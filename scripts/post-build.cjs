@@ -14,6 +14,11 @@ export default install
 
 // 导出所有组件
 export * from './types/components'
+
+// 显式导出 FMessage 和 FNotification
+export { FMessage, FNotification } from './types/components'
+export type { FMessageFn, FMessageOptions, FMessageInstance } from './types/components'
+export type { FNotificationFn, FNotificationOptions, FNotificationInstance } from './types/components'
 `;
 
 fs.writeFileSync('dist/index.d.ts', mainDts, 'utf-8');
