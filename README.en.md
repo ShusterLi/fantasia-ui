@@ -57,7 +57,7 @@ npm install @vueuse/core
 // main.ts
 import { createApp } from 'vue'
 import FantasiaUI, { install } from 'fantasia-ui'
-import 'fantasia-ui/dist/fantasia-ui.css'
+import 'fantasia-ui/index.css'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -70,7 +70,7 @@ app.mount('#app')
 ```vue
 <script setup lang="ts">
 import { FButton, FInput } from 'fantasia-ui'
-import 'fantasia-ui/dist/fantasia-ui.css'
+import 'fantasia-ui/index.css'
 </script>
 
 <template>
