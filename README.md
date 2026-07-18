@@ -299,7 +299,7 @@ const buttonProps: FButtonProps = {
 - [更新日志（中文）](./CHANGELOG.zh-CN.md)
 - [更新日志（English）](./CHANGELOG.md)
 - [优化报告](./OPTIMIZATION.md)
-- [问题反馈](https://github.com/shuster/fantasia-ui/issues)
+- [问题反馈](https://github.com/ShusterLi/fantasia-ui/issues)
 
 ## 📄 开源协议
 

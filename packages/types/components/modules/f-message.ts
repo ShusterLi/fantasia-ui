@@ -1,5 +1,4 @@
-import type { VNode } from "vue"
-import { Type } from "./base"
+import { ActiveInstance, Type } from "./base"
 
 interface FMessageOptions {
 	message: string
@@ -20,15 +19,12 @@ type FMessageFn = ((options: FMessageOptions | string) => FMessageInstance) & {
 	info: (options: FMessageOptions | string) => FMessageInstance
 	success: (options: FMessageOptions | string) => FMessageInstance
 	warning: (options: FMessageOptions | string) => FMessageInstance
-	error: (options: FMessageOptions | string) => FMessageInstance
+	failed: (options: FMessageOptions | string) => FMessageInstance
 	closeAll: () => void
 }
 
-interface ActiveInstance {
-	id: number
-	vnode: VNode
-	container: HTMLElement
-	height: number
+interface FMessageActiveInstance extends ActiveInstance {
+	height: number;
 }
 
 interface FMessageProps {
@@ -40,4 +36,4 @@ interface FMessageProps {
 	offset?: number
 }
 
-export type { FMessageProps, FMessageFn, Type, FMessageInstance, FMessageOptions, ActiveInstance };
+export type { FMessageProps, FMessageFn, FMessageInstance, FMessageOptions, FMessageActiveInstance };

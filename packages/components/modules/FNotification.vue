@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FNotificationProps } from '@/types';
 import { CheckmarkCircle, Close, CloseCircle, InformationCircle, Warning } from '@vicons/ionicons5';
-import { FIcon } from 'fantasia-ui'
+import FIcon from './FIcon.vue';
 
 const props = withDefaults(defineProps<FNotificationProps>(), {
 	type: 'info',
@@ -26,7 +26,7 @@ const iconName = computed(() => {
 		info: InformationCircle,
 		success: CheckmarkCircle,
 		warning: Warning,
-		error: CloseCircle
+		failed: CloseCircle
 	} as const
 	return map[props.type]
 })

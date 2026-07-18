@@ -36,12 +36,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/shuster/fantasia-ui.git"
+    "url": "https://github.com/ShusterLi/fantasia-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/shuster/fantasia-ui/issues"
+    "url": "https://github.com/ShusterLi/fantasia-ui/issues"
   },
-  "homepage": "https://github.com/shuster/fantasia-ui#readme",
+  "homepage": "https://github.com/ShusterLi/fantasia-ui#readme",
   "scripts": {
     "dev": "vite",
     "build": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json && node scripts/post-build.cjs",

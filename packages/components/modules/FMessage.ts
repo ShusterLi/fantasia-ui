@@ -1,4 +1,4 @@
-import type { ActiveInstance, FMessageFn, FMessageInstance, FMessageOptions, Type } from '@/types'
+import type { FMessageActiveInstance, FMessageFn, FMessageInstance, FMessageOptions, Type } from '@/types'
 import { createVNode, render } from 'vue'
 import FMessageComp from './FMessage.vue'
 
@@ -6,7 +6,7 @@ const GAP = 16
 const BASE_OFFSET = 20
 
 let seed = 0
-const instances: ActiveInstance[] = []
+const instances: FMessageActiveInstance[] = []
 
 const normalizeOptions = (options: FMessageOptions | string): FMessageOptions => {
 	return typeof options === 'string' ? { message: options } : options
@@ -67,7 +67,7 @@ const createInstance = (options: FMessageOptions): FMessageInstance => {
 	return {
 		id,
 		close: () => {
-			; (vnode.component?.exposed as any)?.close?.()
+			(vnode.component?.exposed as any)?.close?.()
 		}
 	}
 }
@@ -82,7 +82,7 @@ const withType = (type: Type) => (options: FMessageOptions | string) =>
 FMessage.info = withType('info')
 FMessage.success = withType('success')
 FMessage.warning = withType('warning')
-FMessage.error = withType('error')
+FMessage.failed = withType('failed')
 
 FMessage.closeAll = () => {
 	[...instances].forEach((item) => {

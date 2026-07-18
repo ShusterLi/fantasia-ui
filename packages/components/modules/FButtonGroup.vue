@@ -3,7 +3,6 @@ import type { FButtonGroupProps } from '@/types';
 
 const props = withDefaults(defineProps<FButtonGroupProps>(), {
 	size: 'normal',
-	type: 'default',
 	vertical: false
 })
 

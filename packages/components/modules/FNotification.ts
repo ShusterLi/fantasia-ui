@@ -1,4 +1,4 @@
-import type { FNotificationActiveInstance, FNotificationFn, FNotificationInstance, FNotificationOptions, FNotificationPosition, FNotificationType } from '@/types';
+import type { FNotificationActiveInstance, FNotificationFn, FNotificationInstance, FNotificationOptions, Position, Type } from '@/types';
 import { createVNode, render } from 'vue'
 import FNotificationComp from './FNotification.vue'
 
@@ -6,7 +6,7 @@ const GAP = 16
 const BASE_OFFSET = 20
 
 let seed = 0
-const groups: Record<FNotificationPosition, FNotificationActiveInstance[]> = {
+const groups: Record<Position, FNotificationActiveInstance[]> = {
 	'top-right': [],
 	'top-left': [],
 	'bottom-right': [],
@@ -17,18 +17,18 @@ const normalizeOptions = (options: FNotificationOptions | string): FNotification
 	return typeof options === 'string' ? { message: options } : options
 }
 
-const repositionGroup = (position: FNotificationPosition) => {
+const repositionGroup = (position: Position) => {
 	let offset = BASE_OFFSET
 	groups[position].forEach((item) => {
 		const vm = item.vnode.component
 		if (vm) {
 			vm.props.offset = offset
 		}
-		offset += item.size + GAP
+		offset += Number(item.size) + GAP
 	})
 }
 
-const removeInstance = (position: FNotificationPosition, id: number) => {
+const removeInstance = (position: Position, id: number) => {
 	const list = groups[position]
 	const index = list.findIndex((item) => item.id === id)
 	if (index === -1) return
@@ -50,7 +50,7 @@ const createInstance = (options: FNotificationOptions): FNotificationInstance =>
 			? BASE_OFFSET
 			: (() => {
 				const last = list[list.length - 1]!
-				return (last.vnode.component?.props.offset as number) + last.size + GAP
+				return Number(last.vnode.component?.props.offset) + Number(last.size) + GAP
 			})()
 
 	const vnode = createVNode(FNotificationComp, {
@@ -79,7 +79,7 @@ const createInstance = (options: FNotificationOptions): FNotificationInstance =>
 	return {
 		id,
 		close: () => {
-			; (vnode.component?.exposed as any)?.close?.()
+			(vnode.component?.exposed as any)?.close?.()
 		}
 	}
 }
@@ -88,19 +88,19 @@ const FNotification = ((options: FNotificationOptions | string) => {
 	return createInstance(normalizeOptions(options))
 }) as FNotificationFn
 
-const withType = (type: FNotificationType) => (options: FNotificationOptions | string) =>
+const withType = (type: Type) => (options: FNotificationOptions | string) =>
 	createInstance({ ...normalizeOptions(options), type })
 
 FNotification.info = withType('info')
 FNotification.success = withType('success')
 FNotification.warning = withType('warning')
-FNotification.error = withType('error')
+FNotification.failed = withType('failed')
 
 FNotification.closeAll = (position) => {
-	const positions = position ? [position] : (Object.keys(groups) as FNotificationPosition[])
+	const positions = position ? [position] : (Object.keys(groups) as Position[])
 	positions.forEach((pos) => {
-		;[...groups[pos]].forEach((item) => {
-			; (item.vnode.component?.exposed as any)?.close?.()
+		[...groups[pos]].forEach((item) => {
+			item.vnode.component?.exposed?.close?.()
 		})
 	})
 }
