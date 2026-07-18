@@ -10,3 +10,6 @@ const install: Plugin = (app: App) => {
 
 export default install
 export * from './components'
+
+// 显式导出 FMessage 和 FNotification
+export { FMessage, FNotification } from './components'

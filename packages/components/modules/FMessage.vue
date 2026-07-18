@@ -95,7 +95,7 @@ defineExpose({ close })
 	--f-info: #60a5fa;
 	--f-success: #34d399;
 	--f-warning: #fb923c;
-	--f-error: #f87171;
+	--f-failed: #f87171;
 
 	position: fixed;
 	left: 50%;
@@ -155,8 +155,8 @@ defineExpose({ close })
 		color: var(--f-warning);
 	}
 
-	&--error .f-message__icon {
-		color: var(--f-error);
+	&--failed .f-message__icon {
+		color: var(--f-failed);
 	}
 }
 
@@ -170,7 +170,7 @@ defineExpose({ close })
 	--f-info: #2563eb;
 	--f-success: #059669;
 	--f-warning: #ea580c;
-	--f-error: #dc2626;
+	--f-failed: #dc2626;
 }
 
 .f-message-fade-enter-active {
