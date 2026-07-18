@@ -303,7 +303,7 @@ Or add to `src/env.d.ts`:
 
 ## 📄 License
 
-[MIT](./LICENSE) License © 2024 Shuster
+[MIT](./LICENSE) License © 2026 Shuster
 
 ## 🤝 Contributing
 

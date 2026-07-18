@@ -303,7 +303,7 @@ const buttonProps: FButtonProps = {
 
 ## 📄 开源协议
 
-[MIT](./LICENSE) License © 2024 Shuster
+[MIT](./LICENSE) License © 2026 Shuster
 
 ## 🤝 贡献
 
