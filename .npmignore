@@ -1,0 +1,33 @@
+# Source files (only publish dist/)
+packages/
+scripts/
+.vscode/
+.git/
+node_modules/
+
+# Config files
+*.config.ts
+*.config.js
+tsconfig*.json
+pnpm-workspace.yaml
+pnpm-lock.yaml
+vitest.config.ts
+
+# Documentation (optional, you can publish these if you want)
+# *.md
+
+# Development files
+.gitignore
+.eslintrc*
+.prettierrc*
+
+# Test files
+**/__tests__/
+**/*.spec.ts
+**/*.test.ts
+
+# Build artifacts
+auto-imports.d.ts
+
+# Only publish dist/ folder and essential files
+# The files array in package.json controls what gets published
