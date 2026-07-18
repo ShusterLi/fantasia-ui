@@ -2,7 +2,21 @@
 
 ## 前置准备
 
-### 1. 配置 NPM Token
+### 1. 确保 pnpm-lock.yaml 已提交
+
+**重要**：`pnpm-lock.yaml` 必须提交到 Git 仓库，否则 GitHub Actions 构建会失败。
+
+检查锁文件状态：
+```bash
+git status pnpm-lock.yaml
+
+# 如果未提交，添加并提交
+git add pnpm-lock.yaml
+git commit -m "chore: add pnpm-lock.yaml"
+git push origin main
+```
+
+### 2. 配置 NPM Token
 
 在 GitHub 仓库中配置 NPM 访问令牌：
 
@@ -16,7 +30,7 @@
    - Name: `NPM_TOKEN`
    - Value: 粘贴你的 npm token
 
-### 2. 检查 package.json
+### 3. 检查 package.json
 
 确保以下字段正确配置：
 
@@ -148,6 +162,34 @@ console.log('✅ Import successful')
 ```
 
 ## ⚠️ 常见问题
+
+### 发布失败：pnpm-lock.yaml 缺失
+
+错误信息：
+```
+ERR_PNPM_NO_LOCKFILE Cannot install with "frozen-lockfile" because pnpm-lock.yaml is absent
+```
+
+**原因**：`pnpm-lock.yaml` 文件未提交到 Git 仓库。
+
+**解决方法**：
+```bash
+# 检查文件是否存在
+ls pnpm-lock.yaml
+
+# 如果文件存在但未提交
+git add pnpm-lock.yaml
+git commit -m "chore: add pnpm lockfile"
+git push origin main
+
+# 如果文件不存在，先安装依赖生成锁文件
+pnpm install
+git add pnpm-lock.yaml
+git commit -m "chore: add pnpm lockfile"
+git push origin main
+```
+
+**注意**：lockfile 兼容性问题（"not compatible lockfile"）通常是因为 pnpm 版本不一致。工作流使用 pnpm 8，确保本地也使用相同版本。
 
 ### 发布失败：NPM_TOKEN 无效
 
