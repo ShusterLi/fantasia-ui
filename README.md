@@ -222,6 +222,48 @@ import { FRow, FCol, FSpace } from 'fantasia-ui'
 </template>
 ```
 
+### 消息提示和通知
+
+```vue
+<script setup lang="ts">
+import { FMessage, FNotification } from 'fantasia-ui'
+
+// 消息提示
+const showMessage = () => {
+  FMessage.success('操作成功！')
+}
+
+// 通知
+const showNotification = () => {
+  FNotification({
+    title: '系统通知',
+    message: '您有一条新消息',
+    type: 'info'
+  })
+}
+
+// 在异步操作中使用
+const handleSubmit = async () => {
+  try {
+    await submitForm()
+    FMessage.success('提交成功！')
+  } catch (error) {
+    FMessage.error('提交失败，请重试')
+  }
+}
+</script>
+
+<template>
+  <div>
+    <FButton @click="showMessage">显示消息</FButton>
+    <FButton @click="showNotification">显示通知</FButton>
+    <FButton @click="handleSubmit">提交表单</FButton>
+  </div>
+</template>
+```
+
+> 💡 查看完整的 FMessage 和 FNotification API 文档：[使用指南](./MESSAGE_USAGE.md)
+
 ## 🎨 主题定制
 
 组件库支持 CSS 变量自定义主题：
@@ -298,7 +340,11 @@ const buttonProps: FButtonProps = {
 
 - [更新日志（中文）](./CHANGELOG.zh-CN.md)
 - [更新日志（English）](./CHANGELOG.md)
+- [类型支持文档](./TYPE_SUPPORT.md)
 - [优化报告](./OPTIMIZATION.md)
+- [构建问题解决方案](./BUILD_FIX.md)
+- [贡献指南](./CONTRIBUTING.md)
+- [发布指南](./.github/PUBLISH_GUIDE.md)
 - [问题反馈](https://github.com/ShusterLi/fantasia-ui/issues)
 
 ## 📄 开源协议

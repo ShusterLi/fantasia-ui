@@ -222,6 +222,48 @@ import { FRow, FCol, FSpace } from 'fantasia-ui'
 </template>
 ```
 
+### Message and Notification
+
+```vue
+<script setup lang="ts">
+import { FMessage, FNotification } from 'fantasia-ui'
+
+// Message
+const showMessage = () => {
+  FMessage.success('Success!')
+}
+
+// Notification
+const showNotification = () => {
+  FNotification({
+    title: 'System Notification',
+    message: 'You have a new message',
+    type: 'info'
+  })
+}
+
+// Use in async operations
+const handleSubmit = async () => {
+  try {
+    await submitForm()
+    FMessage.success('Submitted successfully!')
+  } catch (error) {
+    FMessage.error('Failed to submit, please try again')
+  }
+}
+</script>
+
+<template>
+  <div>
+    <FButton @click="showMessage">Show Message</FButton>
+    <FButton @click="showNotification">Show Notification</FButton>
+    <FButton @click="handleSubmit">Submit Form</FButton>
+  </div>
+</template>
+```
+
+> 💡 View complete FMessage and FNotification API documentation: [Usage Guide](./MESSAGE_USAGE.md)
+
 ## 🎨 Theme Customization
 
 The component library supports theme customization via CSS variables:
@@ -296,10 +338,14 @@ Or add to `src/env.d.ts`:
 
 ## 🔗 Links
 
-- [Changelog](./CHANGELOG.md)
+- [Changelog (中文)](./CHANGELOG.zh-CN.md)
+- [Changelog (English)](./CHANGELOG.md)
+- [Type Support Documentation](./TYPE_SUPPORT.md)
 - [Optimization Report](./OPTIMIZATION.md)
-- [Issues](https://github.com/shuster/fantasia-ui/issues)
+- [Build Issue Solutions](./BUILD_FIX.md)
 - [Contributing Guide](./CONTRIBUTING.md)
+- [Publish Guide](./.github/PUBLISH_GUIDE.md)
+- [Issues](https://github.com/ShusterLi/fantasia-ui/issues)
 
 ## 📄 License
 

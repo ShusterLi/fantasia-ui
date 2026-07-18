@@ -4,7 +4,6 @@
 
 ### 新增
 - ✨ 新增 `FMessage` 和 `FNotification` 组件的命令式 API 导出
-- 📝 添加 `MESSAGE_USAGE.md` 使用文档
 
 ### 修复
 - 🐛 修复 FButtonGroup 组件的类型默认值错误

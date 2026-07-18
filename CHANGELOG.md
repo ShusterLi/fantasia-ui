@@ -4,7 +4,6 @@
 
 ### Added
 - ✨ Added imperative API exports for `FMessage` and `FNotification` components
-- 📝 Added `MESSAGE_USAGE.md` documentation
 
 ### Fixed
 - 🐛 Fixed type default value error in FButtonGroup component
