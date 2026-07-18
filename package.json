@@ -15,8 +15,8 @@
     "./global": {
       "types": "./dist/types/global.d.ts"
     },
-    "./index.css": "./dist/fantasia-ui.css",
-    "./*": "./dist/*"
+    "./dist/index.css": "./dist/index.css",
+    "./*": "./*"
   },
   "files": [
     "dist"

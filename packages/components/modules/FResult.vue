@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FResultProps } from '@/types';
 import { CheckmarkCircle, CloseCircle, AlertCircle, InformationCircle } from '@vicons/ionicons5';
-import { FIcon } from 'fantasia-ui';
+import FIcon from './FIcon.vue';
 
 const props = withDefaults(defineProps<FResultProps>(), {
 	status: 'info'

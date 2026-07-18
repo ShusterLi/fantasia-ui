@@ -10,4 +10,3 @@ const install: Plugin = (app: App) => {
 
 export default install
 export * from './components'
-// 不导出 types，用户不需要直接导入 Props 类型
