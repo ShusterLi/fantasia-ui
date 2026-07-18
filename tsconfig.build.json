@@ -1,0 +1,27 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "declaration": true,
+        "outDir": "dist/types",
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "rootDir": "./packages",
+        "skipLibCheck": true,
+        "paths": {
+            "@/*": [
+                "./packages/*"
+            ]
+        }
+    },
+    "include": [
+        "packages/**/*"
+    ],
+    "exclude": [
+        "packages/__tests__/**/*",
+        "packages/components/modules/FCrop.vue",
+        "packages/components/modules/FSliderCaptcha.vue",
+        "node_modules",
+        "dist"
+    ]
+}

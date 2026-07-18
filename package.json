@@ -1,0 +1,82 @@
+{
+  "name": "fantasia-ui",
+  "private": false,
+  "version": "0.2.31",
+  "type": "module",
+  "main": "dist/fantasia-ui.umd.js",
+  "module": "dist/fantasia-ui.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/fantasia-ui.es.js",
+      "require": "./dist/fantasia-ui.umd.js"
+    },
+    "./global": {
+      "types": "./dist/types/global.d.ts"
+    },
+    "./index.css": "./dist/fantasia-ui.css",
+    "./*": "./dist/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "author": "Shuster",
+  "license": "MIT",
+  "description": "一个基于 Vue 3 + TypeScript 的轻量级现代化 UI 组件库",
+  "keywords": [
+    "vue3",
+    "fantasia-ui",
+    "components",
+    "typescript",
+    "ui-library"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuster/fantasia-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shuster/fantasia-ui/issues"
+  },
+  "homepage": "https://github.com/shuster/fantasia-ui#readme",
+  "scripts": {
+    "dev": "vite",
+    "build": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json && node scripts/post-build.cjs",
+    "build:lib": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json",
+    "preview": "vite preview",
+    "prepublishOnly": "pnpm run build",
+    "publish:patch": "npm version patch && npm publish",
+    "publish:minor": "npm version minor && npm publish",
+    "publish:major": "npm version major && npm publish"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "peerDependenciesMeta": {
+    "@vicons/ionicons5": {
+      "optional": true
+    },
+    "@vueuse/core": {
+      "optional": true
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/tsconfig": "^0.7.0",
+    "@vicons/ionicons5": "^0.13.0",
+    "@vueuse/core": "^14.3.0",
+    "sass": "^1.89.0",
+    "typescript": "~5.8.3",
+    "unplugin-auto-import": "^19.3.0",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.8",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.2.8"
+  }
+}
