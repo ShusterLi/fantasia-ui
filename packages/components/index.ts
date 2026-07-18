@@ -41,5 +41,14 @@ export { default as FSlider } from './modules/FSlider.vue';
 export { default as FScrollbar } from './modules/FScrollbar.vue';
 export { default as FInputNumber } from './modules/FInputNumber.vue';
 export { default as FResult } from './modules/FResult.vue';
-export { default as FMessage } from './modules/FMessage';
-export { default as FNotification } from './modules/FNotification';
+
+// FMessage 和 FNotification 使用命名导出
+import FMessageDefault from './modules/FMessage';
+import FNotificationDefault from './modules/FNotification';
+
+export { FMessageDefault as FMessage };
+export { FNotificationDefault as FNotification };
+
+// 导出 FMessage 和 FNotification 类型
+export type { FMessageFn, FMessageOptions, FMessageInstance } from '@/types';
+export type { FNotificationFn, FNotificationOptions, FNotificationInstance } from '@/types';

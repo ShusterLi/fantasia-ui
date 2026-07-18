@@ -46,7 +46,7 @@ export default defineConfig({
         exports: 'named',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'style.css') {
-            return 'index.css'
+            return 'fantasia-ui.css'
           }
           return assetInfo.name as string
         },
