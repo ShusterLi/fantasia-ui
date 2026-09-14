@@ -1,10 +1,8 @@
 interface FInputProps {
-  placeholder?: string
-  type?: string
-  disabled?: boolean
-  readonly?: boolean
-  name?: string
-  id?: string
+	type?: string;
+	placeholder?: string;
+	clearable?: boolean;
+	showPassword?: boolean;
 }
 
-export type { FInputProps };
+export type { FInputProps }

@@ -15,6 +15,7 @@ interface FDropdownProps {
   zIndex?: number;
   trigger?: 'hover' | 'click';
   options?: FDropdownOption[];
+  disabled?: boolean;
 }
 
 export type { FDropdownProps, FDropdownOption };

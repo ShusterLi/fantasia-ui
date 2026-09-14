@@ -30,7 +30,6 @@ export { default as FCheckbox } from "./modules/FCheckbox.vue";
 export { default as FAlert } from "./modules/FAlert.vue";
 export { default as FEditor } from "./modules/FEditor.vue";
 export { default as FTable } from "./modules/FTable.vue";
-export { default as FDialog } from "./modules/FDialog.vue";
 export { default as FUpload } from './modules/FUpload.vue';
 export { default as FButtonGroup } from './modules/FButtonGroup.vue';
 export { default as FCollapse } from './modules/FCollapse.vue';
@@ -43,11 +42,13 @@ export { default as FInputNumber } from './modules/FInputNumber.vue';
 export { default as FResult } from './modules/FResult.vue';
 
 // FMessage 和 FNotification 使用命名导出
-import FMessageDefault from './modules/FMessage';
-import FNotificationDefault from './modules/FNotification';
+import FMessageDefault from '../composables/FMessage.js';
+import FNotificationDefault from '../composables/FNotification.js';
+import FDialogDefault from '../composables/FDialog.js';
 
 export { FMessageDefault as FMessage };
 export { FNotificationDefault as FNotification };
+export { FDialogDefault as FDialog };
 
 // 导出 FMessage 和 FNotification 类型
 export type { FMessageFn, FMessageOptions, FMessageInstance } from '@/types';

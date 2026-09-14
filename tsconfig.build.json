@@ -6,7 +6,7 @@
         "target": "ESNext",
         "module": "ESNext",
         "moduleResolution": "bundler",
-        "rootDir": "./packages",
+        "rootDir": ".",
         "skipLibCheck": true,
         "paths": {
             "@/*": [

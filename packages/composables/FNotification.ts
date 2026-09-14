@@ -1,6 +1,6 @@
 import type { FNotificationActiveInstance, FNotificationFn, FNotificationInstance, FNotificationOptions, Position, Type } from '@/types';
 import { createVNode, render } from 'vue'
-import FNotificationComp from './FNotification.vue'
+import FNotificationComp from '../components/modules/FNotification.vue'
 
 const GAP = 16
 const BASE_OFFSET = 20

@@ -1,109 +1,137 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { FInputProps } from '@/types';
-import { Search } from '@vicons/ionicons5';
 import FIcon from './FIcon.vue';
+import { EyeOutline, EyeOffOutline, CloseCircleOutline } from '@vicons/ionicons5';
 
-const model = defineModel<string>({ default: '' })
 
-const props = withDefaults(defineProps<FInputProps>(), {
-  placeholder: '输入...',
-  type: 'text',
-  disabled: false,
-  readonly: false,
-  name: '',
-  id: ''
-})
+const modelValue = defineModel<string>({ default: '' });
+const props = defineProps<FInputProps>();
 
-const emit = defineEmits<{
-  (e: 'input', value: string): void
-  (e: 'change', value: string): void
-  (e: 'focus', event: FocusEvent): void
-  (e: 'blur', event: FocusEvent): void
-}>()
+const formItemContext = inject<{ errorMsg: Ref<string>, validate: () => void } | null>('FFormItemContext', null)
 
-const handleInput = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value
-  emit('input', value)
-}
+const isPasswordVisible = ref(false);
+const isFocused = ref(false);
 
-const handleChange = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value
-  emit('change', value)
-}
+const hasError = computed(() => !!formItemContext?.errorMsg?.value)
+const inputType = computed(() => {
+	if (props.showPassword && props.type === 'password') {
+		return isPasswordVisible.value ? 'text' : 'password';
+	}
+	return props.type || 'text';
+});
 
-const handleFocus = (event: FocusEvent) => {
-  emit('focus', event)
-}
+const showClearIcon = computed(() => {
+	return props.clearable && modelValue.value && !props.showPassword;
+});
 
-const handleBlur = (event: FocusEvent) => {
-  emit('blur', event)
-}
+const showPasswordIcon = computed(() => {
+	return props.showPassword && props.type === 'password' && modelValue.value;
+});
+
+const onInput = (e: Event) => {
+	modelValue.value = (e.target as HTMLInputElement).value;
+};
+
+const onBlur = (e: FocusEvent) => {
+	isFocused.value = false;
+	formItemContext?.validate();
+};
+
+const onFocus = () => {
+	isFocused.value = true;
+};
+
+const clearValue = () => {
+	modelValue.value = '';
+};
+
+const togglePassword = () => {
+	isPasswordVisible.value = !isPasswordVisible.value;
+};
 </script>
 
 <template>
-  <div class="f-input" :class="{ 'is-disabled': disabled, 'is-readonly': readonly }">
-    <f-icon class="f-input__icon">
-      <Search />
-    </f-icon>
-    <input class="f-input__text" v-model="model" :type="type" :placeholder="placeholder" :disabled="disabled"
-      :readonly="readonly" :name="name" :id="id" @input="handleInput" @change="handleChange" @focus="handleFocus"
-      @blur="handleBlur" />
-  </div>
+	<div class="f-input" :class="{
+		'is-focus': isFocused,
+		'is-error': hasError
+	}">
+		<input :type="inputType" :value="modelValue" :placeholder="placeholder" @input="onInput" @blur="onBlur"
+			@focus="onFocus" class="f-input__inner" />
+
+		<div class="f-input__suffix">
+			<f-icon v-if="showClearIcon" @click="clearValue" class="icon-btn">
+				<component :is="CloseCircleOutline" />
+			</f-icon>
+
+			<f-icon v-if="showPasswordIcon" @click="togglePassword" class="icon-btn">
+				<component :is="isPasswordVisible ? EyeOutline : EyeOffOutline" />
+			</f-icon>
+		</div>
+
+		<div class="f-input__focus-bg"></div>
+	</div>
 </template>
 
 <style lang="scss" scoped>
 .f-input {
-  flex: 1;
-  position: relative;
+	position: relative;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	background: #f8fafc;
+	border: 1px solid #e0e0e6;
+	border-radius: 4px;
+	transition: all 0.2s ease;
 
-  &.is-disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+	&__inner {
+		flex: 1;
+		padding: 10px 12px;
+		background: transparent;
+		border: none;
+		font-size: 14px;
+		color: #1e293b;
+		outline: none;
 
-    .f-input__text {
-      cursor: not-allowed;
-    }
-  }
+		&::placeholder {
+			color: #94a3b8;
+		}
+	}
 
-  &.is-readonly {
-    .f-input__text {
-      cursor: default;
-      background-color: var(--surface-muted, #f5f5f5);
-    }
-  }
+	&__suffix {
+		display: flex;
+		align-items: center;
+		padding-right: 8px;
+		gap: 4px;
+		color: #94a3b8;
 
-  .f-input__text {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 16px 12px 44px;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
-    transition: border-color .2s;
+		.icon-btn {
+			cursor: pointer;
+			transition: color 0.2s;
 
-    &::placeholder {
-      color: var(--text-dim)
-    }
+			&:hover {
+				color: #64748b;
+			}
+		}
+	}
 
-    &:focus {
-      border-color: rgba(192, 132, 252, .3)
-    }
+	&:hover {
+		border-color: #ec4899;
+	}
 
-    &:disabled {
-      background: var(--surface-disabled, #f9f9f9);
-      cursor: not-allowed;
-    }
-  }
+	&.is-focus {
+		background: #fff;
+		border-color: #ec4899;
+		box-shadow: 0 0 0 2px #ec48993a;
+	}
 
-  .f-input__icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-dim);
-    pointer-events: none;
-  }
+	// 错误状态样式
+	&.is-error {
+		border-color: #f43f5e;
+		background: #fff1f2;
+
+		&:focus-within {
+			box-shadow: 0 0 0 2px #f43f5e2a;
+		}
+	}
 }
 </style>

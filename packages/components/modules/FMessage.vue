@@ -24,7 +24,9 @@ const iconName = computed(() => {
 		info: InformationCircle,
 		success: CheckmarkCircle,
 		warning: Warning,
-		failed: CloseCircle
+		failed: CloseCircle,
+		default: InformationCircle,
+		primary: InformationCircle
 	} as const
 	return map[props.type]
 })

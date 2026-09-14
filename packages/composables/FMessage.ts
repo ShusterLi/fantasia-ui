@@ -1,6 +1,6 @@
 import type { FMessageActiveInstance, FMessageFn, FMessageInstance, FMessageOptions, Type } from '@/types'
 import { createVNode, render } from 'vue'
-import FMessageComp from './FMessage.vue'
+import FMessageComp from '../components/modules/FMessage.vue'
 
 const GAP = 16
 const BASE_OFFSET = 20

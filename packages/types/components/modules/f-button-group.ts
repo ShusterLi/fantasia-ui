@@ -13,4 +13,4 @@ interface FButtonGroupContext {
   disabled?: boolean;
 }
 
-export type { FButtonGroupProps,FButtonGroupContext }
+export type { FButtonGroupProps, FButtonGroupContext }

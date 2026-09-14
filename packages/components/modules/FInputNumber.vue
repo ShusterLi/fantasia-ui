@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { FInputNumberProps } from '@/types';
+import { FIcon } from 'fantasia-ui';
+import { RemoveOutline, AddOutline, ChevronUpOutline, ChevronDownOutline } from '@vicons/ionicons5';
 
 const props = withDefaults(defineProps<FInputNumberProps>(), {
 	min: -Infinity,
@@ -7,7 +9,6 @@ const props = withDefaults(defineProps<FInputNumberProps>(), {
 	step: 1,
 	precision: undefined,
 	disabled: false,
-	size: 'default',
 	controls: true,
 	controlsPosition: 'right',
 	placeholder: ''
@@ -17,14 +18,16 @@ const modelValue = defineModel<number | undefined>()
 
 const inputRef = ref<HTMLInputElement | null>(null)
 const isFocused = ref(false)
-// 编辑态下的原始文本，允许输入 "1." "-" 这类中间态
 const displayText = ref('')
 
-function format(value: number) {
+const formItemContext = inject<{ errorMsg: Ref<string>, validate: () => void } | null>('FFormItemContext', null)
+const hasError = computed(() => !!formItemContext?.errorMsg?.value)
+
+const format = (value: number) => {
 	return props.precision !== undefined ? value.toFixed(props.precision) : String(value)
 }
 
-function clamp(value: number) {
+const clamp = (value: number) => {
 	let result = Math.min(Math.max(value, props.min), props.max)
 	if (props.precision !== undefined) {
 		result = Number(result.toFixed(props.precision))
@@ -44,7 +47,7 @@ watch(
 const canIncrease = computed(() => modelValue.value === undefined || modelValue.value < props.max)
 const canDecrease = computed(() => modelValue.value === undefined || modelValue.value > props.min)
 
-function commit(raw: string) {
+const commit = (raw: string) => {
 	if (raw.trim() === '') {
 		modelValue.value = undefined
 		displayText.value = ''
@@ -52,7 +55,6 @@ function commit(raw: string) {
 	}
 	const parsed = Number(raw)
 	if (Number.isNaN(parsed)) {
-		// 非法输入，回退到上一个合法值
 		displayText.value = modelValue.value === undefined ? '' : format(modelValue.value)
 		return
 	}
@@ -61,28 +63,28 @@ function commit(raw: string) {
 	displayText.value = format(clamped)
 }
 
-function handleInput(e: Event) {
+const handleInput = (e: Event) => {
 	const raw = (e.target as HTMLInputElement).value
-	// 编辑过程中放行合法的数字中间态：空、负号、小数点结尾
 	if (raw === '' || raw === '-' || /^-?\d*\.?\d*$/.test(raw)) {
 		displayText.value = raw
 	}
 }
 
-function handleFocus() {
+const handleFocus = () => {
 	isFocused.value = true
 }
 
-function handleBlur() {
+const handleBlur = () => {
 	isFocused.value = false
 	commit(displayText.value)
+	formItemContext?.validate();
 }
 
-function handleEnter() {
+const handleEnter = () => {
 	inputRef.value?.blur()
 }
 
-function step(direction: 1 | -1) {
+const step = (direction: 1 | -1) => {
 	if (props.disabled) return
 	const base = modelValue.value ?? 0
 	const next = clamp(base + direction * props.step)
@@ -90,11 +92,10 @@ function step(direction: 1 | -1) {
 	displayText.value = format(next)
 }
 
-// 长按连续加减
 let repeatTimer: ReturnType<typeof setTimeout> | null = null
 let repeatInterval: ReturnType<typeof setInterval> | null = null
 
-function startRepeat(direction: 1 | -1) {
+const startRepeat = (direction: 1 | -1) => {
 	if (props.disabled) return
 	step(direction)
 	repeatTimer = setTimeout(() => {
@@ -102,14 +103,14 @@ function startRepeat(direction: 1 | -1) {
 	}, 400)
 }
 
-function stopRepeat() {
+const stopRepeat = () => {
 	if (repeatTimer) clearTimeout(repeatTimer)
 	if (repeatInterval) clearInterval(repeatInterval)
 	repeatTimer = null
 	repeatInterval = null
 }
 
-function handleKeydown(e: KeyboardEvent) {
+const handleKeydown = (e: KeyboardEvent) => {
 	if (e.key === 'ArrowUp') {
 		e.preventDefault()
 		step(1)
@@ -121,7 +122,7 @@ function handleKeydown(e: KeyboardEvent) {
 	}
 }
 
-function handleWheel(e: WheelEvent) {
+const handleWheel = (e: WheelEvent) => {
 	if (!isFocused.value || props.disabled) return
 	e.preventDefault()
 	step(e.deltaY < 0 ? 1 : -1)
@@ -129,166 +130,134 @@ function handleWheel(e: WheelEvent) {
 </script>
 
 <template>
-	<div class="f-input-number" :class="[
-		`f-input-number--${size}`,
-		`f-input-number--controls-${controlsPosition}`,
-		{ 'f-input-number--disabled': disabled, 'f-input-number--without-controls': !controls }
-	]">
-		<button v-if="controls && controlsPosition === 'both'" type="button"
-			class="f-input-number__control f-input-number__control--minus" tabindex="-1" :disabled="disabled || !canDecrease"
-			@mousedown.prevent="startRepeat(-1)" @mouseup="stopRepeat" @mouseleave="stopRepeat">
-			<svg viewBox="0 0 12 12" width="10" height="10">
-				<path d="M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-			</svg>
+	<div class="f-input-number" :class="{
+		'is-focus': isFocused,
+		'is-error': hasError,
+		'is-disabled': disabled,
+		'has-controls-both': controls && controlsPosition === 'both',
+		'has-controls-right': controls && controlsPosition === 'right'
+	}">
+		<button v-if="controls && controlsPosition === 'both'" type="button" class="f-input-number__btn-left"
+			tabindex="-1" :disabled="disabled || !canDecrease" @mousedown.prevent="startRepeat(-1)" @mouseup="stopRepeat"
+			@mouseleave="stopRepeat">
+			<f-icon>
+				<RemoveOutline />
+			</f-icon>
 		</button>
 
 		<input ref="inputRef" class="f-input-number__inner" type="text" inputmode="decimal" :value="displayText"
 			:disabled="disabled" :placeholder="placeholder" @input="handleInput" @focus="handleFocus" @blur="handleBlur"
 			@keydown="handleKeydown" @wheel="handleWheel" />
 
-		<button v-if="controls && controlsPosition === 'both'" type="button"
-			class="f-input-number__control f-input-number__control--plus" tabindex="-1" :disabled="disabled || !canIncrease"
-			@mousedown.prevent="startRepeat(1)" @mouseup="stopRepeat" @mouseleave="stopRepeat">
-			<svg viewBox="0 0 12 12" width="10" height="10">
-				<path d="M2 6h8M6 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-			</svg>
+		<button v-if="controls && controlsPosition === 'both'" type="button" class="f-input-number__btn-right"
+			tabindex="-1" :disabled="disabled || !canIncrease" @mousedown.prevent="startRepeat(1)" @mouseup="stopRepeat"
+			@mouseleave="stopRepeat">
+			<f-icon>
+				<AddOutline />
+			</f-icon>
 		</button>
 
 		<div v-if="controls && controlsPosition === 'right'" class="f-input-number__stack">
 			<button type="button" class="f-input-number__stack-btn" tabindex="-1" :disabled="disabled || !canIncrease"
 				@mousedown.prevent="startRepeat(1)" @mouseup="stopRepeat" @mouseleave="stopRepeat">
-				<svg viewBox="0 0 12 12" width="8" height="8">
-					<path d="M2 7l4-4 4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"
-						stroke-linejoin="round" />
-				</svg>
+				<f-icon>
+					<ChevronUpOutline />
+				</f-icon>
 			</button>
 			<button type="button" class="f-input-number__stack-btn" tabindex="-1" :disabled="disabled || !canDecrease"
 				@mousedown.prevent="startRepeat(-1)" @mouseup="stopRepeat" @mouseleave="stopRepeat">
-				<svg viewBox="0 0 12 12" width="8" height="8">
-					<path d="M2 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"
-						stroke-linejoin="round" />
-				</svg>
+				<f-icon>
+					<ChevronDownOutline />
+				</f-icon>
 			</button>
 		</div>
 	</div>
 </template>
 
-<style lang="scss">
-:root {
-	--f-input-number-border-color: #333338;
-	--f-input-number-bg: #18181b;
-	--f-input-number-color: #e4e4e7;
-	--f-input-number-control-bg: #232328;
-	--f-input-number-control-hover-bg: #2c2c32;
-	--f-input-number-focus-color: #6366f1;
-}
-
-:root.light {
-	--f-input-number-border-color: #e4e4e7;
-	--f-input-number-bg: #ffffff;
-	--f-input-number-color: #18181b;
-	--f-input-number-control-bg: #f4f4f5;
-	--f-input-number-control-hover-bg: #e4e4e7;
-}
-
+<style lang="scss" scoped>
 .f-input-number {
 	position: relative;
 	display: inline-flex;
-	align-items: stretch;
+	align-items: center;
 	width: 140px;
-	border: 1px solid var(--f-input-number-border-color);
-	border-radius: 6px;
-	background: var(--f-input-number-bg);
-	overflow: hidden;
-	transition: border-color 0.2s;
-
-	&:focus-within {
-		border-color: var(--f-input-number-focus-color);
-	}
-
-	&--small {
-		height: 28px;
-		font-size: 12px;
-	}
-
-	&--default {
-		height: 32px;
-		font-size: 13px;
-	}
-
-	&--large {
-		height: 38px;
-		font-size: 14px;
-	}
-
-	&--disabled {
-		opacity: 0.5;
-		pointer-events: none;
-	}
+	background: #f8fafc;
+	border: 1px solid #e0e0e6;
+	border-radius: 4px;
+	transition: all 0.2s ease;
 
 	&__inner {
 		flex: 1;
 		min-width: 0;
-		padding: 0 10px;
+		padding: 10px 12px;
 		border: none;
 		outline: none;
 		background: transparent;
-		color: var(--f-input-number-color);
-		font-size: inherit;
-		text-align: center;
+		color: #1e293b;
+		font-size: 14px;
+		text-align: left;
 
 		&::placeholder {
-			color: var(--f-input-number-control-hover-bg);
+			color: #94a3b8;
 		}
 	}
 
-	&--controls-both &__inner {
+	&.has-controls-both &__inner {
 		text-align: center;
 	}
 
-	&--controls-right &__inner {
-		text-align: left;
+	&.has-controls-right &__inner {
+		padding-right: 8px;
 	}
 
-	&--without-controls &__inner {
-		text-align: left;
-	}
-
-	&__control {
+	&__btn-left,
+	&__btn-right {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 28px;
+		width: 32px;
+		height: 100%;
 		flex-shrink: 0;
 		border: none;
-		background: var(--f-input-number-control-bg);
-		color: var(--f-input-number-color);
+		background: transparent;
+		color: #94a3b8;
 		cursor: pointer;
+		transition: all 0.2s ease;
+
+		:deep(svg) {
+			width: 16px;
+			height: 16px;
+		}
 
 		&:hover:not(:disabled) {
-			background: var(--f-input-number-control-hover-bg);
+			color: #64748b;
+			background: #f1f5f9;
+		}
+
+		&:active:not(:disabled) {
+			transform: scale(0.95);
 		}
 
 		&:disabled {
-			opacity: 0.4;
+			opacity: 0.35;
 			cursor: not-allowed;
 		}
+	}
 
-		&--minus {
-			border-right: 1px solid var(--f-input-number-border-color);
-		}
+	&__btn-left {
+		border-right: 1px solid #e0e0e6;
+	}
 
-		&--plus {
-			border-left: 1px solid var(--f-input-number-border-color);
-		}
+	&__btn-right {
+		border-left: 1px solid #e0e0e6;
 	}
 
 	&__stack {
 		display: flex;
 		flex-direction: column;
 		flex-shrink: 0;
-		width: 20px;
-		border-left: 1px solid var(--f-input-number-border-color);
+		width: 24px;
+		height: 100%;
+		border-left: 1px solid #e0e0e6;
 
 		&-btn {
 			flex: 1;
@@ -296,22 +265,62 @@ function handleWheel(e: WheelEvent) {
 			align-items: center;
 			justify-content: center;
 			border: none;
-			background: var(--f-input-number-control-bg);
-			color: var(--f-input-number-color);
+			background: transparent;
+			color: #94a3b8;
 			cursor: pointer;
+			transition: all 0.15s ease;
+
+			:deep(svg) {
+				width: 12px;
+				height: 12px;
+			}
 
 			&:first-child {
-				border-bottom: 1px solid var(--f-input-number-border-color);
+				border-bottom: 1px solid #e0e0e6;
 			}
 
 			&:hover:not(:disabled) {
-				background: var(--f-input-number-control-hover-bg);
+				color: #64748b;
+				background: #f1f5f9;
+			}
+
+			&:active:not(:disabled) {
+				transform: scale(0.9);
 			}
 
 			&:disabled {
-				opacity: 0.4;
+				opacity: 0.35;
 				cursor: not-allowed;
 			}
+		}
+	}
+
+	&:hover:not(.is-disabled) {
+		border-color: #ec4899;
+	}
+
+	&.is-focus {
+		background: #fff;
+		border-color: #ec4899;
+		box-shadow: 0 0 0 2px #ec48993a;
+	}
+
+	&.is-error {
+		border-color: #f43f5e;
+		background: #fff1f2;
+
+		&.is-focus {
+			box-shadow: 0 0 0 2px #f43f5e2a;
+		}
+	}
+
+	&.is-disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		background: #f8fafc;
+
+		.f-input-number__inner {
+			cursor: not-allowed;
 		}
 	}
 }

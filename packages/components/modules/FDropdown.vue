@@ -9,9 +9,10 @@ const props = withDefaults(defineProps<FDropdownProps>(), {
   offset: 12,
   zIndex: 2000,
   options: () => [],
+  disabled: false,
 });
 
-const emit = defineEmits(['select']);
+const emit = defineEmits(['select', 'show', 'hide']);
 
 const show = ref(false);
 const anchorRect = ref<DOMRect | null>(null);
@@ -119,7 +120,7 @@ const clearLeaveTimer = () => {
 };
 
 const handleTriggerClick = (e: MouseEvent) => {
-  if (props.trigger !== 'click') return;
+  if (props.trigger !== 'click' || props.disabled) return;
   e.stopPropagation();
   if (!show.value) {
     anchorRect.value = triggerRef.value!.getBoundingClientRect();
@@ -130,7 +131,7 @@ const handleTriggerClick = (e: MouseEvent) => {
 };
 
 const handleMouseEnter = () => {
-  if (props.trigger !== 'hover') return;
+  if (props.trigger !== 'hover' || props.disabled) return;
   clearLeaveTimer();
   showTimer = setTimeout(() => {
     if (triggerRef.value) {
@@ -164,9 +165,11 @@ watch(show, async (val) => {
     await nextTick();
     dropdownHeight.value = dropdownRef.value?.offsetHeight || 200;
     dropdownWidth.value = dropdownRef.value?.offsetWidth || 160;
+    emit('show');
   } else {
     dropdownHeight.value = 0;
     dropdownWidth.value = 0;
+    emit('hide');
   }
 });
 

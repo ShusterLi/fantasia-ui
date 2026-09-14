@@ -1,5 +1,5 @@
 export * from './modules/base';
-export * from './modules/f-dialog';
+export * from './modules/f-mask';
 export * from './modules/f-pagination';
 export * from './modules/f-slider-captcha';
 export * from './modules/f-upload';
@@ -47,3 +47,5 @@ export * from './modules/f-slider';
 export * from './modules/f-input-number';
 export * from './modules/f-message';
 export * from './modules/f-notification';
+export * from './modules/f-select';
+export * from './modules/f-dialog';
