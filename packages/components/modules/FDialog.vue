@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { FButton, FIcon } from 'fantasia-ui';
+import type { FDialogProps, FDialogEmits } from '@/types/components';
+import FButton from './FButton.vue';
+import FIcon from './FIcon.vue';
 import {
 	CloseOutline,
 	CheckmarkCircleOutline,
@@ -7,7 +9,6 @@ import {
 	InformationCircleOutline,
 	WarningOutline,
 } from '@vicons/ionicons5';
-import type { FDialogProps, FDialogEmits } from '@/types/components';
 
 const props = withDefaults(defineProps<FDialogProps>(), {
 	title: '提示',
@@ -85,32 +86,21 @@ const iconMap = {
 
 const hasIcon = computed(() => props.type && props.type !== 'default');
 </script>
-</script>
 
 <template>
 	<Teleport to="body">
 		<Transition name="f-dialog-fade">
 			<div v-if="visible" class="f-dialog-overlay" @click="handleOverlayClick">
 				<Transition name="f-dialog-zoom">
-					<div 
-						v-if="visible" 
-						class="f-dialog" 
-						:class="[
-							`f-dialog--${type}`,
-							{
-								'is-center': center,
-								'is-fullscreen': fullscreen
-							}
-						]"
-						:style="{ width: fullscreen ? '100%' : width }"
-					>
+					<div v-if="visible" class="f-dialog" :class="[
+						`f-dialog--${type}`,
+						{
+							'is-center': center,
+							'is-fullscreen': fullscreen
+						}
+					]" :style="{ width: fullscreen ? '100%' : width }">
 						<!-- 关闭按钮 -->
-						<button 
-							v-if="showClose" 
-							type="button" 
-							class="f-dialog__close" 
-							@click="handleClose"
-						>
+						<button v-if="showClose" type="button" class="f-dialog__close" @click="handleClose">
 							<f-icon>
 								<CloseOutline />
 							</f-icon>
@@ -349,6 +339,7 @@ const hasIcon = computed(() => props.type && props.type !== 'default');
 		opacity: 0;
 		transform: scale(0.7);
 	}
+
 	100% {
 		opacity: 1;
 		transform: scale(1);
@@ -360,6 +351,7 @@ const hasIcon = computed(() => props.type && props.type !== 'default');
 		opacity: 1;
 		transform: scale(1);
 	}
+
 	100% {
 		opacity: 0;
 		transform: scale(0.7);
