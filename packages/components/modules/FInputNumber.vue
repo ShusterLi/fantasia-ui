@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FInputNumberProps } from '@/types';
-import { FIcon } from 'fantasia-ui';
+import FIcon from './FIcon.vue';
 import { RemoveOutline, AddOutline, ChevronUpOutline, ChevronDownOutline } from '@vicons/ionicons5';
 
 const props = withDefaults(defineProps<FInputNumberProps>(), {

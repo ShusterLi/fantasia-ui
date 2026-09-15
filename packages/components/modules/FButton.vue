@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { CSSProperties, Component } from 'vue';
 import type { FButtonProps, FButtonGroupContext } from '@/types';
-import { FIcon } from 'fantasia-ui';
+import FIcon from './FIcon.vue';
 
 const SIZE_MAP = {
   small: { h: '24px', p: '0 8px', f: '12px', i: '14px' },
