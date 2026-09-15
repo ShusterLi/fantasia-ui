@@ -1,36 +1,12 @@
 # 快速开始
 
-## 安装
+文档已被重置为最小结构，仅保留此入门页。如需恢复自动生成的组件文档或搭建 Storybook，请联系我或运行相应的生成脚本。
 
-建议使用 pnpm：
-
-```bash
-pnpm add -D vitepress
-```
-
-或者使用 npm/yarn：
+示例：如何在项目中本地预览文档（示范使用 Vite）
 
 ```bash
-npm i -D vitepress
-# 或
-yarn add -D vitepress
+pnpm install
+pnpm run dev
 ```
 
-## 本地启动
-
-安装依赖后，运行：
-
-```bash
-pnpm run docs:dev
-```
-
-浏览器打开 http://localhost:5173
-
-## 构建静态站点
-
-```bash
-pnpm run docs:build
-pnpm run docs:serve
-```
-
-构建产物位于 `docs/.vitepress/dist`（或 VitePress 默认输出目录）。
+（如果你准备重新搭建文档，我可以帮你初始化 Storybook 或 VitePress 模板。）

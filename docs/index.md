@@ -6,13 +6,6 @@ heroAlt: Fantasia UI
 
 # Fantasia UI
 
-> 一个基于 Vue 3 + TypeScript 的轻量级现代化 UI 组件库。
+这是项目的文档首页。文档已被重置为最小结构，仅保留入门指南。
 
-- 文档目录：
-  - [快速开始](/guide/getting-started)
-  - 组件使用说明：
-    - [FButton 按钮](/components/f-button)
-    - [FInput 输入框](/components/f-input)
-    - [FDialog 对话框](/components/f-dialog)
-
-更多组件文档会在 `components` 目录下逐步补充。
+- 快速开始：参见 [Guide - 快速开始](./guide/getting-started.md)
