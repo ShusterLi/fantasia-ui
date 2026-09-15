@@ -235,15 +235,16 @@ useEventListener(window, 'click', handleWindowClick);
 }
 
 .f-dropdown-content {
-  background: var(--surface);
-  border-radius: 4px;
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
   box-shadow:
-    0 4px 6px -2px var(--shadow, rgba(0, 0, 0, 0.05)),
-    0 10px 24px -4px var(--shadow, rgba(0, 0, 0, 0.1));
+    0 10px 24px rgba(15, 23, 42, 0.12),
+    0 4px 12px rgba(15, 23, 42, 0.06);
   padding: 4px;
   min-width: 140px;
   width: fit-content;
+  backdrop-filter: blur(6px);
 
   .f-dropdown-option {
     display: flex;

@@ -5,11 +5,18 @@ import FProgress from './FProgress.vue';
 
 const file = defineModel<string>('file', { default: '' });
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   accept?: string;
   limit?: number;
   progress?: number | null;
-}>();
+  buttonMode?: boolean;
+  buttonText?: string;
+  hint?: string;
+}>(), {
+  buttonMode: false,
+  buttonText: '选择文件',
+  hint: '支持 .xlsx .xls .json .txt',
+});
 
 const emit = defineEmits<{
   change: [file: File];
@@ -48,7 +55,7 @@ const onFileChange = (e: Event) => {
 
 <template>
   <div class="f-upload">
-    <div class="f-upload__zone" :class="{ 'f-upload--drag': dragActive }" @dragover="onDragOver"
+    <div v-if="!buttonMode" class="f-upload__zone" :class="{ 'f-upload--drag': dragActive }" @dragover="onDragOver"
       @dragleave="onDragLeave" @drop="onDrop">
       <label class="f-upload__label">
         <input type="file" :accept="accept" class="f-upload__input" @change="onFileChange" />
@@ -57,10 +64,17 @@ const onFileChange = (e: Event) => {
             <CloudUpload />
           </f-icon>
           <span class="f-upload__title">点击或拖拽文件至此处</span>
-          <span class="f-upload__hint">支持 .xlsx .xls .json .txt</span>
+          <span class="f-upload__hint">{{ hint }}</span>
         </slot>
       </label>
     </div>
+
+    <label v-else class="f-upload__button">
+      <input type="file" :accept="accept" class="f-upload__input" @change="onFileChange" />
+      <slot>
+        <span>{{ buttonText }}</span>
+      </slot>
+    </label>
 
     <div v-if="file" class="f-upload__file-item">
       <f-icon>
@@ -119,6 +133,25 @@ const onFileChange = (e: Event) => {
     justify-content: center;
     gap: 0.5rem;
     cursor: pointer;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 16px rgba(168, 85, 247, 0.2);
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(168, 85, 247, 0.24);
+    }
   }
 
   &__title {

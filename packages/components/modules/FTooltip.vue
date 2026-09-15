@@ -60,12 +60,11 @@ const updatePosition = () => {
     else top = trigger.top + (trigger.height - tooltip.height) / 2;
   }
 
-  // 视口边界保护
   const padding = 8;
   left = Math.max(padding, Math.min(left, window.innerWidth - tooltip.width - padding));
   top = Math.max(padding, Math.min(top, window.innerHeight - tooltip.height - padding));
 
-  position.value = { top: top + window.scrollY, left: left + window.scrollX };
+  position.value = { top, left };
 };
 
 onUnmounted(hide);
@@ -97,15 +96,16 @@ onUnmounted(hide);
 }
 
 .f-tooltip-wrapper {
-  position: absolute;
+  position: fixed;
   z-index: 999;
   padding: 5px 9px;
-  border-radius: 2px;
+  border-radius: 6px;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--surface);
-  background: var(--text);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18), 0 2px 6px rgba(15, 23, 42, 0.12);
   pointer-events: none;
   word-break: break-word;
   white-space: pre-wrap;
@@ -114,7 +114,9 @@ onUnmounted(hide);
     position: absolute;
     width: 6px;
     height: 6px;
-    background: var(--text);
+    background: rgba(15, 23, 42, 0.96);
+    border-right: 1px solid rgba(148, 163, 184, 0.2);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
     transform: rotate(45deg);
   }
 

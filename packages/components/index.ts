@@ -27,6 +27,11 @@ export { default as FAffix } from "./modules/FAffix.vue";
 export { default as FForm } from "./modules/FForm.vue";
 export { default as FFormItem } from "./modules/FFormItem.vue";
 export { default as FCheckbox } from "./modules/FCheckbox.vue";
+export { default as FRadio } from "./modules/FRadio.vue";
+export { default as FRadioGroup } from "./modules/FRadioGroup.vue";
+export { default as FSwitch } from "./modules/FSwitch.vue";
+export { default as FTreeSelect } from "./modules/FTreeSelect.vue";
+export { default as FTransfer } from "./modules/FTransfer.vue";
 export { default as FAlert } from "./modules/FAlert.vue";
 export { default as FEditor } from "./modules/FEditor.vue";
 export { default as FTable } from "./modules/FTable.vue";
@@ -40,6 +45,10 @@ export { default as FSlider } from './modules/FSlider.vue';
 export { default as FScrollbar } from './modules/FScrollbar.vue';
 export { default as FInputNumber } from './modules/FInputNumber.vue';
 export { default as FResult } from './modules/FResult.vue';
+export { default as FMask } from './modules/FMask.vue';
+export { default as FMarquee } from './modules/FMarquee.vue';
+export { default as FSteps } from './modules/FSteps.vue';
+
 
 // FMessage 和 FNotification 使用命名导出
 import FMessageDefault from '../composables/FMessage.js';

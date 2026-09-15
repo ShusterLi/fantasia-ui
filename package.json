@@ -64,12 +64,12 @@
       "optional": true
     }
   },
-  "dependencies": {},
   "devDependencies": {
+    "@vicons/ionicons5": "^0.13.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
-    "@vicons/ionicons5": "^0.13.0",
     "@vueuse/core": "^14.3.0",
+    "jsdom": "^30.0.1",
     "sass": "^1.89.0",
     "typescript": "~5.8.3",
     "unplugin-auto-import": "^19.3.0",

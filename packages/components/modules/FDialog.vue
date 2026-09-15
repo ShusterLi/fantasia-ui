@@ -150,24 +150,28 @@ const hasIcon = computed(() => props.type && props.type !== 'default');
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(0, 0, 0, 0.5);
+	background: rgba(15, 23, 42, 0.46);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	z-index: 2000;
 	padding: 20px;
+	backdrop-filter: blur(2px);
+	transition: background-color 0.25s ease;
 }
 
 .f-dialog {
 	position: relative;
 	background: #fff;
 	border-radius: 8px;
-	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
 	max-width: 90vw;
 	max-height: 90vh;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	will-change: transform, opacity;
+	transform-origin: center;
 
 	&.is-fullscreen {
 		width: 100% !important;
@@ -318,7 +322,7 @@ const hasIcon = computed(() => props.type && props.type !== 'default');
 // 动画
 .f-dialog-fade-enter-active,
 .f-dialog-fade-leave-active {
-	transition: opacity 0.3s;
+	transition: opacity 0.25s ease;
 }
 
 .f-dialog-fade-enter-from,
@@ -326,35 +330,20 @@ const hasIcon = computed(() => props.type && props.type !== 'default');
 	opacity: 0;
 }
 
-.f-dialog-zoom-enter-active {
-	animation: f-dialog-zoom-in 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
+.f-dialog-zoom-enter-active,
 .f-dialog-zoom-leave-active {
-	animation: f-dialog-zoom-out 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+	transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes f-dialog-zoom-in {
-	0% {
-		opacity: 0;
-		transform: scale(0.7);
-	}
-
-	100% {
-		opacity: 1;
-		transform: scale(1);
-	}
+.f-dialog-zoom-enter-from,
+.f-dialog-zoom-leave-to {
+	opacity: 0;
+	transform: scale(0.88) translateY(6px);
 }
 
-@keyframes f-dialog-zoom-out {
-	0% {
-		opacity: 1;
-		transform: scale(1);
-	}
-
-	100% {
-		opacity: 0;
-		transform: scale(0.7);
-	}
+.f-dialog-zoom-enter-to,
+.f-dialog-zoom-leave-from {
+	opacity: 1;
+	transform: scale(1) translateY(0);
 }
 </style>

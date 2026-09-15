@@ -13,6 +13,11 @@ declare module '@vue/runtime-core' {
     FButton: typeof components.FButton
     FCard: typeof components.FCard
     FCheckbox: typeof components.FCheckbox
+    FRadio: typeof components.FRadio
+    FRadioGroup: typeof components.FRadioGroup
+    FSwitch: typeof components.FSwitch
+    FTreeSelect: typeof components.FTreeSelect
+    FTransfer: typeof components.FTransfer
     FCol: typeof components.FCol
     FContainer: typeof components.FContainer
     FDialog: typeof components.FDialog
@@ -47,6 +52,9 @@ declare module '@vue/runtime-core' {
     FSlider: typeof components.FSlider
     FScrollbar: typeof components.FScrollbar
     FInputNumber: typeof components.FInputNumber
+    FMask: typeof components.FMask
+    FMarquee: typeof components.FMarquee
+    FSteps: typeof components.FSteps
   }
 }
 

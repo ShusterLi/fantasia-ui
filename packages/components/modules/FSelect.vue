@@ -79,8 +79,10 @@ const handleSelect = (key: string | number, option: FDropdownOption) => {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-width: 120px;
-  width: fit-content;
+  min-width: 180px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 8px 12px;
   background: var(--surface2);
   border: 1.5px solid var(--border);
