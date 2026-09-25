@@ -55,9 +55,8 @@ declare module '@vue/runtime-core' {
     FMask: typeof components.FMask
     FMarquee: typeof components.FMarquee
     FSteps: typeof components.FSteps
-    FMessage: typeof components.FMessage
-    FNotification: typeof components.FNotification
     FResult: typeof components.FResult
+    // FMessage 和 FNotification 只作为函数式 API 使用，从 composables 导出
   }
 }
 

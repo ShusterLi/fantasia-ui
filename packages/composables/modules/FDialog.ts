@@ -1,6 +1,6 @@
 import type { FDialogFn, FDialogOptions, FDialogType } from '@/types';
 import { h, render } from 'vue';
-import FDialogComp from '../components/modules/FDialog.vue';
+import FDialogComp from '../../components/modules/FDialog.vue';
 
 const showDialog = (options: FDialogOptions): Promise<boolean> => {
 	return new Promise((resolve) => {

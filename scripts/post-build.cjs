@@ -13,12 +13,15 @@ declare const install: Plugin
 export default install
 
 // 导出所有组件
-export * from './types/components'
+export * from './types/packages/components'
 
-// 显式导出 FMessage 和 FNotification
-export { FMessage, FNotification } from './types/components'
-export type { FMessageFn, FMessageOptions, FMessageInstance } from './types/components'
-export type { FNotificationFn, FNotificationOptions, FNotificationInstance } from './types/components'
+// 导出所有 composables
+export * from './types/packages/composables'
+
+// 导出类型
+export type { FDialogFn, FDialogOptions } from './types/packages/types/components'
+export type { FMessageFn, FMessageOptions, FMessageInstance } from './types/packages/types/components'
+export type { FNotificationFn, FNotificationOptions, FNotificationInstance } from './types/packages/types/components'
 `;
 
 fs.writeFileSync('dist/index.d.ts', mainDts, 'utf-8');
