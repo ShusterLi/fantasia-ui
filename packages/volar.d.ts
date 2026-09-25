@@ -20,7 +20,7 @@ declare module '@vue/runtime-core' {
     FTransfer: typeof components.FTransfer
     FCol: typeof components.FCol
     FContainer: typeof components.FContainer
-    FDialog: typeof components.FDialog
+    FDialog: typeof components.FDialogComponent
     FDivider: typeof components.FDivider
     FDropdown: typeof components.FDropdown
     FEditor: typeof components.FEditor
@@ -55,6 +55,9 @@ declare module '@vue/runtime-core' {
     FMask: typeof components.FMask
     FMarquee: typeof components.FMarquee
     FSteps: typeof components.FSteps
+    FMessage: typeof components.FMessageComponent
+    FNotification: typeof components.FNotificationComponent
+    FResult: typeof components.FResult
   }
 }
 

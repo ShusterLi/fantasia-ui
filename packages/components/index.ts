@@ -49,8 +49,12 @@ export { default as FMask } from './modules/FMask.vue';
 export { default as FMarquee } from './modules/FMarquee.vue';
 export { default as FSteps } from './modules/FSteps.vue';
 
+// Dialog、Message、Notification 组件导出
+export { default as FDialogComponent } from './modules/FDialog.vue';
+export { default as FMessageComponent } from './modules/FMessage.vue';
+export { default as FNotificationComponent } from './modules/FNotification.vue';
 
-// FMessage 和 FNotification 使用命名导出
+// Dialog、Message、Notification 函数式 API 导出
 import FMessageDefault from '../composables/FMessage.js';
 import FNotificationDefault from '../composables/FNotification.js';
 import FDialogDefault from '../composables/FDialog.js';
@@ -59,6 +63,7 @@ export { FMessageDefault as FMessage };
 export { FNotificationDefault as FNotification };
 export { FDialogDefault as FDialog };
 
-// 导出 FMessage 和 FNotification 类型
+// 导出相关类型
 export type { FMessageFn, FMessageOptions, FMessageInstance } from '@/types';
 export type { FNotificationFn, FNotificationOptions, FNotificationInstance } from '@/types';
+export type { FDialogFn, FDialogOptions } from '@/types';
