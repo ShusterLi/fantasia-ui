@@ -1,7 +1,7 @@
 {
   "name": "fantasia-ui",
   "private": false,
-  "version": "0.2.48",
+  "version": "0.2.49",
   "type": "module",
   "main": "dist/fantasia-ui.umd.js",
   "module": "dist/fantasia-ui.es.js",
@@ -45,7 +45,6 @@
   "scripts": {
     "dev": "vite",
     "build": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json && node scripts/post-build.cjs",
-    
     "build:lib": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build",
     "build:types": "vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json",
     "preview": "vite preview",
