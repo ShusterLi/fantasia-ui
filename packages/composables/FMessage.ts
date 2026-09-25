@@ -72,6 +72,25 @@ const createInstance = (options: FMessageOptions): FMessageInstance => {
 	}
 }
 
+/**
+ * FMessage 函数式 API
+ * 
+ * @example
+ * // 推荐用法 - 使用小写名称
+ * import { message } from 'fantasia-ui'
+ * message.success('操作成功')
+ * message.error('操作失败')
+ * 
+ * @example
+ * // 或使用 FMessageAPI (向后兼容)
+ * import { FMessageAPI } from 'fantasia-ui'
+ * FMessageAPI.info('这是一条消息')
+ * 
+ * @example
+ * // 组件用法
+ * import { FMessage } from 'fantasia-ui'
+ * // 在模板中使用 <FMessage />
+ */
 const FMessage = ((options: FMessageOptions | string) => {
 	return createInstance(normalizeOptions(options))
 }) as FMessageFn

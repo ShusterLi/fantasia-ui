@@ -77,6 +77,24 @@ const info = (content: string, title = '提示'): Promise<boolean> => {
 	return alert(content, title, 'info');
 };
 
+/**
+ * FDialog 函数式 API
+ * 
+ * @example
+ * // 基础用法
+ * import { dialog } from 'fantasia-ui'
+ * dialog.confirm('确认删除吗?')
+ * 
+ * @example
+ * // 或使用 FDialogAPI
+ * import { FDialogAPI } from 'fantasia-ui'
+ * FDialogAPI.alert('操作成功', '提示')
+ * 
+ * @example
+ * // 组件用法
+ * import { FDialog } from 'fantasia-ui'
+ * // 在模板中使用 <FDialog />
+ */
 const FDialog = ((options: FDialogOptions): Promise<boolean> => {
 	return showDialog(options);
 }) as FDialogFn;

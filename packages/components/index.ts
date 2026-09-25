@@ -49,19 +49,25 @@ export { default as FMask } from './modules/FMask.vue';
 export { default as FMarquee } from './modules/FMarquee.vue';
 export { default as FSteps } from './modules/FSteps.vue';
 
-// Dialog、Message、Notification 组件导出
-export { default as FDialogComponent } from './modules/FDialog.vue';
-export { default as FMessageComponent } from './modules/FMessage.vue';
-export { default as FNotificationComponent } from './modules/FNotification.vue';
+// Dialog、Message、Notification 组件导出 (使用原始名称)
+export { default as FDialog } from './modules/FDialog.vue';
+export { default as FMessage } from './modules/FMessage.vue';
+export { default as FNotification } from './modules/FNotification.vue';
 
 // Dialog、Message、Notification 函数式 API 导出
-import FMessageDefault from '../composables/FMessage.js';
-import FNotificationDefault from '../composables/FNotification.js';
-import FDialogDefault from '../composables/FDialog.js';
+import FDialogAPI from '../composables/FDialog.js';
+import FMessageAPI from '../composables/FMessage.js';
+import FNotificationAPI from '../composables/FNotification.js';
 
-export { FMessageDefault as FMessage };
-export { FNotificationDefault as FNotification };
-export { FDialogDefault as FDialog };
+// 小写名称导出 (推荐用法,类似 Naive UI)
+export { FDialogAPI as dialog };
+export { FMessageAPI as message };
+export { FNotificationAPI as notification };
+
+// 保持向后兼容性 - 支持 API 后缀名称
+export { FDialogAPI };
+export { FMessageAPI };
+export { FNotificationAPI };
 
 // 导出相关类型
 export type { FMessageFn, FMessageOptions, FMessageInstance } from '@/types';

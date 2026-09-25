@@ -84,6 +84,25 @@ const createInstance = (options: FNotificationOptions): FNotificationInstance =>
 	}
 }
 
+/**
+ * FNotification 函数式 API
+ * 
+ * @example
+ * // 推荐用法 - 使用小写名称
+ * import { notification } from 'fantasia-ui'
+ * notification.success('操作成功')
+ * notification.error('操作失败')
+ * 
+ * @example
+ * // 或使用 FNotificationAPI (向后兼容)
+ * import { FNotificationAPI } from 'fantasia-ui'
+ * FNotificationAPI.info('这是一条通知')
+ * 
+ * @example
+ * // 组件用法
+ * import { FNotification } from 'fantasia-ui'
+ * // 在模板中使用 <FNotification />
+ */
 const FNotification = ((options: FNotificationOptions | string) => {
 	return createInstance(normalizeOptions(options))
 }) as FNotificationFn
