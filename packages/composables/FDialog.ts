@@ -1,4 +1,4 @@
-import type { FDialogFn, FDialogOptions, Type } from '@/types';
+import type { FDialogFn, FDialogOptions, FDialogType } from '@/types';
 import { h, render } from 'vue';
 import FDialogComp from '../components/modules/FDialog.vue';
 
@@ -19,17 +19,10 @@ const showDialog = (options: FDialogOptions): Promise<boolean> => {
 			resolve(false);
 		};
 
-		const handleClose = () => {
-			cleanup();
-			resolve(false);
-		};
-
 		const cleanup = () => {
 			visible.value = false;
-			setTimeout(() => {
-				render(null, container);
-				document.body.removeChild(container);
-			}, 300);
+			render(null, container);
+			document.body.removeChild(container);
 		};
 
 		const vnode = h(FDialogComp, {
@@ -42,7 +35,6 @@ const showDialog = (options: FDialogOptions): Promise<boolean> => {
 			},
 			onConfirm: handleConfirm,
 			onCancel: handleCancel,
-			onClose: handleClose,
 			...options,
 		});
 
@@ -54,20 +46,18 @@ const confirm = (content: string, title = '确认'): Promise<boolean> => {
 	return showDialog({
 		title,
 		content,
-		type: 'warning',
+		type: 'confirm',
 		showCancel: true,
-		center: true,
 	});
 };
 
-const alert = (content: string, title = '提示', type: Type = 'info'): Promise<boolean> => {
+const alert = (content: string, title = '提示', type: FDialogType = 'info'): Promise<boolean> => {
 	return showDialog({
 		title,
 		content,
 		type,
 		showCancel: false,
 		confirmText: '知道了',
-		center: true,
 	});
 };
 
@@ -79,8 +69,8 @@ const warning = (content: string, title = '警告'): Promise<boolean> => {
 	return alert(content, title, 'warning');
 };
 
-const failed = (content: string, title = '错误'): Promise<boolean> => {
-	return alert(content, title, 'failed');
+const error = (content: string, title = '错误'): Promise<boolean> => {
+	return alert(content, title, 'error');
 };
 
 const info = (content: string, title = '提示'): Promise<boolean> => {
@@ -96,7 +86,7 @@ FDialog.confirm = confirm;
 FDialog.alert = alert;
 FDialog.success = success;
 FDialog.warning = warning;
-FDialog.failed = failed;
+FDialog.error = error;
 FDialog.info = info;
 
 export default FDialog;
