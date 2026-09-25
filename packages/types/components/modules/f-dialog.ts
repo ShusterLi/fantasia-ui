@@ -19,6 +19,10 @@ interface FDialogProps {
 	cancelText?: string;
 	/** 是否显示取消按钮 */
 	showCancel?: boolean;
+	/** 是否显示关闭按钮 */
+	showClose?: boolean;
+	/** 是否显示分割线 */
+	divider?: boolean;
 	/** 点击遮罩是否关闭 */
 	closeOnClickOutside?: boolean;
 	/** 按 ESC 是否关闭 */

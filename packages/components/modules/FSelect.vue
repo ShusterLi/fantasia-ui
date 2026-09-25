@@ -1,18 +1,20 @@
 <script lang="ts" setup>
-import type { FDropdownOption } from '@/types';
-import { ChevronDownOutline } from '@vicons/ionicons5';
+import type { FSelectProps } from '@/types';
+import { ChevronDownOutline, CloseCircleOutline } from '@vicons/ionicons5';
 import FIcon from './FIcon.vue';
 import FDropdown from './FDropdown.vue';
 
-const props = defineProps<{
-  options: FDropdownOption[];
-  placeholder?: string;
-  disabled?: boolean;
-}>();
+const props = withDefaults(defineProps<FSelectProps>(), {
+  placeholder: '请选择',
+  disabled: false,
+  clearable: false,
+  size: 'medium',
+});
 
 const emit = defineEmits<{
-  (e: 'select', key: string | number, option: FDropdownOption): void;
-  (e: 'change', key: string | number, option: FDropdownOption): void;
+  (e: 'select', key: string | number, option: any): void;
+  (e: 'change', key: string | number, option: any): void;
+  (e: 'clear'): void;
 }>();
 
 const modelValue = defineModel<string | number>();
@@ -22,24 +24,33 @@ const dropdownRef = ref<InstanceType<typeof FDropdown>>();
 
 const selectedLabel = computed(() => {
   const option = props.options.find(o => o.key === modelValue.value);
-  return option?.label ?? (props.placeholder ?? '请选择');
+  return option?.label ?? props.placeholder;
 });
 
 const hasValue = computed(() => {
   return modelValue.value !== undefined && modelValue.value !== null && modelValue.value !== '';
 });
 
-const handleSelect = (key: string | number, option: FDropdownOption) => {
+const showClear = computed(() => {
+  return props.clearable && hasValue.value && !props.disabled;
+});
+
+const handleSelect = (key: string | number, option: any) => {
   const oldValue = modelValue.value;
   modelValue.value = key;
   emit('select', key, option);
   
-  // 只有值真正改变时才触发 change 事件
   if (oldValue !== key) {
     emit('change', key, option);
   }
   
   isOpen.value = false;
+};
+
+const handleClear = (e: MouseEvent) => {
+  e.stopPropagation();
+  modelValue.value = undefined;
+  emit('clear');
 };
 </script>
 
@@ -60,15 +71,26 @@ const handleSelect = (key: string | number, option: FDropdownOption) => {
       :class="{ 
         'is-active': hasValue, 
         'is-open': isOpen,
-        'is-disabled': disabled 
+        'is-disabled': disabled,
+        [`f-select--${size}`]: size
       }"
     >
       <span class="f-select__label" :class="{ 'is-placeholder': !hasValue }">
         {{ selectedLabel }}
       </span>
-      <f-icon class="f-select__arrow">
-        <ChevronDownOutline />
-      </f-icon>
+      
+      <div class="f-select__suffix">
+        <f-icon 
+          v-if="showClear" 
+          class="f-select__clear"
+          @click="handleClear"
+        >
+          <CloseCircleOutline />
+        </f-icon>
+        <f-icon class="f-select__arrow">
+          <ChevronDownOutline />
+        </f-icon>
+      </div>
     </div>
   </f-dropdown>
 </template>
@@ -83,40 +105,39 @@ const handleSelect = (key: string | number, option: FDropdownOption) => {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 8px 12px;
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius, 8px);
+  padding: 0 12px;
+  height: 36px;
+  background: #fff;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
   cursor: pointer;
   user-select: none;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   &:hover:not(.is-disabled) {
-    background: var(--surface3);
-    border-color: var(--border2);
+    border-color: #c0c4cc;
   }
 
   &.is-open:not(.is-disabled),
   &:focus-within:not(.is-disabled) {
-    background: var(--surface);
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+    border-color: #409eff;
+    
+    .f-select__arrow {
+      transform: rotate(180deg);
+    }
   }
 
   &.is-active {
     .f-select__label {
-      color: var(--text);
-      font-weight: 500;
+      color: #606266;
     }
   }
 
   &.is-disabled {
     cursor: not-allowed;
-    opacity: 0.5;
-    background: var(--surface2);
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    color: #c0c4cc;
 
     .f-select__label,
     .f-select__arrow {
@@ -124,31 +145,71 @@ const handleSelect = (key: string | number, option: FDropdownOption) => {
     }
   }
 
+  // Size variants
+  &--small {
+    height: 32px;
+    font-size: 13px;
+    
+    .f-select__label {
+      font-size: 13px;
+    }
+  }
+
+  &--medium {
+    height: 36px;
+    font-size: 14px;
+  }
+
+  &--large {
+    height: 40px;
+    font-size: 16px;
+    
+    .f-select__label {
+      font-size: 16px;
+    }
+  }
+
   &__label {
     font-size: 14px;
-    line-height: 1.4;
-    color: var(--text);
+    line-height: 1.5;
+    color: #606266;
     flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: color 0.2s ease;
+    transition: color 0.2s;
 
     &.is-placeholder {
-      color: var(--text-dim);
-      font-weight: 400;
+      color: #c0c4cc;
+    }
+  }
+
+  &__suffix {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  &__clear {
+    font-size: 14px;
+    color: #c0c4cc;
+    transition: color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: #909399;
     }
   }
 
   &__arrow {
-    font-size: 15px;
-    color: var(--text-muted);
-    flex-shrink: 0;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 14px;
+    color: #c0c4cc;
+    transition: transform 0.3s, color 0.2s;
   }
 
-  &.is-open:not(.is-disabled) &__arrow {
-    transform: rotate(180deg);
+  &:hover:not(.is-disabled) &__arrow {
+    color: #909399;
   }
 }
 </style>

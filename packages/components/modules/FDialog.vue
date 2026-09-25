@@ -7,6 +7,7 @@ import {
 	AlertCircleOutline,
 	InformationCircleOutline,
 	WarningOutline,
+	CloseOutline,
 } from '@vicons/ionicons5';
 import '@/styles/components/f-dialog.scss';
 
@@ -17,6 +18,8 @@ const props = withDefaults(defineProps<FDialogProps>(), {
 	confirmText: '确定',
 	cancelText: '取消',
 	showCancel: true,
+	showClose: true,
+	divider: false,
 	closeOnClickOutside: true,
 	closeOnEsc: true,
 });
@@ -78,8 +81,24 @@ const iconMap = {
 			<div v-if="visible" class="f-dialog-overlay" @click="handleOverlayClick">
 				<Transition name="dialog">
 					<div v-if="visible" class="f-dialog" :class="`f-dialog--${type}`">
+						<!-- 关闭按钮 -->
+						<button 
+							v-if="showClose" 
+							type="button" 
+							class="f-dialog__close" 
+							@click="handleClose"
+						>
+							<f-icon :size="18">
+								<CloseOutline />
+							</f-icon>
+						</button>
+
 						<!-- 头部 -->
-						<div v-if="$slots.header || title" class="f-dialog__header">
+						<div 
+							v-if="$slots.header || title" 
+							class="f-dialog__header"
+							:class="{ 'has-divider': divider }"
+						>
 							<slot name="header">
 								<div class="f-dialog__icon">
 									<f-icon>
@@ -98,7 +117,10 @@ const iconMap = {
 						</div>
 
 						<!-- 底部 -->
-						<div class="f-dialog__footer">
+						<div 
+							class="f-dialog__footer"
+							:class="{ 'has-divider': divider }"
+						>
 							<slot name="footer">
 								<f-button v-if="showCancel" @click="handleCancel">
 									{{ cancelText }}
