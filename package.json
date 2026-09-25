@@ -1,7 +1,7 @@
 {
   "name": "fantasia-ui",
   "private": false,
-  "version": "0.2.49",
+  "version": "0.2.50",
   "type": "module",
   "main": "dist/fantasia-ui.umd.js",
   "module": "dist/fantasia-ui.es.js",
