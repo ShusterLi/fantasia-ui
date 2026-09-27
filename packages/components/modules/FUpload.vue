@@ -4,7 +4,6 @@ import { Close, CloseCircle, CloudUpload, DocumentOutline, CheckmarkCircle, Aler
 import FIcon from './FIcon.vue';
 import FProgress from './FProgress.vue';
 
-
 const fileList = defineModel<UploadFileItem[]>('fileList', { default: () => [] });
 
 const props = withDefaults(defineProps<FUploadProps>(), {
@@ -56,7 +55,7 @@ const submitUpload = async (item: UploadFileItem) => {
 const addFiles = async (files: File[]) => {
   if (!files.length) return;
 
-  // 数量限制：超出的部分直接拒绝，并抛给外部处理提示
+  // 数量限制：超出的部分直接拒绝,并抛给外部处理提示
   const remaining = props.limit != null ? props.limit - fileList.value.length : Infinity;
   if (remaining <= 0) {
     emit('exceed', files);
@@ -69,7 +68,7 @@ const addFiles = async (files: File[]) => {
   for (const raw of accepted) {
     if (props.beforeUpload) {
       const ok = await props.beforeUpload(raw);
-      if (!ok) continue; // 校验未通过：不加入列表，也不触发上传
+      if (!ok) continue; // 校验未通过:不加入列表,也不触发上传
     }
 
     const item: UploadFileItem = {
@@ -113,7 +112,18 @@ const onFileChange = (e: Event) => {
   addFiles(files);
 };
 
-defineExpose({ retryUpload, removeFile, submitAll: () => fileList.value.filter(f => f.status === 'ready').forEach(submitUpload) });
+defineExpose({ 
+  /** 重试上传单个失败的文件 */
+  retryUpload, 
+  /** 移除文件 */
+  removeFile, 
+  /** 批量上传所有 ready 状态的文件 */
+  submitAll: () => {
+    fileList.value
+      .filter(f => f.status === 'ready')
+      .forEach(item => submitUpload(item));
+  }
+});
 </script>
 
 <template>
@@ -161,7 +171,7 @@ defineExpose({ retryUpload, removeFile, submitAll: () => fileList.value.filter(f
 .f-upload {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 12px;
 
   &__trigger {
     display: inline-block;
@@ -169,27 +179,27 @@ defineExpose({ retryUpload, removeFile, submitAll: () => fileList.value.filter(f
   }
 
   &__zone {
-    height: 11rem;
+    height: 180px;
     width: 100%;
-    border: 2px dashed #e2e8f0;
-    border-radius: 8px;
+    border: 2px dashed #dcdfe6;
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1.25rem;
+    padding: 20px;
     text-align: center;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s;
 
     &:hover {
-      border-color: #818cf8;
-      background: rgba(248, 250, 252, 0.3);
+      border-color: #409eff;
+      background: rgba(236, 245, 255, 0.3);
     }
   }
 
   &--drag &__zone {
-    border-color: #6366f1;
-    background: rgba(238, 242, 255, 0.2);
+    border-color: #409eff;
+    background: rgba(236, 245, 255, 0.5);
   }
 
   &__input {
@@ -197,65 +207,74 @@ defineExpose({ retryUpload, removeFile, submitAll: () => fileList.value.filter(f
   }
 
   &__title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    color: #606266;
+    margin-top: 8px;
   }
 
   &__hint {
-    font-size: 0.625rem;
-    font-weight: 700;
-    color: #94a3b8;
-    margin-top: 0.25rem;
-    line-height: 1.4;
+    font-size: 12px;
+    color: #909399;
+    margin-top: 4px;
+    line-height: 1.5;
   }
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 8px;
   }
 
   &__file-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    background: rgba(238, 242, 255, 0.5);
-    border: 1px solid #e0e7ff;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    color: #4338ca;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #ecf5ff;
+    border: 1px solid #d9ecff;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #409eff;
+    transition: all 0.2s;
+
+    &--uploading {
+      background: #ecf5ff;
+      border-color: #d9ecff;
+      color: #409eff;
+    }
 
     &--error {
-      background: rgba(254, 226, 226, 0.5);
-      border-color: #fecaca;
-      color: #b91c1c;
+      background: #fef0f0;
+      border-color: #fde2e2;
+      color: #f56c6c;
     }
 
     &--success {
-      border-color: #bbf7d0;
+      background: #f0f9ff;
+      border-color: #e1f3d8;
+      color: #67c23a;
     }
   }
 
   &__file-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 4px;
     flex: 1;
     min-width: 0;
   }
 
   &__file-name {
-    font-weight: 600;
+    font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__file-error {
-    font-size: 0.6875rem;
-    color: #dc2626;
+    font-size: 12px;
+    color: #f56c6c;
   }
 }
 </style>
