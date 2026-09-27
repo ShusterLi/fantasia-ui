@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     FCol: typeof components.FCol
     FContainer: typeof components.FContainer
     FDialog: typeof components.FDialog
+    FDrawer: typeof components.FDrawer
     FDivider: typeof components.FDivider
     FDropdown: typeof components.FDropdown
     FEditor: typeof components.FEditor

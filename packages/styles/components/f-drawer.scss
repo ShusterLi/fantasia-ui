@@ -1,0 +1,144 @@
+.f-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1100;
+  backdrop-filter: blur(2px);
+}
+
+.f-drawer {
+  position: fixed;
+  background: #fff;
+  z-index: 1101;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+
+  &--left {
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  &--right {
+    top: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  &--top {
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &--bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #e4e7ed;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #303133;
+  }
+
+  &__close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: #909399;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f5f7fa;
+      color: #606266;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  &__footer {
+    padding: 20px;
+    border-top: 1px solid #e4e7ed;
+    flex-shrink: 0;
+  }
+}
+
+// 动画
+.drawer-fade-enter-active,
+.drawer-fade-leave-active {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-fade-enter-from,
+.drawer-fade-leave-to {
+  opacity: 0;
+}
+
+// 左侧抽屉动画
+.drawer-left-enter-active,
+.drawer-left-leave-active {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-left-enter-from,
+.drawer-left-leave-to {
+  transform: translateX(-100%);
+}
+
+// 右侧抽屉动画
+.drawer-right-enter-active,
+.drawer-right-leave-active {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-right-enter-from,
+.drawer-right-leave-to {
+  transform: translateX(100%);
+}
+
+// 顶部抽屉动画
+.drawer-top-enter-active,
+.drawer-top-leave-active {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-top-enter-from,
+.drawer-top-leave-to {
+  transform: translateY(-100%);
+}
+
+// 底部抽屉动画
+.drawer-bottom-enter-active,
+.drawer-bottom-leave-active {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-bottom-enter-from,
+.drawer-bottom-leave-to {
+  transform: translateY(100%);
+}

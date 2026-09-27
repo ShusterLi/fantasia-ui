@@ -54,5 +54,6 @@ export * from './modules/f-message';
 export * from './modules/f-notification';
 export * from './modules/f-select';
 export * from './modules/f-dialog';
+export * from './modules/f-drawer';
 export * from './modules/f-marquee';
 export * from './modules/f-steps';
