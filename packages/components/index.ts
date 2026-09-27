@@ -50,4 +50,3 @@ export { default as FMarquee } from './modules/FMarquee.vue';
 export { default as FSteps } from './modules/FSteps.vue';
 export { default as FDialog } from './modules/FDialog.vue';
 export { default as FDrawer } from './modules/FDrawer.vue';
-// FMessage 和 FNotification 只作为函数式 API 使用，从 composables 导出

@@ -9,12 +9,8 @@ const props = withDefaults(defineProps<{
   accept?: string;
   limit?: number;
   progress?: number | null;
-  buttonMode?: boolean;
-  buttonText?: string;
   hint?: string;
 }>(), {
-  buttonMode: false,
-  buttonText: '选择文件',
   hint: '支持 .xlsx .xls .json .txt',
 });
 
@@ -35,44 +31,31 @@ const onDrop = (e: DragEvent) => {
   dragActive.value = false;
   const f = e.dataTransfer?.files?.[0];
   if (!f) return;
-  if (props.limit && f.size > props.limit) {
-    emit('exceed', f);
-    return;
-  }
   emit('change', f);
 };
 
 const onFileChange = (e: Event) => {
-  const f = (e.target as HTMLInputElement).files?.[0];
+  const input = e.target as HTMLInputElement;
+  const f = input.files?.[0];
   if (!f) return;
-  if (props.limit && f.size > props.limit) {
-    emit('exceed', f);
-    return;
-  }
   emit('change', f);
+  input.value = '';
 };
 </script>
 
 <template>
   <div class="f-upload">
-    <div v-if="!buttonMode" class="f-upload__zone" :class="{ 'f-upload--drag': dragActive }" @dragover="onDragOver"
+    <label class="f-upload__trigger" :class="{ 'f-upload--drag': dragActive }" @dragover="onDragOver"
       @dragleave="onDragLeave" @drop="onDrop">
-      <label class="f-upload__label">
-        <input type="file" :accept="accept" class="f-upload__input" @change="onFileChange" />
-        <slot>
+      <input type="file" :accept="accept" class="f-upload__input" @change="onFileChange" />
+      <slot>
+        <div class="f-upload__zone">
           <f-icon :size="40">
             <CloudUpload />
           </f-icon>
           <span class="f-upload__title">点击或拖拽文件至此处</span>
           <span class="f-upload__hint">{{ hint }}</span>
-        </slot>
-      </label>
-    </div>
-
-    <label v-else class="f-upload__button">
-      <input type="file" :accept="accept" class="f-upload__input" @change="onFileChange" />
-      <slot>
-        <span>{{ buttonText }}</span>
+        </div>
       </slot>
     </label>
 
@@ -98,11 +81,18 @@ const onFileChange = (e: Event) => {
   flex-direction: column;
   gap: 0.5rem;
 
+  &__trigger {
+    display: inline-block;
+    cursor: pointer;
+  }
+
   &__zone {
     height: 11rem;
+    width: 100%;
     border: 2px dashed #e2e8f0;
     border-radius: 8px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 1.25rem;
@@ -115,43 +105,13 @@ const onFileChange = (e: Event) => {
     }
   }
 
-  &--drag {
+  &--drag &__zone {
     border-color: #6366f1;
     background: rgba(238, 242, 255, 0.2);
   }
 
   &__input {
     display: none;
-  }
-
-  &__label {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-
-  &__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.5rem;
-    padding: 0 1rem;
-    border-radius: 9999px;
-    background: linear-gradient(135deg, #ec4899, #a855f7);
-    color: #fff;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 6px 16px rgba(168, 85, 247, 0.2);
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 18px rgba(168, 85, 247, 0.24);
-    }
   }
 
   &__title {
