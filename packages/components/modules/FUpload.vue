@@ -1,53 +1,127 @@
 <script lang="ts" setup>
-import { Close, CloseCircle, CloudUpload, DocumentOutline } from '@vicons/ionicons5';
+import type { FUploadProps, UploadFileItem } from '@/types';
+import { Close, CloseCircle, CloudUpload, DocumentOutline, CheckmarkCircle, AlertCircle, Reload } from '@vicons/ionicons5';
 import FIcon from './FIcon.vue';
 import FProgress from './FProgress.vue';
 
-const file = defineModel<string>('file', { default: '' });
 
-const props = withDefaults(defineProps<{
-  accept?: string;
-  limit?: number;
-  progress?: number | null;
-  hint?: string;
-}>(), {
+const fileList = defineModel<UploadFileItem[]>('fileList', { default: () => [] });
+
+const props = withDefaults(defineProps<FUploadProps>(), {
   hint: '支持 .xlsx .xls .json .txt',
+  autoUpload: true,
 });
 
 const emit = defineEmits<{
-  change: [file: File];
-  exceed: [file: File];
+  change: [file: UploadFileItem];
+  progress: [file: UploadFileItem];
+  success: [file: UploadFileItem, response: string];
+  error: [file: UploadFileItem, error: unknown];
+  remove: [file: UploadFileItem];
+  exceed: [files: File[]];
 }>();
 
 const dragActive = ref(false);
-const isCloseHover = ref(false);
+const hoveredUid = ref<string | null>(null);
 
-const clearFile = () => { file.value = ''; };
+const genUid = () => `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+
+const findItem = (uid: string) => fileList.value.find(f => f.uid === uid);
+
+const updateItem = (uid: string, patch: Partial<UploadFileItem>) => {
+  const item = findItem(uid);
+  if (item) Object.assign(item, patch);
+  return item;
+};
+
+const submitUpload = async (item: UploadFileItem) => {
+  if (!props.httpRequest) return;
+  
+  updateItem(item.uid, { status: 'uploading', percentage: 0 });
+
+  try {
+    const response = await props.httpRequest(item.raw, (percent) => {
+      const current = updateItem(item.uid, { percentage: percent });
+      if (current) emit('progress', current);
+    });
+
+    const done = updateItem(item.uid, { status: 'success', percentage: 100, response });
+    if (done) emit('success', done, response);
+  } catch (err: any) {
+    const failed = updateItem(item.uid, { status: 'error', errorMessage: err?.message || '上传失败' });
+    if (failed) emit('error', failed, err);
+  }
+};
+
+const addFiles = async (files: File[]) => {
+  if (!files.length) return;
+
+  // 数量限制：超出的部分直接拒绝，并抛给外部处理提示
+  const remaining = props.limit != null ? props.limit - fileList.value.length : Infinity;
+  if (remaining <= 0) {
+    emit('exceed', files);
+    return;
+  }
+  const accepted = files.slice(0, remaining);
+  const rejected = files.slice(remaining);
+  if (rejected.length) emit('exceed', rejected);
+
+  for (const raw of accepted) {
+    if (props.beforeUpload) {
+      const ok = await props.beforeUpload(raw);
+      if (!ok) continue; // 校验未通过：不加入列表，也不触发上传
+    }
+
+    const item: UploadFileItem = {
+      uid: genUid(),
+      name: raw.name,
+      status: 'ready',
+      percentage: 0,
+      raw,
+    };
+    fileList.value = [...fileList.value, item];
+    emit('change', item);
+
+    if (props.autoUpload) submitUpload(item);
+  }
+};
+
+const retryUpload = (uid: string) => {
+  const item = findItem(uid);
+  if (item) submitUpload(item);
+};
+
+const removeFile = (uid: string) => {
+  const item = findItem(uid);
+  fileList.value = fileList.value.filter(f => f.uid !== uid);
+  if (item) emit('remove', item);
+};
 
 const onDragOver = (e: DragEvent) => { e.preventDefault(); dragActive.value = true; };
 const onDragLeave = (e: DragEvent) => { e.preventDefault(); dragActive.value = false; };
 const onDrop = (e: DragEvent) => {
   e.preventDefault();
   dragActive.value = false;
-  const f = e.dataTransfer?.files?.[0];
-  if (!f) return;
-  emit('change', f);
+  const files = Array.from(e.dataTransfer?.files ?? []);
+  addFiles(files);
 };
 
 const onFileChange = (e: Event) => {
   const input = e.target as HTMLInputElement;
-  const f = input.files?.[0];
-  if (!f) return;
-  emit('change', f);
+  const files = Array.from(input.files ?? []);
   input.value = '';
+  addFiles(files);
 };
+
+defineExpose({ retryUpload, removeFile, submitAll: () => fileList.value.filter(f => f.status === 'ready').forEach(submitUpload) });
 </script>
 
 <template>
   <div class="f-upload">
     <label class="f-upload__trigger" :class="{ 'f-upload--drag': dragActive }" @dragover="onDragOver"
       @dragleave="onDragLeave" @drop="onDrop">
-      <input type="file" :accept="accept" class="f-upload__input" @change="onFileChange" />
+      <input type="file" :accept="accept" :multiple="limit == null || limit > 1" class="f-upload__input"
+        @change="onFileChange" />
       <slot>
         <div class="f-upload__zone">
           <f-icon :size="40">
@@ -59,18 +133,26 @@ const onFileChange = (e: Event) => {
       </slot>
     </label>
 
-    <div v-if="file" class="f-upload__file-item">
-      <f-icon>
-        <DocumentOutline />
-      </f-icon>
-      <div class="f-upload__file-info">
-        <span class="f-upload__file-name">{{ file }}</span>
-        <f-progress v-if="progress != null" :percent="progress" show-text />
+    <div v-if="fileList.length" class="f-upload__list">
+      <div v-for="item in fileList" :key="item.uid" class="f-upload__file-item"
+        :class="`f-upload__file-item--${item.status}`">
+        <f-icon>
+          <component
+            :is="item.status === 'success' ? CheckmarkCircle : item.status === 'error' ? AlertCircle : DocumentOutline" />
+        </f-icon>
+        <div class="f-upload__file-info">
+          <span class="f-upload__file-name">{{ item.name }}</span>
+          <f-progress v-if="item.status === 'uploading'" :percent="item.percentage" show-text />
+          <span v-else-if="item.status === 'error'" class="f-upload__file-error">{{ item.errorMessage }}</span>
+        </div>
+        <f-icon v-if="item.status === 'error'" @click.stop="retryUpload(item.uid)" style="cursor: pointer;">
+          <Reload />
+        </f-icon>
+        <f-icon @click.stop="removeFile(item.uid)" @mouseenter="hoveredUid = item.uid" @mouseleave="hoveredUid = null"
+          style="cursor: pointer; transition: color 0.2s;">
+          <component :is="hoveredUid === item.uid ? CloseCircle : Close" />
+        </f-icon>
       </div>
-      <f-icon @click.stop="clearFile" @mouseenter="isCloseHover = true" @mouseleave="isCloseHover = false"
-        style="cursor: pointer; transition: color 0.2s;">
-        <component :is="isCloseHover ? CloseCircle : Close" />
-      </f-icon>
     </div>
   </div>
 </template>
@@ -128,6 +210,12 @@ const onFileChange = (e: Event) => {
     line-height: 1.4;
   }
 
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
   &__file-item {
     display: flex;
     align-items: center;
@@ -138,6 +226,16 @@ const onFileChange = (e: Event) => {
     border-radius: 6px;
     font-size: 0.75rem;
     color: #4338ca;
+
+    &--error {
+      background: rgba(254, 226, 226, 0.5);
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+
+    &--success {
+      border-color: #bbf7d0;
+    }
   }
 
   &__file-info {
@@ -153,6 +251,11 @@ const onFileChange = (e: Event) => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__file-error {
+    font-size: 0.6875rem;
+    color: #dc2626;
   }
 }
 </style>

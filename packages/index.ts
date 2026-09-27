@@ -19,6 +19,14 @@ export * from './components'
 export * from './composables'
 
 // 导出类型
-export type { FDialogFn, FDialogOptions } from './types/components'
-export type { FMessageFn, FMessageOptions, FMessageInstance } from './types/components'
-export type { FNotificationFn, FNotificationOptions, FNotificationInstance } from './types/components'
+export type {
+    FDialogFn,
+    FDialogOptions,
+    FMessageFn,
+    FMessageOptions,
+    FMessageInstance,
+    FNotificationFn,
+    FNotificationOptions,
+    FNotificationInstance,
+    UploadFileItem
+} from './types/components'
