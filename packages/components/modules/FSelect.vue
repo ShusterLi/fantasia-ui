@@ -107,20 +107,22 @@ const handleClear = (e: MouseEvent) => {
   box-sizing: border-box;
   padding: 0 12px;
   height: 36px;
-  background: #fff;
-  border: 1px solid #dcdfe6;
+  background: #f8fafc;
+  border: 1px solid #e0e0e6;
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   &:hover:not(.is-disabled) {
-    border-color: #c0c4cc;
+    border-color: #ec4899;
   }
 
   &.is-open:not(.is-disabled),
   &:focus-within:not(.is-disabled) {
-    border-color: #409eff;
+    border-color: #ec4899;
+    background: #fff;
+    box-shadow: 0 0 0 2px #ec48993a;
     
     .f-select__arrow {
       transform: rotate(180deg);
@@ -129,7 +131,7 @@ const handleClear = (e: MouseEvent) => {
 
   &.is-active {
     .f-select__label {
-      color: #606266;
+      color: #1e293b;
     }
   }
 
@@ -172,7 +174,7 @@ const handleClear = (e: MouseEvent) => {
   &__label {
     font-size: 14px;
     line-height: 1.5;
-    color: #606266;
+    color: #1e293b;
     flex: 1;
     white-space: nowrap;
     overflow: hidden;
@@ -180,7 +182,7 @@ const handleClear = (e: MouseEvent) => {
     transition: color 0.2s;
 
     &.is-placeholder {
-      color: #c0c4cc;
+      color: #94a3b8;
     }
   }
 
@@ -193,23 +195,23 @@ const handleClear = (e: MouseEvent) => {
 
   &__clear {
     font-size: 14px;
-    color: #c0c4cc;
+    color: #94a3b8;
     transition: color 0.2s;
     cursor: pointer;
 
     &:hover {
-      color: #909399;
+      color: #64748b;
     }
   }
 
   &__arrow {
     font-size: 14px;
-    color: #c0c4cc;
+    color: #94a3b8;
     transition: transform 0.3s, color 0.2s;
   }
 
   &:hover:not(.is-disabled) &__arrow {
-    color: #909399;
+    color: #64748b;
   }
 }
 </style>

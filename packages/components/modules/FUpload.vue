@@ -192,14 +192,14 @@ defineExpose({
     transition: all 0.2s;
 
     &:hover {
-      border-color: #409eff;
-      background: rgba(236, 245, 255, 0.3);
+      border-color: #ec4899;
+      background: rgba(236, 72, 153, 0.05);
     }
   }
 
   &--drag &__zone {
-    border-color: #409eff;
-    background: rgba(236, 245, 255, 0.5);
+    border-color: #ec4899;
+    background: rgba(236, 72, 153, 0.1);
   }
 
   &__input {
@@ -231,17 +231,17 @@ defineExpose({
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    background: #ecf5ff;
-    border: 1px solid #d9ecff;
+    background: #fdf2f8;
+    border: 1px solid #fce7f3;
     border-radius: 4px;
     font-size: 14px;
-    color: #409eff;
+    color: #ec4899;
     transition: all 0.2s;
 
     &--uploading {
-      background: #ecf5ff;
-      border-color: #d9ecff;
-      color: #409eff;
+      background: #fdf2f8;
+      border-color: #fce7f3;
+      color: #ec4899;
     }
 
     &--error {
