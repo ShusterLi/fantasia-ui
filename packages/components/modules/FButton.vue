@@ -37,22 +37,23 @@ const hasContent = (nodes: VNode[]): boolean =>
 const hasText = computed(() => hasContent(slots.default?.() ?? []));
 
 const buttonStyle = computed(() => {
-  const s = SIZE_MAP[mergedSize.value] || SIZE_MAP.normal;
+  const sizeKey = typeof mergedSize.value === 'number' ? 'normal' : mergedSize.value;
+  const s = SIZE_MAP[sizeKey as keyof typeof SIZE_MAP] || SIZE_MAP.normal;
   const style = {
-    height: s.h,
+    height: typeof mergedSize.value === 'number' ? `${mergedSize.value}px` : s.h,
     padding: props.circle ? '0' : s.p,
     fontSize: s.f,
-    minWidth: props.circle ? s.h : 'auto',
+    minWidth: props.circle ? (typeof mergedSize.value === 'number' ? `${mergedSize.value}px` : s.h) : 'auto',
     backgroundColor: props.bgColor,
     color: props.color,
     '--f-button-gap': s.g,
-    '--f-button-h': s.h
+    '--f-button-h': typeof mergedSize.value === 'number' ? `${mergedSize.value}px` : s.h
   } as CSSProperties;
 
   // 圆角只有在非 Group 模式下才默认生效
   if (props.circle) {
     style.borderRadius = '50%';
-    style.width = s.h;
+    style.width = typeof mergedSize.value === 'number' ? `${mergedSize.value}px` : s.h;
   } else if (typeof props.round === 'number') {
     style.borderRadius = `${props.round}px`;
   } else if (props.round === true) {
@@ -63,7 +64,10 @@ const buttonStyle = computed(() => {
 });
 
 const iconSize = computed(() => {
-  const s = SIZE_MAP[mergedSize.value] || SIZE_MAP.normal;
+  if (typeof mergedSize.value === 'number') {
+    return Math.round(mergedSize.value * 0.6); // 图标大小约为按钮高度的 60%
+  }
+  const s = SIZE_MAP[mergedSize.value as keyof typeof SIZE_MAP] || SIZE_MAP.normal;
   return s.i;
 });
 </script>

@@ -9,16 +9,16 @@ const props = withDefaults(defineProps<FAvatarProps>(), {
   shape: 'circle'
 });
 
-const sizeMap: Record<Size, string> = {
+const sizeMap = {
   small: '32px',
   normal: '48px',
   large: '64px'
-};
+} as const;
 
 const AvatarStyle = computed<CSSProperties>(() => {
   return {
-    width: typeof props.size === 'string' ? sizeMap[props.size] : `${props.size}px`,
-    height: typeof props.size === 'string' ? sizeMap[props.size] : `${props.size}px`,
+    width: typeof props.size === 'string' ? sizeMap[props.size as keyof typeof sizeMap] : `${props.size}px`,
+    height: typeof props.size === 'string' ? sizeMap[props.size as keyof typeof sizeMap] : `${props.size}px`,
     borderRadius: props.shape === 'circle' ? '50%' : '8px'
   };
 });
