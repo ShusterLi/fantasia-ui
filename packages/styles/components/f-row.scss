@@ -1,0 +1,9 @@
+﻿.f-row {
+  display: flex;
+  box-sizing: border-box;
+
+  :deep(.f-col) {
+    padding-left: var(--row-gutter-h);
+    padding-right: var(--row-gutter-h);
+  }
+}

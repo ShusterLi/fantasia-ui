@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FAvatarProps, Size } from '@/types';
 import type { CSSProperties } from 'vue';
 import { Person } from '@vicons/ionicons5'
@@ -32,22 +32,7 @@ const AvatarStyle = computed<CSSProperties>(() => {
     </f-icon>
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-avatar {
-  background-color: var(--surface);
-  color: var(--text-dim);
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
-
-  img {
-    display: block;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
-}
+@use '../../styles/components/f-avatar.scss';
 </style>
+

@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FSliderCaptcha, PolygonsType, ProgressStatus } from '@/types';
 
 const props = withDefaults(defineProps<FSliderCaptcha>(), {
@@ -26,7 +26,7 @@ const handleRef = useTemplateRef<HTMLElement | null>('handleRef');
 const bgCanvas = useTemplateRef<HTMLCanvasElement | null>('bgCanvas');
 const fragmentCanvas = useTemplateRef<HTMLCanvasElement | null>('fragmentCanvas');
 
-// 绘图逻辑保持不变
+// 图片功能保持不变
 const drawShape = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, type: PolygonsType) => {
 	const polygons: Record<string, number> = {
 		triangle: 3, square: 4, pentagon: 5, hexagon: 6, heptagon: 7, octagon: 8
@@ -224,174 +224,7 @@ const handleReset = () => {
 		</div>
 	</div>
 </template>
-
 <style lang="scss" scoped>
-/* 样式保持原封不动 */
-$primary-color: #4a5568;
-$success-color: #48bb78;
-$error-color: #ff4d4f;
-
-.f-slider-captcha {
-	display: inline-flex;
-	flex-direction: column;
-	background-color: #fff;
-	border-radius: 4px;
-	padding: 10px;
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-	border: 1px solid #f0f0f0;
-	width: 320px;
-	user-select: none;
-
-	.captcha-imgs {
-		position: relative;
-		width: 300px;
-		height: 150px;
-		border-radius: 4px;
-		overflow: hidden;
-		background-color: #f7fafc;
-		margin-bottom: 10px;
-
-		.bg-canvas {
-			display: block;
-		}
-
-		.fragment-canvas {
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 10;
-			pointer-events: none;
-			/* 确保旋转平滑 */
-			will-change: transform;
-		}
-
-		.loading-overlay {
-			position: absolute;
-			inset: 0;
-			background: #f5f5f5;
-			z-index: 20;
-		}
-
-		.refresh-btn {
-			position: absolute;
-			top: 8px;
-			right: 8px;
-			font-size: 20px;
-			color: #ffffff73;
-			z-index: 11;
-			transition: all 0.2s;
-
-			&:hover {
-				color: #fff;
-			}
-		}
-	}
-
-	.slider-track {
-		position: relative;
-		height: 44px;
-		background-color: #f0f2f5;
-		border-radius: 4px;
-		border: 1px solid #e6e8eb;
-		overflow: hidden;
-
-		.slider-progress {
-			position: absolute;
-			left: 2px;
-			height: 40px;
-			z-index: 2;
-			border-radius: 4px;
-
-			&.moving {
-				background-color: $primary-color;
-			}
-
-			&.success {
-				background-color: $success-color;
-			}
-
-			&.error {
-				background-color: $error-color;
-			}
-		}
-
-		.track-tip {
-			position: relative;
-			z-index: 1;
-			font-size: 13px;
-			color: #999;
-			pointer-events: none;
-		}
-
-		.slider-handle {
-			position: absolute;
-			left: 2px;
-			width: 40px;
-			height: 40px;
-			background-color: #fff;
-			border-radius: 4px;
-			cursor: grab;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-			z-index: 3;
-			touch-action: none;
-			transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-
-			.status-default {
-				display: flex;
-				gap: 4px;
-				align-items: center;
-				justify-content: center;
-				transition: all 0.3s;
-
-				.stripe {
-					width: 2px;
-					height: 20px;
-					background-color: #ccc;
-					border-radius: 2px;
-					transition: all 0.3s;
-				}
-			}
-
-			&:hover,
-			&.dragging {
-				background-color: $primary-color;
-
-				.status-default {
-					.stripe {
-						&:first-child {
-							width: 0;
-							height: 0;
-							background-color: transparent;
-							border-top: 4px solid transparent;
-							border-bottom: 4px solid transparent;
-							border-right: 6px solid #fff;
-							transform: translateX(-2px);
-						}
-
-						&:last-child {
-							width: 0;
-							height: 0;
-							background-color: transparent;
-							border-top: 4px solid transparent;
-							border-bottom: 4px solid transparent;
-							border-left: 6px solid #fff;
-							transform: translateX(2px);
-						}
-
-						&:nth-child(2) {
-							width: 4px;
-							height: 4px;
-							border-radius: 50%;
-							background-color: #fff;
-						}
-					}
-				}
-			}
-
-			&.dragging {
-				cursor: grabbing;
-			}
-		}
-	}
-}
+@use '../../styles/components/f-slider-captcha.scss';
 </style>
+

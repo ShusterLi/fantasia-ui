@@ -1,0 +1,70 @@
+﻿.f-button-group {
+	display: inline-flex;
+	vertical-align: middle;
+
+	&:last-child {
+		margin-right: 0;
+	}
+
+	&> :deep(*) {
+		position: relative;
+		display: inline-flex;
+
+		.f-button {
+			border-radius: 0;
+		}
+
+		// 2. 按钮组合时，移除相邻元素之间的 1px 重叠边框
+		&:not(:first-child) {
+			margin-left: -1px;
+		}
+
+		// 3. 对于当前组中的第一个子元素，设置左侧圆角
+		&:first-child {
+			.f-button {
+				border-top-left-radius: 4px;
+				border-bottom-left-radius: 4px;
+			}
+		}
+
+		// 4. 对于当前组中的最后一个子元素，设置右侧圆角
+		&:last-child {
+			.f-button {
+				border-top-right-radius: 4px;
+				border-bottom-right-radius: 4px;
+			}
+		}
+
+		// 5. 悬浮时提升层级，确保 1px 边框视觉一致
+		&:hover {
+			z-index: 1;
+		}
+
+		// 激活状态提高层级
+		.is-active {
+			z-index: 2;
+		}
+	}
+
+	// 垂直排列样式
+	&--vertical {
+		flex-direction: column;
+		margin-right: 0;
+		margin-bottom: 12px;
+
+		&> :deep(*) {
+			&:not(:first-child) {
+				margin-left: 0;
+				margin-top: -1px;
+			}
+
+			&:first-child .f-button {
+				border-radius: 4px 4px 0 0;
+			}
+
+			&:last-child .f-button {
+				border-radius: 0 0 4px 4px;
+			}
+		}
+	}
+}

@@ -1,0 +1,149 @@
+﻿.f-input-number {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	width: 140px;
+	background: #f8fafc;
+	border: 1px solid #e0e0e6;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+
+	&__inner {
+		flex: 1;
+		min-width: 0;
+		padding: 10px 12px;
+		border: none;
+		outline: none;
+		background: transparent;
+		color: #1e293b;
+		font-size: 14px;
+		text-align: left;
+
+		&::placeholder {
+			color: #94a3b8;
+		}
+	}
+
+	&.has-controls-both &__inner {
+		text-align: center;
+	}
+
+	&.has-controls-right &__inner {
+		padding-right: 8px;
+	}
+
+	&__btn-left,
+	&__btn-right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 100%;
+		flex-shrink: 0;
+		border: none;
+		background: transparent;
+		color: #94a3b8;
+		cursor: pointer;
+		transition: all 0.2s ease;
+
+		:deep(svg) {
+			width: 16px;
+			height: 16px;
+		}
+
+		&:hover:not(:disabled) {
+			color: #64748b;
+			background: #f1f5f9;
+		}
+
+		&:active:not(:disabled) {
+			transform: scale(0.95);
+		}
+
+		&:disabled {
+			opacity: 0.35;
+			cursor: not-allowed;
+		}
+	}
+
+	&__btn-left {
+		border-right: 1px solid #e0e0e6;
+	}
+
+	&__btn-right {
+		border-left: 1px solid #e0e0e6;
+	}
+
+	&__stack {
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 0;
+		width: 24px;
+		height: 100%;
+		border-left: 1px solid #e0e0e6;
+
+		&-btn {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: none;
+			background: transparent;
+			color: #94a3b8;
+			cursor: pointer;
+			transition: all 0.15s ease;
+
+			:deep(svg) {
+				width: 12px;
+				height: 12px;
+			}
+
+			&:first-child {
+				border-bottom: 1px solid #e0e0e6;
+			}
+
+			&:hover:not(:disabled) {
+				color: #64748b;
+				background: #f1f5f9;
+			}
+
+			&:active:not(:disabled) {
+				transform: scale(0.9);
+			}
+
+			&:disabled {
+				opacity: 0.35;
+				cursor: not-allowed;
+			}
+		}
+	}
+
+	&:hover:not(.is-disabled) {
+		border-color: #ec4899;
+	}
+
+	&.is-focus {
+		background: #fff;
+		border-color: #ec4899;
+		box-shadow: 0 0 0 2px #ec48993a;
+	}
+
+	&.is-error {
+		border-color: #f43f5e;
+		background: #fff1f2;
+
+		&.is-focus {
+			box-shadow: 0 0 0 2px #f43f5e2a;
+		}
+	}
+
+	&.is-disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		background: #f8fafc;
+
+		.f-input-number__inner {
+			cursor: not-allowed;
+		}
+	}
+}

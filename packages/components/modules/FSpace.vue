@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FSpaceProps, Size } from '@/types';
 import type { VNode, CSSProperties, Slots } from "vue";
 import { Fragment } from 'vue'
@@ -62,24 +62,9 @@ const children = computed(() => {
       </div>
       <span v-if="split && index < children.length - 1" class="f-space__split" aria-hidden="true">{{ split }}</span>
     </template>
+
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-space {
-  display: inline-flex;
-  box-sizing: border-box;
-
-  &__item {
-    display: flex;
-    align-items: center;
-  }
-
-  &__split {
-    display: flex;
-    align-items: center;
-    color: var(--border3);
-    user-select: none;
-  }
-}
+@use '../../styles/components/f-space.scss';
 </style>

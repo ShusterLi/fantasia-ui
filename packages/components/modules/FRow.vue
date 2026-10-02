@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FRowProps, Justify, Align } from '@/types';
 
 const props = withDefaults(defineProps<FRowProps>(), {
@@ -48,15 +48,7 @@ const rowStyle = computed(() => ({
     <slot />
   </component>
 </template>
-
 <style lang="scss" scoped>
-.f-row {
-  display: flex;
-  box-sizing: border-box;
-
-  :deep(.f-col) {
-    padding-left: var(--row-gutter-h);
-    padding-right: var(--row-gutter-h);
-  }
-}
+@use '../../styles/components/f-row.scss';
 </style>
+

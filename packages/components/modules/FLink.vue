@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FLinkProps } from '@/types';
 
 const props = withDefaults(defineProps<FLinkProps>(), {
@@ -17,80 +17,7 @@ const props = withDefaults(defineProps<FLinkProps>(), {
     <slot />
   </a>
 </template>
-
 <style lang="scss" scoped>
-.f-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: color 0.2s, opacity 0.2s;
-  color: var(--text-link);
-
-  &--underline-none {
-    text-decoration: none;
-  }
-
-  &--underline-always {
-    text-decoration: underline;
-  }
-
-  &--underline-hover {
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  &--default {
-    color: var(--text);
-  }
-
-  &--muted {
-    color: var(--text-muted);
-  }
-
-  &--accent {
-    color: var(--accent);
-
-    &:hover {
-      color: var(--accent-hover);
-    }
-  }
-
-  &--accent2 {
-    color: var(--accent2);
-
-    &:hover {
-      color: var(--accent2-hover);
-    }
-  }
-
-  &--green {
-    color: var(--green);
-  }
-
-  &--red {
-    color: var(--red);
-  }
-
-  &--blue {
-    color: var(--blue);
-  }
-
-  &--gold {
-    color: var(--gold);
-  }
-
-  &:hover {
-    color: var(--accent-hover);
-  }
-
-  &--disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-}
+@use '../../styles/components/f-link.scss';
 </style>
+

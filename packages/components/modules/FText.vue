@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FTextProps } from '@/types';
 
 const props = withDefaults(defineProps<FTextProps>(), {
@@ -40,115 +40,7 @@ const resolvedWeight = computed(() => props.weight ?? (props.heading ? headingWe
     <slot />
   </component>
 </template>
-
 <style lang="scss" scoped>
-.f-text {
-
-  // 字号
-  &--xs {
-    font-size: 11px;
-  }
-
-  &--sm {
-    font-size: 13px;
-  }
-
-  &--normal {
-    font-size: 14px;
-  }
-
-  &--lg {
-    font-size: 16px;
-  }
-
-  &--xl {
-    font-size: 18px;
-  }
-
-  &--2xl {
-    font-size: 22px;
-  }
-
-  &--3xl {
-    font-size: 28px;
-  }
-
-  // 字重
-  &--normal {
-    font-weight: 400;
-  }
-
-  &--medium {
-    font-weight: 500;
-  }
-
-  &--bold {
-    font-weight: 600;
-  }
-
-  &--bolder {
-    font-weight: 700;
-  }
-
-  // 颜色
-  &--default {
-    color: var(--text);
-  }
-
-  &--muted {
-    color: var(--text-muted);
-  }
-
-  &--dim {
-    color: var(--text-dim);
-  }
-
-  &--link {
-    color: var(--text-link);
-  }
-
-  &--accent {
-    color: var(--accent);
-  }
-
-  &--accent2 {
-    color: var(--accent2);
-  }
-
-  &--accent3 {
-    color: var(--accent3);
-  }
-
-  &--gold {
-    color: var(--gold);
-  }
-
-  &--green {
-    color: var(--green);
-  }
-
-  &--red {
-    color: var(--red);
-  }
-
-  &--blue {
-    color: var(--blue);
-  }
-
-  &--orange {
-    color: var(--orange);
-  }
-
-  // 修饰
-  &--truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: block;
-  }
-
-  &--italic {
-    font-style: italic;
-  }
-}
+@use '../../styles/components/f-text.scss';
 </style>
+

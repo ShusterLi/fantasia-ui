@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FColProps, ColSize } from '@/types';
 
 const props = withDefaults(defineProps<FColProps>(), {
@@ -37,79 +37,7 @@ const colClass = computed(() => {
     <slot />
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-col {
-  box-sizing: border-box;
-  flex-shrink: 0;
-  width: calc(var(--col-span) / 60 * 100%);
-  margin-left: calc(var(--col-offset) / 60 * 100%);
-  order: var(--col-order);
-
-  // xs < 576px（默认，不加 media query）
-  @for $i from 0 through 60 {
-    &--xs-#{$i} {
-      width: calc($i / 60 * 100%);
-    }
-
-    &--xs-offset-#{$i} {
-      margin-left: calc($i / 60 * 100%);
-    }
-
-    &--xs-order-#{$i} {
-      order: $i;
-    }
-  }
-
-  // sm ≥ 576px
-  @media (min-width: 576px) {
-    @for $i from 0 through 60 {
-      &--sm-#{$i} {
-        width: calc($i / 60 * 100%);
-      }
-
-      &--sm-offset-#{$i} {
-        margin-left: calc($i / 60 * 100%);
-      }
-
-      &--sm-order-#{$i} {
-        order: $i;
-      }
-    }
-  }
-
-  // md ≥ 768px
-  @media (min-width: 768px) {
-    @for $i from 0 through 60 {
-      &--md-#{$i} {
-        width: calc($i / 60 * 100%);
-      }
-
-      &--md-offset-#{$i} {
-        margin-left: calc($i / 60 * 100%);
-      }
-
-      &--md-order-#{$i} {
-        order: $i;
-      }
-    }
-  }
-
-  // lg ≥ 1200px
-  @media (min-width: 1200px) {
-    @for $i from 0 through 60 {
-      &--lg-#{$i} {
-        width: calc($i / 60 * 100%);
-      }
-
-      &--lg-offset-#{$i} {
-        margin-left: calc($i / 60 * 100%);
-      }
-
-      &--lg-order-#{$i} {
-        order: $i;
-      }
-    }
-  }
-}
+@use '../../styles/components/f-col.scss';
 </style>
+

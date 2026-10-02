@@ -1,0 +1,88 @@
+﻿:root {
+	--f-scrollbar-thumb-bg: rgba(255, 255, 255, 0.25);
+	--f-scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.4);
+	--f-scrollbar-size: 8px;
+	--f-scrollbar-transition-duration: 0.2s;
+}
+
+:root.light {
+	--f-scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
+	--f-scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
+}
+
+.f-scrollbar {
+	position: relative;
+	overflow: hidden;
+	height: 100%;
+
+	&__wrap {
+		height: 100%;
+		overflow: auto;
+
+		&--hidden-bar {
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+	}
+
+	&__view {
+		display: inline-block;
+		min-width: 100%;
+	}
+
+	&__bar {
+		// 让滚动条在 position: absolute 时同时作为 &__thumb 的定位参考
+		position: absolute;
+		z-index: 1;
+		opacity: 0;
+		transition: opacity var(--f-scrollbar-transition-duration);
+		pointer-events: none;
+
+		&--visible {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		&--vertical {
+			top: 2px;
+			right: 2px;
+			bottom: 2px;
+			width: var(--f-scrollbar-size);
+		}
+
+		&--horizontal {
+			left: 2px;
+			right: 2px;
+			bottom: 2px;
+			height: var(--f-scrollbar-size);
+		}
+	}
+
+	&__thumb {
+		position: absolute;
+		border-radius: calc(var(--f-scrollbar-size) / 2);
+		background: var(--f-scrollbar-thumb-bg);
+		cursor: pointer;
+		transition: background var(--f-scrollbar-transition-duration);
+
+		.f-scrollbar__bar--vertical & {
+			width: 100%;
+		}
+
+		.f-scrollbar__bar--horizontal & {
+			height: 100%;
+		}
+
+		&:hover {
+			background: var(--f-scrollbar-thumb-hover-bg);
+		}
+	}
+
+	&--native {
+		overflow: auto;
+	}
+}

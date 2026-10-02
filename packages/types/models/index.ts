@@ -29,3 +29,7 @@ export interface Actions {
   disabled?: boolean;
   [key: string]: any;
 }
+
+// 图片类型
+export type imageType = 'image/png' | 'image/jpeg' | 'image/webp' | 'image/jpg' | 'image/bmp' | 'image/gif' | 'image/svg+xml';
+

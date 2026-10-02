@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FRateProps } from '@/types';
 import { Star, StarHalf, StarOutline } from '@vicons/ionicons5';
 import FIcon from './FIcon.vue';
@@ -81,38 +81,7 @@ const onClick = () => {
     </span>
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-rate {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-
-  &__item {
-    cursor: pointer;
-    transition: transform 0.1s ease;
-    line-height: 1;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-
-  &__score {
-    margin-left: 8px;
-    font-size: 14px;
-    color: #606266;
-    line-height: 1;
-  }
-
-  &--readonly {
-    .f-rate__item {
-      cursor: default;
-
-      &:hover {
-        transform: none;
-      }
-    }
-  }
-}
+@use '../../styles/components/f-rate.scss';
 </style>
+

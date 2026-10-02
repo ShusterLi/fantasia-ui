@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FCollapseProps } from '@/types';
 
 const props = withDefaults(defineProps<FCollapseProps>(), {
@@ -6,8 +6,8 @@ const props = withDefaults(defineProps<FCollapseProps>(), {
 })
 
 /**
- * accordion = false 时 modelValue 为 (string | number)[]
- * accordion = true  时 modelValue 为 string | number
+ * accordion = false 鏃?modelValue 涓?(string | number)[]
+ * accordion = true  鏃?modelValue 涓?string | number
  */
 const activeNames = defineModel<Array<string | number> | string | number>({
 	default: () => []
@@ -50,20 +50,7 @@ provide(
 		<slot />
 	</div>
 </template>
-
-<style lang="scss">
-:root {
-	--f-collapse-border-color: #333338;
-	--f-collapse-radius: 8px;
-}
-
-:root.light {
-	--f-collapse-border-color: #e4e4e7;
-}
-
-.f-collapse {
-	border: 1px solid var(--f-collapse-border-color);
-	border-radius: var(--f-collapse-radius);
-	overflow: hidden;
-}
+<style lang="scss" scoped>
+@use '../../styles/components/f-collapse.scss';
 </style>
+

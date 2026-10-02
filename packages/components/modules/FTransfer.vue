@@ -1,9 +1,9 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FTransferItem, FTransferProps } from '@/types';
 
 const props = withDefaults(defineProps<FTransferProps>(), {
-	leftTitle: '可选项',
-	rightTitle: '已选项',
+	leftTitle: '鍙€夐」',
+	rightTitle: '宸查€夐」',
 	disabled: false,
 });
 
@@ -71,10 +71,10 @@ const moveSelected = (direction: 'left' | 'right') => {
 
 		<div class="f-transfer__actions">
 			<button type="button" class="f-transfer__btn" :disabled="disabled || leftList.length === 0" @click="moveSelected('right')">
-				→
+				鈫?
 			</button>
 			<button type="button" class="f-transfer__btn" :disabled="disabled || rightList.length === 0" @click="moveSelected('left')">
-				←
+				鈫?
 			</button>
 		</div>
 
@@ -94,91 +94,7 @@ const moveSelected = (direction: 'left' | 'right') => {
 		</div>
 	</div>
 </template>
-
 <style lang="scss" scoped>
-.f-transfer {
-	display: flex;
-	align-items: stretch;
-	gap: 16px;
-	width: 100%;
-
-	&.is-disabled {
-		opacity: 0.7;
-	}
-
-	&__panel {
-		flex: 1;
-		background: #fff;
-		border: 1px solid #e5e7eb;
-		border-radius: 10px;
-		overflow: hidden;
-	}
-
-	&__header {
-		padding: 10px 12px;
-		font-size: 13px;
-		font-weight: 600;
-		color: #374151;
-		background: #f8fafc;
-		border-bottom: 1px solid #e5e7eb;
-	}
-
-	&__list {
-		list-style: none;
-		padding: 8px;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-		min-height: 180px;
-	}
-
-	&__item {
-		padding: 8px 10px;
-		border-radius: 6px;
-		font-size: 14px;
-		color: #334155;
-		cursor: pointer;
-		transition: all 0.15s ease;
-
-		&:hover {
-			background: #fdf2f8;
-		}
-
-		&.is-selected {
-			background: #fdf2f8;
-			color: #9d174d;
-			font-weight: 500;
-		}
-	}
-
-	&__actions {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 10px;
-		padding-top: 32px;
-	}
-
-	&__btn {
-		width: 38px;
-		height: 32px;
-		border: 1px solid #f3b4d6;
-		background: #fff;
-		color: #ec4899;
-		border-radius: 8px;
-		font-size: 18px;
-		cursor: pointer;
-		transition: all 0.2s ease;
-
-		&:hover:not(:disabled) {
-			background: #fdf2f8;
-		}
-
-		&:disabled {
-			opacity: 0.45;
-			cursor: not-allowed;
-		}
-	}
-}
+@use '../../styles/components/f-transfer.scss';
 </style>
+

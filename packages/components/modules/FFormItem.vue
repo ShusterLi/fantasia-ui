@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FFormItemProps } from '@/types'
 import { validateSingleField } from '@/utils'
 
@@ -28,7 +28,7 @@ const validate = async () => {
 
 const clearValidate = () => { errorMsg.value = '' }
 
-// 提供给 FInput
+// 鎻愪緵缁?FInput
 provide('FFormItemContext', { errorMsg, validate })
 
 onMounted(() => {
@@ -61,8 +61,7 @@ defineExpose({ validate, clearValidate })
 			textAlign: labelPosition === 'top' ? 'left' : labelPosition
 		}">
 			<span v-if="isRequired" class="star">*</span>
-			{{ label }}：
-		</label>
+			{{ label }}锛?		</label>
 
 		<div class="f-form-item__content">
 			<slot />
@@ -72,77 +71,7 @@ defineExpose({ validate, clearValidate })
 		</div>
 	</div>
 </template>
-
 <style lang="scss" scoped>
-.f-form-item {
-	display: flex;
-	font-size: 12px;
-	margin-bottom: 18px;
-
-	&.is-label-top {
-		flex-direction: column;
-
-		.f-form-item__label {
-			margin-bottom: 6px;
-		}
-	}
-
-	&.is-label-left,
-	&.is-label-right {
-		flex-direction: row;
-		align-items: flex-start;
-
-		.f-form-item__label {
-			margin-right: 12px;
-			padding-top: 8px;
-			flex-shrink: 0;
-		}
-	}
-
-	&.is-size-small .f-form-item__label {
-		font-size: 12px;
-	}
-
-	&.is-size-large .f-form-item__label {
-		font-size: 16px;
-	}
-
-	&__label {
-		color: #374151;
-		font-size: 13px;
-		font-weight: 500;
-
-		.star {
-			color: #f43f5e;
-			margin-right: 2px;
-		}
-	}
-
-	&__content {
-		flex: 1;
-		min-width: 0;
-		position: relative;
-	}
-
-	&__error {
-		position: absolute;
-		top: 100%;
-		left: 4px;
-		font-size: 12px;
-		color: #f43f5e;
-		margin-top: 2px;
-		line-height: 1.4;
-	}
-}
-
-.err-slide-enter-active,
-.err-slide-leave-active {
-	transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.err-slide-enter-from,
-.err-slide-leave-to {
-	opacity: 0;
-	transform: translateY(-4px);
-}
+@use '../../styles/components/f-form-item.scss';
 </style>
+

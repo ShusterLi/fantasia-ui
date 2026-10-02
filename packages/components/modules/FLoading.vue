@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FLoadingProps } from '@/types';
 
 const props = withDefaults(defineProps<FLoadingProps>(), {
@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<FLoadingProps>(), {
     <p v-if="props.text" class="msg">{{ props.text }}</p>
   </div>
 </template>
-
 <style lang="scss" scoped>
-@use '../../styles/modules/loading.scss';
+@use '../../styles/components/f-loading.scss';
 </style>
+

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FTableProps } from '@/types/index';
 import FTooltip from './FTooltip.vue';
 
@@ -8,8 +8,8 @@ const props = withDefaults(defineProps<FTableProps>(), {
   overscan: 5,
   showIndex: true,
   loading: false,
-  loadingText: '加载中...',
-  emptyText: '暂无数据',
+  loadingText: '鍔犺浇涓?..',
+  emptyText: '鏆傛棤鏁版嵁',
 })
 
 const scrollEl = ref<HTMLElement | null>(null)
@@ -129,6 +129,7 @@ watch(() => props.data, () => {
                     {{ formatCell(row[col.key]) }}
                   </f-tooltip>
                 </template>
+
               </td>
             </tr>
           </template>
@@ -149,124 +150,6 @@ watch(() => props.data, () => {
     </div>
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-table {
-  position: relative;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  overflow: hidden;
-  min-height: 14rem;
-
-  &__loading {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(2px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 0.625rem;
-    z-index: 10;
-  }
-
-  &__scroll {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-  }
-
-  &__inner {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.75rem;
-    text-align: left;
-    table-layout: auto;
-    min-width: 100%;
-
-    th,
-    td {
-      padding: 0.625rem;
-      border-right: 1px solid #e2e8f0;
-
-      &:last-child {
-        border-right: none;
-      }
-    }
-  }
-
-  &__col--index {
-    width: 3rem;
-  }
-
-  // ── thead ──────────────────────────────────────────
-  &__head {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background: #1e293b;
-    color: #ffffff;
-  }
-
-  &__th {
-    font-weight: 700;
-    text-align: center;
-
-    &--index {
-      background: #0f172a;
-      width: 3rem;
-    }
-
-    &-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-    }
-  }
-
-  // ── tbody ──────────────────────────────────────────
-  &__row {
-    border-bottom: 1px solid #e2e8f0;
-
-    &:hover {
-      background: rgba(248, 250, 252, 0.7);
-    }
-  }
-
-  &__td {
-    text-align: center;
-    font-size: 0.6875rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    &--muted {
-      color: #94a3b8;
-      text-decoration: line-through;
-      opacity: 0.6;
-    }
-
-    &--index {
-      background: rgba(248, 250, 252, 0.5);
-      font-weight: 800;
-      color: #64748b;
-    }
-  }
-
-  &__spacer td {
-    padding: 0;
-    border: none;
-  }
-
-  &__empty {
-    padding: 3rem 0;
-    text-align: center;
-    color: #94a3b8;
-    font-weight: 700;
-    background: rgba(248, 250, 252, 0.5);
-  }
-}
+@use '../../styles/components/f-table.scss';
 </style>

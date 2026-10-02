@@ -1,0 +1,118 @@
+﻿.f-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 180px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0 12px;
+  height: 36px;
+  background: #f8fafc;
+  border: 1px solid #e0e0e6;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  &:hover:not(.is-disabled) {
+    border-color: #ec4899;
+  }
+
+  &.is-open:not(.is-disabled),
+  &:focus-within:not(.is-disabled) {
+    border-color: #ec4899;
+    background: #fff;
+    box-shadow: 0 0 0 2px #ec48993a;
+    
+    .f-select__arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  &.is-active {
+    .f-select__label {
+      color: #1e293b;
+    }
+  }
+
+  &.is-disabled {
+    cursor: not-allowed;
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    color: #c0c4cc;
+
+    .f-select__label,
+    .f-select__arrow {
+      cursor: not-allowed;
+    }
+  }
+
+  // Size variants
+  &--small {
+    height: 32px;
+    font-size: 13px;
+    
+    .f-select__label {
+      font-size: 13px;
+    }
+  }
+
+  &--medium {
+    height: 36px;
+    font-size: 14px;
+  }
+
+  &--large {
+    height: 40px;
+    font-size: 16px;
+    
+    .f-select__label {
+      font-size: 16px;
+    }
+  }
+
+  &__label {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1e293b;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s;
+
+    &.is-placeholder {
+      color: #94a3b8;
+    }
+  }
+
+  &__suffix {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  &__clear {
+    font-size: 14px;
+    color: #94a3b8;
+    transition: color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: #64748b;
+    }
+  }
+
+  &__arrow {
+    font-size: 14px;
+    color: #94a3b8;
+    transition: transform 0.3s, color 0.2s;
+  }
+
+  &:hover:not(.is-disabled) &__arrow {
+    color: #64748b;
+  }
+}

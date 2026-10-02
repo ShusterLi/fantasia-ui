@@ -1,0 +1,14 @@
+﻿:root {
+	--f-collapse-border-color: #333338;
+	--f-collapse-radius: 8px;
+}
+
+:root.light {
+	--f-collapse-border-color: #e4e4e7;
+}
+
+.f-collapse {
+	border: 1px solid var(--f-collapse-border-color);
+	border-radius: var(--f-collapse-radius);
+	overflow: hidden;
+}

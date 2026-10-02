@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FMaskProps } from '@/types';
 
 const props = withDefaults(defineProps<FMaskProps>(), {
@@ -13,7 +13,7 @@ const handleMaskClick = () => {
 	if (props.maskClosable) visible.value = false;
 };
 
-// 遮罩颜色映射
+// 閬僵棰滆壊鏄犲皠
 const maskBackgroundColor = computed(() => {
 	if (!props.showMask) return 'transparent';
 
@@ -42,27 +42,7 @@ const maskBackgroundColor = computed(() => {
 		</Transition>
 	</Teleport>
 </template>
-
 <style lang="scss" scoped>
-.f-dialog-mask {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 1000;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
+@use '../../styles/components/f-mask.scss';
 </style>
+

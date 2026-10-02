@@ -10,7 +10,35 @@ export * from './components'
 // 导出所有 composables
 export * from './composables'
 
-// 导出类型
-export type { FDialogFn, FDialogOptions } from './types/components'
-export type { FMessageFn, FMessageOptions, FMessageInstance } from './types/components'
-export type { FNotificationFn, FNotificationOptions, FNotificationInstance } from './types/components'
+// 导出常用公开类型，方便在业务代码中引用
+export type {
+    Justify,
+    Align,
+    Wrap,
+    Direction,
+    Size,
+    Placement,
+    Type,
+    Position,
+    ActiveInstance,
+    FButtonProps,
+    FInputProps,
+    FUploadProps,
+    FTransferItem,
+    FTreeSelectOption,
+    FTableColumn,
+    Rule,
+    Rules,
+    FDialogFn,
+    FDialogOptions,
+    FMessageFn,
+    FMessageOptions,
+    FMessageInstance,
+    FNotificationFn,
+    FNotificationOptions,
+    FNotificationInstance,
+    UploadFileItem,
+    MenuItem,
+    Columns,
+    Actions
+} from './types'

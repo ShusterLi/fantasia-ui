@@ -1,0 +1,287 @@
+
+.f-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--f-border-color, #dcdfe6);
+  background: transparent;
+  color: #606266;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.1s;
+  line-height: 1;
+  box-sizing: border-box;
+
+  .f-button__inner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--f-button-gap, 8px);
+    height: 100%;
+    min-width: 0;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  &__text {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  // 纯图标按钮时去掉间距
+  &.is-icon-only .f-button__inner {
+    gap: 0;
+  }
+
+  &.is-icon-only:not(.is-text) {
+    padding: 0;
+    min-width: var(--f-button-h);
+  }
+
+  :deep(.f-icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 1em;
+      height: 1em;
+      display: block;
+    }
+  }
+
+  // 颜色变体
+  &--default {
+    &:hover {
+      color: #409eff;
+      border-color: #c6e2ff;
+      background: #f5f7fa;
+    }
+
+    &:active {
+      background: #eeeeee;
+    }
+  }
+
+  &--primary {
+    background: #409eff;
+    border-color: #409eff;
+    color: #fff;
+
+    &:hover {
+      background: #66b1ff;
+      border-color: #66b1ff;
+    }
+
+    &:active {
+      background: #3a8ee6;
+      border-color: #3a8ee6;
+    }
+  }
+
+  &--success {
+    background: #67c23a;
+    border-color: #67c23a;
+    color: #fff;
+
+    &:hover {
+      background: #85ce61;
+      border-color: #85ce61;
+    }
+
+    &:active {
+      background: #5daf34;
+      border-color: #5daf34;
+    }
+  }
+
+  &--error {
+    background: #f56c6c;
+    border-color: #f56c6c;
+    color: #fff;
+
+    &:hover {
+      background: #f78989;
+      border-color: #f78989;
+    }
+
+    &:active {
+      background: #dd6161;
+      border-color: #dd6161;
+    }
+  }
+
+  &--warning {
+    background: #e6a23c;
+    border-color: #e6a23c;
+    color: #fff;
+
+    &:hover {
+      background: #ebb563;
+      border-color: #ebb563;
+    }
+
+    &:active {
+      background: #cf9236;
+      border-color: #cf9236;
+    }
+  }
+
+  &--info {
+    background: #909399;
+    border-color: #909399;
+    color: #fff;
+
+    &:hover {
+      background: #a6a9ad;
+      border-color: #a6a9ad;
+    }
+
+    &:active {
+      background: #82848a;
+      border-color: #82848a;
+    }
+  }
+
+  &--failed {
+    background: #f56c6c;
+    border-color: #f56c6c;
+    color: #fff;
+
+    &:hover {
+      background: #f78989;
+      border-color: #f78989;
+    }
+
+    &:active {
+      background: #dd6161;
+      border-color: #dd6161;
+    }
+  }
+
+  // 文本按钮
+  &.is-text {
+    border-color: transparent;
+    background: transparent;
+    color: #409eff;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:hover {
+      color: #66b1ff;
+      border-color: transparent;
+      background: transparent;
+    }
+
+    &:active {
+      color: #3a8ee6;
+      background: transparent;
+    }
+
+    &.is-disabled {
+      background: transparent;
+      border-color: transparent;
+    }
+
+    // 文本按钮的不同类型颜色
+    &.f-button--primary {
+      color: #409eff;
+      background: transparent;
+      border-color: transparent;
+
+      &:hover {
+        color: #66b1ff;
+      }
+
+      &:active {
+        color: #3a8ee6;
+      }
+    }
+
+    &.f-button--success {
+      color: #67c23a;
+      background: transparent;
+      border-color: transparent;
+
+      &:hover {
+        color: #85ce61;
+      }
+
+      &:active {
+        color: #5daf34;
+      }
+    }
+
+    &.f-button--warning {
+      color: #e6a23c;
+      background: transparent;
+      border-color: transparent;
+
+      &:hover {
+        color: #ebb563;
+      }
+
+      &:active {
+        color: #cf9236;
+      }
+    }
+
+    &.f-button--failed {
+      color: #f56c6c;
+      background: transparent;
+      border-color: transparent;
+
+      &:hover {
+        color: #f78989;
+      }
+
+      &:active {
+        color: #dd6161;
+      }
+    }
+
+    &.f-button--info {
+      color: #909399;
+      background: transparent;
+      border-color: transparent;
+
+      &:hover {
+        color: #a6a9ad;
+      }
+
+      &:active {
+        color: #82848a;
+      }
+    }
+  }
+
+  &.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+    pointer-events: none;
+    filter: grayscale(1);
+  }
+
+  .f-loader {
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: rotate 0.8s linear infinite;
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

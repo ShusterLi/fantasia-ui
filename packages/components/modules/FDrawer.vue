@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FDrawerProps, FDrawerEmits } from '@/types/components';
 import FIcon from './FIcon.vue';
 import { CloseOutline } from '@vicons/ionicons5';
@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
 		</Transition>
 	</Teleport>
 </template>
-
 <style lang="scss" scoped>
 @use '../../styles/components/f-drawer.scss';
 </style>
+

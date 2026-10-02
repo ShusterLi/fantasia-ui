@@ -57,3 +57,4 @@ export * from './modules/f-dialog';
 export * from './modules/f-drawer';
 export * from './modules/f-marquee';
 export * from './modules/f-steps';
+export * from './modules/f-crop';

@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { CSSProperties } from 'vue';
 import type { FDropdownProps, FDropdownOption } from '@/types';
 import { useEventListener } from '@vueuse/core';
@@ -21,9 +21,8 @@ const dropdownRef = ref<HTMLElement | null>(null);
 const dropdownHeight = ref(0);
 const dropdownWidth = ref(0);
 
-// ── 锚点矩形 ────────────────────────────────────────
-// 包裹层是 display: contents，自身没有盒子（rect 全为 0），
-// 因此取插槽里第一个真实元素作为定位锚点
+// 这里的包装层是 display: contents，原生元素没有实际 rect，取值会为 0，
+// 因此需要改为取第一个实际节点作为定位锚点
 const getAnchorRect = (): DOMRect | null => {
   const root = triggerRef.value;
   if (!root) return null;
@@ -31,7 +30,7 @@ const getAnchorRect = (): DOMRect | null => {
   return el.getBoundingClientRect();
 };
 
-// ── 定位计算 ────────────────────────────────────────
+// 定位计算
 const bridgeStyle = computed<CSSProperties>(() => {
   const [side] = props.placement.split('-');
   const gap = Array.isArray(props.offset) ? props.offset[0] : props.offset;
@@ -121,7 +120,7 @@ const dropdownStyle = computed<CSSProperties>(() => {
   };
 });
 
-// ── 逻辑控制 ──────────────────────────────────────
+// 组件交互逻辑
 let leaveTimer: ReturnType<typeof setTimeout> | null = null;
 let showTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -166,7 +165,7 @@ const handleOptionClick = (option: FDropdownOption) => {
   if (!option.children) show.value = false;
 };
 
-// ── 生命周期与事件绑定 ────────────────────────────────
+// 监听外部事件与点击
 watch(show, async (val) => {
   if (val) {
     anchorRect.value = getAnchorRect();
@@ -210,6 +209,7 @@ useEventListener(window, 'click', handleWindowClick);
                 <span class="opt-label">{{ opt.label }}</span>
               </div>
             </template>
+
             <slot v-else name="content" />
           </div>
         </div>
@@ -217,90 +217,6 @@ useEventListener(window, 'click', handleWindowClick);
     </Teleport>
   </div>
 </template>
-
 <style lang="scss" scoped>
-// 不产生盒子，对外层布局完全透明
-.f-dropdown-trigger-wrapper {
-  display: contents;
-}
-
-.f-dropdown-item {
-  position: fixed;
-  pointer-events: auto;
-}
-
-.f-dropdown-bridge {
-  position: absolute;
-  background: transparent;
-}
-
-.f-dropdown-content {
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 8px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow:
-    0 10px 24px rgba(15, 23, 42, 0.12),
-    0 4px 12px rgba(15, 23, 42, 0.06);
-  padding: 4px;
-  min-width: 140px;
-  width: fit-content;
-  backdrop-filter: blur(6px);
-
-  .f-dropdown-option {
-    display: flex;
-    align-items: center;
-    padding: 7px 10px;
-    gap: 8px;
-    border-radius: calc(var(--radius, 8px) - 4px);
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 13px;
-    transition:
-      background 0.15s ease,
-      color 0.15s ease;
-
-    &:hover:not(.is-disabled) {
-      background: var(--surface3);
-      color: var(--text);
-    }
-
-    &.is-disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
-
-    .opt-icon {
-      display: inline-flex;
-      align-items: center;
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-      color: var(--text-dim);
-
-      :deep(svg) {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    .opt-label {
-      flex: 1;
-      white-space: nowrap;
-    }
-  }
-}
-
-// ── 动效 ────────────────────────────────────────────
-.f-dropdown-motion-enter-active,
-.f-dropdown-motion-leave-active {
-  transition:
-    opacity 0.18s ease,
-    transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.f-dropdown-motion-enter-from,
-.f-dropdown-motion-leave-to {
-  opacity: 0;
-  transform: scale(0.92);
-}
+@use '../../styles/components/f-dropdown.scss';
 </style>

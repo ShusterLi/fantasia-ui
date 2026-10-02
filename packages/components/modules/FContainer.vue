@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FContainerProps } from '@/types';
 import type { CSSProperties } from 'vue';
 
@@ -16,10 +16,7 @@ const ContainerStyle = computed<CSSProperties>(() => ({
     <slot />
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-container {
-  width: 100%;
-  height: 100%;
-}
+@use '../../styles/components/f-container.scss';
 </style>
+

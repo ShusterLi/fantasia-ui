@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FImageProps } from '@/types';
 import { PictureError } from '@/assets';
 import FIcon from './FIcon.vue';
@@ -45,40 +45,7 @@ defineSlots<{
       :style="{ objectFit: props.fit }" class="f-image__img" @load="onLoad" @error="onError" />
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background: var(--surface2);
-
-  &__placeholder,
-  &__error {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-dim);
-  }
-
-  &__img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
+@use '../../styles/components/f-image.scss';
 </style>
+

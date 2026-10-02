@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FScrollbarProps } from '@/types';
 
 const props = withDefaults(defineProps<FScrollbarProps>(), {
@@ -20,10 +20,10 @@ const resizeRef = ref<HTMLElement | null>(null)
 const thumbYRef = ref<HTMLElement | null>(null)
 const thumbXRef = ref<HTMLElement | null>(null)
 
-// 滑块相对轨道的高度/宽度占比（0~1）
+// 滚动容器相对内容的高度比例，范围为 0~1
 const ratioY = ref(1)
 const ratioX = ref(1)
-// 滑块的位移百分比（0~100）
+// 滚动容器的位移比例，范围为 0~100
 const moveY = ref(0)
 const moveX = ref(0)
 
@@ -92,7 +92,7 @@ function startDrag(axis: 'x' | 'y', e: MouseEvent) {
 	function onMouseMove(moveEvent: MouseEvent) {
 		const currentClientPos = axis === 'y' ? moveEvent.clientY : moveEvent.clientX
 		const delta = currentClientPos - startClientPos
-		// 滑块每移动 1px，内容需要按 (1 / ratio) 的比例滚动
+		// 滚动条每移动 1px，内容需要按 (1 / ratio) 的比例同步滚动
 		const scrollDelta = ratio > 0 ? delta / ratio : 0
 		const maxScroll = scrollSize - trackSize
 		const nextScroll = Math.min(Math.max(startScroll + scrollDelta, 0), maxScroll)
@@ -190,96 +190,9 @@ watch(
 					@mousedown="startDrag('x', $event)" />
 			</div>
 		</template>
+
 	</div>
 </template>
-
-<style lang="scss">
-:root {
-	--f-scrollbar-thumb-bg: rgba(255, 255, 255, 0.25);
-	--f-scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.4);
-	--f-scrollbar-size: 8px;
-	--f-scrollbar-transition-duration: 0.2s;
-}
-
-:root.light {
-	--f-scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
-	--f-scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
-}
-
-.f-scrollbar {
-	position: relative;
-	overflow: hidden;
-	height: 100%;
-
-	&__wrap {
-		height: 100%;
-		overflow: auto;
-
-		&--hidden-bar {
-			scrollbar-width: none;
-			-ms-overflow-style: none;
-
-			&::-webkit-scrollbar {
-				display: none;
-			}
-		}
-	}
-
-	&__view {
-		display: inline-block;
-		min-width: 100%;
-	}
-
-	&__bar {
-		// 自身 position: absolute 同时也作为内部 &__thumb 的定位参照
-		position: absolute;
-		z-index: 1;
-		opacity: 0;
-		transition: opacity var(--f-scrollbar-transition-duration);
-		pointer-events: none;
-
-		&--visible {
-			opacity: 1;
-			pointer-events: auto;
-		}
-
-		&--vertical {
-			top: 2px;
-			right: 2px;
-			bottom: 2px;
-			width: var(--f-scrollbar-size);
-		}
-
-		&--horizontal {
-			left: 2px;
-			right: 2px;
-			bottom: 2px;
-			height: var(--f-scrollbar-size);
-		}
-	}
-
-	&__thumb {
-		position: absolute;
-		border-radius: calc(var(--f-scrollbar-size) / 2);
-		background: var(--f-scrollbar-thumb-bg);
-		cursor: pointer;
-		transition: background var(--f-scrollbar-transition-duration);
-
-		.f-scrollbar__bar--vertical & {
-			width: 100%;
-		}
-
-		.f-scrollbar__bar--horizontal & {
-			height: 100%;
-		}
-
-		&:hover {
-			background: var(--f-scrollbar-thumb-hover-bg);
-		}
-	}
-
-	&--native {
-		overflow: auto;
-	}
-}
+<style lang="scss" scoped>
+@use '../../styles/components/f-scrollbar.scss';
 </style>

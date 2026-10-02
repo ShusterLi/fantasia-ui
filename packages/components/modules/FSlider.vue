@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FSliderProps } from '@/types';
 
 const props = withDefaults(defineProps<FSliderProps>(), {
@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<FSliderProps>(), {
 
 const modelValue = defineModel<number | [number, number]>({ default: 0 })
 
-// values[0] 单值模式下即当前值；区间模式下 [起点, 终点]
+// values[0] 表示当前值；范围模式下为 [起点, 终点]
 const values = reactive<number[]>(props.range ? [props.min, props.max] : [props.min])
 
 let skipNextWatch = false
@@ -42,7 +42,7 @@ function emitChange() {
 	modelValue.value = props.range ? [values[0], values[1]] : values[0]
 }
 
-// ---------- 数值换算 ----------
+// ---------- 小数位数 ----------
 const decimalPlaces = computed(() => {
 	const str = String(props.step)
 	const idx = str.indexOf('.')
@@ -65,7 +65,7 @@ function percentToValue(percent: number) {
 	return clampValue(props.min + (percent / 100) * (props.max - props.min))
 }
 
-// ---------- 拖拽 ----------
+// ---------- 拖动 ----------
 const trackRef = ref<HTMLElement | null>(null)
 const activeThumb = ref<number | null>(null)
 const hoveredThumb = ref<number | null>(null)
@@ -121,7 +121,7 @@ function startDrag(index: number, e: MouseEvent) {
 
 function handleTrackClick(e: MouseEvent) {
 	if (props.disabled || !trackRef.value) return
-	// 点击在滑块自身上时交给 startDrag 处理，这里只处理空白轨道
+	// 点击在轨道本身上时触发 startDrag 处理，这里仅处理空白轨道
 	if ((e.target as HTMLElement).closest('.f-slider__thumb')) return
 
 	const rect = trackRef.value.getBoundingClientRect()
@@ -161,7 +161,7 @@ function handleKeydown(index: number, e: KeyboardEvent) {
 	emitChange()
 }
 
-// ---------- 展示 ----------
+// ---------- 显示 ----------
 const barStyle = computed(() => {
 	if (props.range) {
 		const start = valueToPercent(values[0])
@@ -216,164 +216,7 @@ function tooltipVisible(index: number) {
 		</div>
 	</div>
 </template>
-
-<style lang="scss">
-:root {
-	--f-slider-track-color: #333338;
-	--f-slider-bar-color: #6366f1;
-	--f-slider-thumb-border-color: #6366f1;
-	--f-slider-thumb-bg: #ffffff;
-	--f-slider-mark-color: #71717a;
-	--f-slider-tooltip-bg: #27272a;
-	--f-slider-tooltip-color: #f4f4f5;
-	--f-slider-track-size: 4px;
-	--f-slider-thumb-size: 14px;
-}
-
-:root.light {
-	--f-slider-track-color: #e4e4e7;
-	--f-slider-mark-color: #a1a1aa;
-	--f-slider-tooltip-bg: #27272a;
-	--f-slider-tooltip-color: #f4f4f5;
-}
-
-.f-slider {
-	position: relative;
-	padding: 10px 6px;
-
-	&--small {
-		--f-slider-track-size: 3px;
-		--f-slider-thumb-size: 12px;
-	}
-
-	&--large {
-		--f-slider-track-size: 6px;
-		--f-slider-thumb-size: 18px;
-	}
-
-	&--disabled {
-		opacity: 0.5;
-		pointer-events: none;
-	}
-
-	&--with-marks {
-		padding-bottom: 26px;
-	}
-
-	&__track {
-		position: relative;
-		height: var(--f-slider-track-size);
-		border-radius: calc(var(--f-slider-track-size) / 2);
-		background: var(--f-slider-track-color);
-		cursor: pointer;
-	}
-
-	&--vertical {
-		display: inline-block;
-		padding: 6px 10px;
-
-		.f-slider__track {
-			width: var(--f-slider-track-size);
-			height: 160px;
-		}
-	}
-
-	&__bar {
-		position: absolute;
-		top: 0;
-		height: 100%;
-		border-radius: inherit;
-		background: var(--f-slider-bar-color);
-	}
-
-	&--vertical &__bar {
-		top: auto;
-		left: 0;
-		width: 100%;
-		height: auto;
-	}
-
-	&__thumb {
-		position: absolute;
-		top: 50%;
-		width: var(--f-slider-thumb-size);
-		height: var(--f-slider-thumb-size);
-		background: var(--f-slider-thumb-bg);
-		border: 2px solid var(--f-slider-thumb-border-color);
-		border-radius: 50%;
-		transform: translate(-50%, -50%);
-		cursor: grab;
-		box-sizing: border-box;
-		outline: none;
-
-		&:hover,
-		&--active {
-			box-shadow: 0 0 0 4px color-mix(in srgb, var(--f-slider-thumb-border-color) 20%, transparent);
-		}
-
-		&--active {
-			cursor: grabbing;
-		}
-	}
-
-	&--vertical &__thumb {
-		top: auto;
-		left: 50%;
-		transform: translate(-50%, 50%);
-	}
-
-	&__tooltip {
-		position: absolute;
-		bottom: calc(100% + 8px);
-		left: 50%;
-		transform: translateX(-50%);
-		padding: 2px 6px;
-		font-size: 12px;
-		white-space: nowrap;
-		color: var(--f-slider-tooltip-color);
-		background: var(--f-slider-tooltip-bg);
-		border-radius: 4px;
-		pointer-events: none;
-	}
-
-	&--vertical &__tooltip {
-		bottom: auto;
-		left: calc(100% + 8px);
-		top: 50%;
-		transform: translateY(-50%);
-	}
-
-	&__mark {
-		position: absolute;
-		top: 50%;
-		transform: translate(-50%, -50%);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-
-		&-dot {
-			width: 4px;
-			height: 4px;
-			border-radius: 50%;
-			background: var(--f-slider-track-color);
-		}
-
-		&-label {
-			margin-top: 14px;
-			font-size: 12px;
-			color: var(--f-slider-mark-color);
-			white-space: nowrap;
-		}
-	}
-}
-
-.f-slider-tooltip-fade-enter-active,
-.f-slider-tooltip-fade-leave-active {
-	transition: opacity 0.15s;
-}
-
-.f-slider-tooltip-fade-enter-from,
-.f-slider-tooltip-fade-leave-to {
-	opacity: 0;
-}
+<style lang="scss" scoped>
+@use '../../styles/components/f-slider.scss';
 </style>
+

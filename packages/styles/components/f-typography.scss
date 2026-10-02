@@ -1,0 +1,15 @@
+﻿.f-typography {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  height: fit-content;
+
+  &::before {
+    content: '';
+    width: 3px;
+    min-height: 14px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+}

@@ -1,0 +1,14 @@
+﻿.f-form {
+	display: flex;
+	flex-direction: column;
+
+	&--size-small {
+		gap: 12px;
+	}
+
+	&--size-large {
+		gap: 24px;
+	}
+
+	&--label-top {}
+}

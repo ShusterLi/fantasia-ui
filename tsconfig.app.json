@@ -2,6 +2,8 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "packages/env.d.ts",
+    "packages/**/*",
+    "packages/**/*.vue",
     "src/**/*",
     "src/**/*.vue",
     "auto-imports.d.ts"
@@ -15,6 +17,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "baseUrl": ".",
     "strict": true,
     "jsx": "preserve",
     "esModuleInterop": true,

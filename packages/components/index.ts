@@ -50,3 +50,4 @@ export { default as FMarquee } from './modules/FMarquee.vue';
 export { default as FSteps } from './modules/FSteps.vue';
 export { default as FDialog } from './modules/FDialog.vue';
 export { default as FDrawer } from './modules/FDrawer.vue';
+export { default as FCrop } from './modules/FCrop.vue';

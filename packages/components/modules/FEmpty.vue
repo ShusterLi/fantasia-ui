@@ -1,8 +1,8 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FEmptyProps } from '@/types';
 
 withDefaults(defineProps<FEmptyProps>(), {
-	description: '暂无数据',
+	description: '鏆傛棤鏁版嵁',
 	image: '',
 	imageSize: 120
 })
@@ -35,46 +35,7 @@ withDefaults(defineProps<FEmptyProps>(), {
 		</div>
 	</div>
 </template>
-
-<style lang="scss">
-:root {
-	--f-empty-image-color: #52525b;
-	--f-empty-description-color: #71717a;
-}
-
-:root.light {
-	--f-empty-image-color: #d4d4d8;
-	--f-empty-description-color: #a1a1aa;
-}
-
-.f-empty {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 32px 0;
-
-	&__image {
-		color: var(--f-empty-image-color);
-
-		&-default,
-		&-img {
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
-		}
-	}
-
-	&__description {
-		margin-top: 12px;
-		font-size: 13px;
-		line-height: 1.5;
-		color: var(--f-empty-description-color);
-		text-align: center;
-	}
-
-	&__extra {
-		margin-top: 16px;
-	}
-}
+<style lang="scss" scoped>
+@use '../../styles/components/f-empty.scss';
 </style>
+

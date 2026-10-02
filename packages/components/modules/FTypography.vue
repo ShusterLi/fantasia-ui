@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FTypographyProps } from '@/types';
 import type { CSSProperties } from 'vue';
 
@@ -18,21 +18,7 @@ const Style = computed<CSSProperties>(() => {
     <slot />
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-typography {
-  display: flex;
-  align-items: stretch;
-  gap: 8px;
-  height: fit-content;
-
-  &::before {
-    content: '';
-    width: 3px;
-    min-height: 14px;
-    background: linear-gradient(to bottom, var(--accent), var(--accent2));
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-}
+@use '../../styles/components/f-typography.scss';
 </style>
+

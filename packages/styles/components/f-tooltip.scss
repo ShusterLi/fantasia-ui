@@ -1,0 +1,64 @@
+﻿.f-tooltip {
+  display: contents;
+}
+
+.f-tooltip-wrapper {
+  position: fixed;
+  z-index: 999;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18), 0 2px 6px rgba(15, 23, 42, 0.12);
+  pointer-events: none;
+  word-break: break-word;
+  white-space: pre-wrap;
+
+  .f-tooltip-arrow {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(15, 23, 42, 0.96);
+    border-right: 1px solid rgba(148, 163, 184, 0.2);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    transform: rotate(45deg);
+  }
+
+  &.is-top .f-tooltip-arrow {
+    bottom: -3px;
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  &.is-bottom .f-tooltip-arrow {
+    top: -3px;
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  &.is-left .f-tooltip-arrow {
+    right: -3px;
+    top: 50%;
+    translate: 0 -50%;
+  }
+
+  &.is-right .f-tooltip-arrow {
+    left: -3px;
+    top: 50%;
+    translate: 0 -50%;
+  }
+}
+
+.f-tooltip-enter-active,
+.f-tooltip-leave-active {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.f-tooltip-enter-from,
+.f-tooltip-leave-to {
+  opacity: 0;
+  transform: scale(0.92);
+}

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FCollapseItemProps } from '@/types';
 
 const props = withDefaults(defineProps<FCollapseItemProps>(), {
@@ -20,7 +20,7 @@ function handleHeaderClick() {
 	context?.handleItemClick(props.name)
 }
 
-// height:auto 无法直接过渡，展开/收起时用 JS 动态设置像素高度
+// height: auto 不能直接过渡，需要通过 JS 计算高度后再做动画
 function onEnter(el: Element) {
 	const element = el as HTMLElement
 	element.style.height = '0px'
@@ -65,87 +65,7 @@ function onLeave(el: Element) {
 		</Transition>
 	</div>
 </template>
-
-<style lang="scss">
-:root {
-	--f-collapse-item-header-bg: #1a1a1e;
-	--f-collapse-item-header-color: #e4e4e7;
-	--f-collapse-item-header-hover-bg: #232328;
-	--f-collapse-item-content-bg: #18181b;
-	--f-collapse-item-content-color: #a1a1aa;
-	--f-collapse-item-border-color: #333338;
-	--f-collapse-item-transition-duration: 0.25s;
-}
-
-:root.light {
-	--f-collapse-item-header-bg: #fafafa;
-	--f-collapse-item-header-color: #18181b;
-	--f-collapse-item-header-hover-bg: #f0f0f2;
-	--f-collapse-item-content-bg: #ffffff;
-	--f-collapse-item-content-color: #52525b;
-	--f-collapse-item-border-color: #e4e4e7;
-}
-
-.f-collapse-item {
-	border-bottom: 1px solid var(--f-collapse-item-border-color);
-
-	&:last-child {
-		border-bottom: none;
-	}
-
-	&__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 12px 16px;
-		background: var(--f-collapse-item-header-bg);
-		color: var(--f-collapse-item-header-color);
-		cursor: pointer;
-		user-select: none;
-		transition: background var(--f-collapse-item-transition-duration);
-
-		&:hover {
-			background: var(--f-collapse-item-header-hover-bg);
-		}
-
-		&-title {
-			font-size: 14px;
-			font-weight: 500;
-		}
-	}
-
-	&__icon {
-		flex-shrink: 0;
-		color: var(--f-collapse-item-content-color);
-		transition: transform var(--f-collapse-item-transition-duration);
-	}
-
-	&--active &__icon {
-		transform: rotate(180deg);
-	}
-
-	&--disabled {
-		.f-collapse-item__header {
-			cursor: not-allowed;
-			opacity: 0.5;
-
-			&:hover {
-				background: var(--f-collapse-item-header-bg);
-			}
-		}
-	}
-
-	&__wrapper {
-		overflow: hidden;
-		transition: height var(--f-collapse-item-transition-duration) ease;
-	}
-
-	&__content {
-		padding: 12px 16px;
-		background: var(--f-collapse-item-content-bg);
-		color: var(--f-collapse-item-content-color);
-		font-size: 13px;
-		line-height: 1.6;
-	}
-}
+<style lang="scss" scoped>
+@use '../../styles/components/f-collapse-item.scss';
 </style>
+

@@ -1,0 +1,16 @@
+﻿.f-space {
+  display: inline-flex;
+  box-sizing: border-box;
+
+  &__item {
+    display: flex;
+    align-items: center;
+  }
+
+  &__split {
+    display: flex;
+    align-items: center;
+    color: var(--border3);
+    user-select: none;
+  }
+}

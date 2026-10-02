@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FColorPickerProps } from '@/types';
 
 const props = withDefaults(defineProps<FColorPickerProps>(), {
@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<FColorPickerProps>(), {
 
 const modelValue = defineModel<string>({ default: '#409eff' })
 
-// ---------- 颜色转换 ----------
+// ---------- 棰滆壊杞崲 ----------
 function hsvToRgb(h: number, s: number, v: number) {
 	s /= 100
 	v /= 100
@@ -83,7 +83,7 @@ function parseColor(input: string) {
 	return null
 }
 
-// ---------- 状态 ----------
+// ---------- 鐘舵€?----------
 const hsva = reactive({ h: 0, s: 0, v: 100, a: 1 })
 
 let skipNextModelWatch = false
@@ -127,7 +127,7 @@ const previewRgb = computed(() => currentRgb())
 const hueBackground =
 	'linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)'
 
-// ---------- 面板显隐 ----------
+// ---------- 闈㈡澘鏄鹃殣 ----------
 const visible = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
 
@@ -152,7 +152,7 @@ function togglePanel() {
 	visible.value = !visible.value
 }
 
-// ---------- 拖拽通用逻辑 ----------
+// ---------- 拖动通用逻辑 ----------
 function startTrack(
 	el: HTMLElement,
 	onMove: (clientX: number, clientY: number, rect: DOMRect) => void,
@@ -176,7 +176,7 @@ function clamp(value: number, min: number, max: number) {
 	return Math.min(Math.max(value, min), max)
 }
 
-// 饱和度-明度面板
+// 面板和滑块的高度区域
 const panelRef = ref<HTMLElement | null>(null)
 function handlePanelDrag(e: MouseEvent) {
 	if (!panelRef.value) return
@@ -193,7 +193,7 @@ function handlePanelDrag(e: MouseEvent) {
 	)
 }
 
-// 色相滑条
+// 色相轨道
 const hueRef = ref<HTMLElement | null>(null)
 function handleHueDrag(e: MouseEvent) {
 	if (!hueRef.value) return
@@ -208,7 +208,7 @@ function handleHueDrag(e: MouseEvent) {
 	)
 }
 
-// 透明度滑条
+// 透明度滑道
 const alphaRef = ref<HTMLElement | null>(null)
 function handleAlphaDrag(e: MouseEvent) {
 	if (!alphaRef.value) return
@@ -223,7 +223,7 @@ function handleAlphaDrag(e: MouseEvent) {
 	)
 }
 
-// ---------- 文本输入 ----------
+// ---------- 颜色输入 ----------
 function tryParseColor(str: string) {
 	const s = str.trim()
 	if (/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(s) || /^rgba?\([^)]+\)$/i.test(s)) {
@@ -246,7 +246,7 @@ function handleInputChange(e: Event) {
 	}
 }
 
-// ---------- 预设色板 ----------
+// ---------- 预定义颜色 ----------
 function selectPredefine(color: string) {
 	const parsed = parseColor(color)
 	if (!parsed) return
@@ -304,208 +304,7 @@ function selectPredefine(color: string) {
 		</Transition>
 	</div>
 </template>
-
-<style lang="scss">
-:root {
-	--f-color-picker-border-color: #333338;
-	--f-color-picker-panel-bg: #1f1f23;
-	--f-color-picker-checkerboard: #333338;
-	--f-color-picker-input-bg: #18181b;
-	--f-color-picker-input-color: #e4e4e7;
-}
-
-:root.light {
-	--f-color-picker-border-color: #e4e4e7;
-	--f-color-picker-panel-bg: #ffffff;
-	--f-color-picker-checkerboard: #d4d4d8;
-	--f-color-picker-input-bg: #fafafa;
-	--f-color-picker-input-color: #18181b;
-}
-
-.f-color-picker {
-	position: relative;
-	display: inline-block;
-
-	&--small &__trigger {
-		width: 24px;
-		height: 24px;
-	}
-
-	&--default &__trigger {
-		width: 32px;
-		height: 32px;
-	}
-
-	&--large &__trigger {
-		width: 40px;
-		height: 40px;
-	}
-
-	&--disabled {
-		opacity: 0.5;
-		pointer-events: none;
-	}
-
-	&__trigger {
-		padding: 3px;
-		border: 1px solid var(--f-color-picker-border-color);
-		border-radius: 6px;
-		cursor: pointer;
-		box-sizing: border-box;
-	}
-
-	&__swatch {
-		width: 100%;
-		height: 100%;
-		border-radius: 3px;
-		background-image:
-			linear-gradient(45deg, var(--f-color-picker-checkerboard) 25%, transparent 25%),
-			linear-gradient(-45deg, var(--f-color-picker-checkerboard) 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, var(--f-color-picker-checkerboard) 75%),
-			linear-gradient(-45deg, transparent 75%, var(--f-color-picker-checkerboard) 75%);
-		background-size: 8px 8px;
-		background-position: 0 0, 0 4px, 4px -4px, -4px 0;
-
-		&-color {
-			display: block;
-			width: 100%;
-			height: 100%;
-			border-radius: 3px;
-		}
-	}
-
-	&__panel {
-		position: absolute;
-		z-index: 10;
-		top: calc(100% + 8px);
-		left: 0;
-		width: 220px;
-		padding: 12px;
-		background: var(--f-color-picker-panel-bg);
-		border: 1px solid var(--f-color-picker-border-color);
-		border-radius: 8px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-		box-sizing: border-box;
-	}
-
-	&__saturation {
-		position: relative;
-		height: 140px;
-		border-radius: 4px;
-		background-image: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent);
-		cursor: crosshair;
-
-		&-thumb {
-			position: absolute;
-			width: 10px;
-			height: 10px;
-			border: 2px solid #fff;
-			border-radius: 50%;
-			box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-			transform: translate(-50%, -50%);
-			pointer-events: none;
-		}
-	}
-
-	&__sliders {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		margin-top: 10px;
-	}
-
-	&__slider-group {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	&__hue,
-	&__alpha {
-		position: relative;
-		height: 10px;
-		border-radius: 5px;
-		cursor: pointer;
-	}
-
-	&__alpha {
-		background-image:
-			linear-gradient(45deg, var(--f-color-picker-checkerboard) 25%, transparent 25%),
-			linear-gradient(-45deg, var(--f-color-picker-checkerboard) 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, var(--f-color-picker-checkerboard) 75%),
-			linear-gradient(-45deg, transparent 75%, var(--f-color-picker-checkerboard) 75%);
-		background-size: 8px 8px;
-		background-position: 0 0, 0 4px, 4px -4px, -4px 0;
-
-		&-gradient {
-			position: absolute;
-			inset: 0;
-			border-radius: 5px;
-		}
-	}
-
-	&__slider-thumb {
-		position: absolute;
-		top: 50%;
-		width: 12px;
-		height: 12px;
-		background: #fff;
-		border-radius: 50%;
-		box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-		transform: translate(-50%, -50%);
-		pointer-events: none;
-	}
-
-	&__current {
-		flex-shrink: 0;
-		width: 24px;
-		height: 24px;
-		border-radius: 4px;
-		border: 1px solid var(--f-color-picker-border-color);
-	}
-
-	&__input {
-		box-sizing: border-box;
-		width: 100%;
-		margin-top: 10px;
-		padding: 6px 8px;
-		font-size: 12px;
-		color: var(--f-color-picker-input-color);
-		background: var(--f-color-picker-input-bg);
-		border: 1px solid var(--f-color-picker-border-color);
-		border-radius: 4px;
-		outline: none;
-
-		&:focus {
-			border-color: var(--f-color-picker-input-color);
-		}
-	}
-
-	&__predefine {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-		margin-top: 10px;
-
-		&-item {
-			width: 18px;
-			height: 18px;
-			border-radius: 3px;
-			border: 1px solid var(--f-color-picker-border-color);
-			cursor: pointer;
-		}
-	}
-}
-
-.f-color-picker-fade-enter-active,
-.f-color-picker-fade-leave-active {
-	transition: opacity 0.15s, transform 0.15s;
-}
-
-.f-color-picker-fade-enter-from,
-.f-color-picker-fade-leave-to {
-	opacity: 0;
-	transform: translateY(-4px);
-}
+<style lang="scss" scoped>
+@use '../../styles/components/f-color-picker.scss';
 </style>
+

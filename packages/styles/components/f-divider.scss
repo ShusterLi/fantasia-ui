@@ -1,0 +1,56 @@
+﻿.f-divider {
+	position: relative;
+	
+	&--horizontal {
+		display: block;
+		width: 100%;
+		height: 0;
+		margin: 24px 0;
+
+		&.f-divider--with-text {
+			display: flex;
+			align-items: center;
+			margin: 24px 0;
+			color: #909399;
+			font-size: 14px;
+		}
+	}
+
+	&--vertical {
+		display: inline-block;
+		width: 0;
+		vertical-align: middle;
+	}
+
+	&__line {
+		flex: 1;
+		min-width: 10%;
+	}
+
+	&__text {
+		padding: 0 16px;
+		white-space: nowrap;
+		font-weight: 500;
+	}
+
+	// 鍐呭浣嶇疆
+	&--left {
+		.f-divider__line:first-child {
+			flex: 0;
+			min-width: 5%;
+		}
+	}
+
+	&--right {
+		.f-divider__line:last-child {
+			flex: 0;
+			min-width: 5%;
+		}
+	}
+
+	&--center {
+		.f-divider__line {
+			flex: 1;
+		}
+	}
+}

@@ -9,7 +9,6 @@ import {
 	WarningOutline,
 	CloseOutline,
 } from '@vicons/ionicons5';
-import '@/styles/components/f-dialog.scss';
 
 const props = withDefaults(defineProps<FDialogProps>(), {
 	title: '提示',
@@ -136,4 +135,9 @@ const iconMap = {
 		</Transition>
 	</Teleport>
 </template>
+<style lang="scss" scoped>
+@use '../../styles/components/f-dialog.scss';
+</style>
+
+
 

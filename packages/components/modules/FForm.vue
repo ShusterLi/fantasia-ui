@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { FFormProps } from '@/types';
 
 const props = withDefaults(defineProps<FFormProps>(), {
@@ -62,20 +62,7 @@ defineExpose({
 		<slot />
 	</form>
 </template>
-
-<style scoped lang="scss">
-.f-form {
-	display: flex;
-	flex-direction: column;
-
-	&--size-small {
-		gap: 12px;
-	}
-
-	&--size-large {
-		gap: 24px;
-	}
-
-	&--label-top {}
-}
+<style lang="scss" scoped>
+@use '../../styles/components/f-form.scss';
 </style>
+

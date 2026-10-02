@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FUploadProps, UploadFileItem } from '@/types';
 import { Close, CloseCircle, CloudUpload, DocumentOutline, CheckmarkCircle, AlertCircle, Reload } from '@vicons/ionicons5';
 import FIcon from './FIcon.vue';
@@ -55,7 +55,7 @@ const submitUpload = async (item: UploadFileItem) => {
 const addFiles = async (files: File[]) => {
   if (!files.length) return;
 
-  // 数量限制：超出的部分直接拒绝,并抛给外部处理提示
+  // 数量控制：超出的全部直接拒绝，并且只保留剩余可接受数量
   const remaining = props.limit != null ? props.limit - fileList.value.length : Infinity;
   if (remaining <= 0) {
     emit('exceed', files);
@@ -68,7 +68,7 @@ const addFiles = async (files: File[]) => {
   for (const raw of accepted) {
     if (props.beforeUpload) {
       const ok = await props.beforeUpload(raw);
-      if (!ok) continue; // 校验未通过:不加入列表,也不触发上传
+      if (!ok) continue; // 校验未通过：未加入列表则不触发上传
     }
 
     const item: UploadFileItem = {
@@ -115,9 +115,9 @@ const onFileChange = (e: Event) => {
 defineExpose({ 
   /** 重试上传单个失败的文件 */
   retryUpload, 
-  /** 移除文件 */
+  /** 删除文件 */
   removeFile, 
-  /** 批量上传所有 ready 状态的文件 */
+  /** 批量上传所有状态为 ready 的文件 */
   submitAll: () => {
     fileList.value
       .filter(f => f.status === 'ready')
@@ -137,7 +137,7 @@ defineExpose({
           <f-icon :size="40">
             <CloudUpload />
           </f-icon>
-          <span class="f-upload__title">点击或拖拽文件至此处</span>
+          <span class="f-upload__title">点击或拖拽文件到此处</span>
           <span class="f-upload__hint">{{ hint }}</span>
         </div>
       </slot>
@@ -166,115 +166,7 @@ defineExpose({
     </div>
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-upload {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  &__trigger {
-    display: inline-block;
-    cursor: pointer;
-  }
-
-  &__zone {
-    height: 180px;
-    width: 100%;
-    border: 2px dashed #dcdfe6;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    text-align: center;
-    transition: all 0.2s;
-
-    &:hover {
-      border-color: #ec4899;
-      background: rgba(236, 72, 153, 0.05);
-    }
-  }
-
-  &--drag &__zone {
-    border-color: #ec4899;
-    background: rgba(236, 72, 153, 0.1);
-  }
-
-  &__input {
-    display: none;
-  }
-
-  &__title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #606266;
-    margin-top: 8px;
-  }
-
-  &__hint {
-    font-size: 12px;
-    color: #909399;
-    margin-top: 4px;
-    line-height: 1.5;
-  }
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  &__file-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: #fdf2f8;
-    border: 1px solid #fce7f3;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #ec4899;
-    transition: all 0.2s;
-
-    &--uploading {
-      background: #fdf2f8;
-      border-color: #fce7f3;
-      color: #ec4899;
-    }
-
-    &--error {
-      background: #fef0f0;
-      border-color: #fde2e2;
-      color: #f56c6c;
-    }
-
-    &--success {
-      background: #f0f9ff;
-      border-color: #e1f3d8;
-      color: #67c23a;
-    }
-  }
-
-  &__file-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__file-name {
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &__file-error {
-    font-size: 12px;
-    color: #f56c6c;
-  }
-}
+@use '../../styles/components/f-upload.scss';
 </style>
+

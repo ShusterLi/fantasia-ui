@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FAffixProps } from '@/types';
 
 const props = withDefaults(defineProps<FAffixProps>(), {
@@ -23,10 +23,7 @@ const style = computed(() => {
     <slot />
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-affix {
-  position: absolute;
-  z-index: 1;
-}
+@use '../../styles/components/f-affix.scss';
 </style>
+

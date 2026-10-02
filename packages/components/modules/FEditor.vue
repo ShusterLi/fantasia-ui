@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
 import type { FEditorProps } from '@/types';
 import FTag from './FTag.vue';
 
@@ -60,7 +60,7 @@ const onKeydown = (e: KeyboardEvent) => {
   }
 };
 
-// ---------- 宽高 --------------
+// ---------- 高度 --------------
 const MAX_BODY_HEIGHT = props.height;
 const MIN_BODY_HEIGHT = 180;
 
@@ -80,8 +80,8 @@ const updateCursorInfo = () => {
 const lines = computed(() => model.value.split('\n'));
 const lineCount = computed(() => lines.value.length);
 
-// ---------- 大数据流式 tokenize：防抖 + 行数阈值降级 ----------
-const HEAVY_LINE_THRESHOLD = 1500; // 超过这个行数关闭逐 token 着色，只做错误高亮
+// ---------- 大量数据处理：tokenize，将每行 + 行数拆分后再渲染 ----------
+const HEAVY_LINE_THRESHOLD = 1500; // 超过该行数时关闭 token 高亮，避免性能下降
 const isHeavy = computed(() => lineCount.value > HEAVY_LINE_THRESHOLD);
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
@@ -89,7 +89,7 @@ const debouncedSource = ref(model.value);
 
 watch(model, (val) => {
   if (debounceTimer) clearTimeout(debounceTimer);
-  // 小文本即时渲染，大文本节流，避免每次击键全量重算
+  // 对于很小的文本，直接全量重新渲染；对于大文本，则避免每次都重新计算 token 数量
   const delay = val.length > 20000 ? 120 : 0;
   debounceTimer = setTimeout(() => {
     debouncedSource.value = val;
@@ -132,7 +132,7 @@ const formatJson = () => {
   try {
     model.value = JSON.stringify(JSON.parse(model.value), null, 2);
   } catch {
-    // 静默失败
+    // 默认失败
   }
 };
 
@@ -151,7 +151,7 @@ const tokenize = (text: string): string => {
     .replace(/([{}[\],])/g, '<span class="tok-punct">$1</span>');
 };
 
-// 逐行渲染，方便加行高亮 wrapper，且重文本时跳过 tokenize 只转义
+// 逐行渲染，按行增加 wrapper，避免大文本时通过 tokenize 处理过慢
 const renderedLines = computed(() => {
   const src = debouncedSource.value;
   const ls = src.split('\n');
@@ -207,7 +207,7 @@ const onInputOrScroll = () => {
     <div class="f-editor__toolbar">
       <span class="f-editor__status">
         <span class="f-editor__lines">{{ lineCount }} 行</span>
-        <f-tag color="orange" v-if="isHeavy" type="square" effect="plain">大文件模式</f-tag>
+        <f-tag color="orange" v-if="isHeavy" type="square" effect="plain">大文件已关闭高亮</f-tag>
       </span>
       <button v-if="language === 'json'" type="button" class="f-editor__format" @click="formatJson">
         格式化
@@ -223,7 +223,7 @@ const onInputOrScroll = () => {
       </div>
 
       <div class="f-editor__code-wrapper">
-        <!-- 当前行高亮条 -->
+        <!-- 当前行高亮 -->
         <div class="f-editor__active-line" :style="{
           top: `${PADDING_TOP_PX + (currentLine - 1) * LINE_HEIGHT_PX - scrollTop}px`,
           height: `${LINE_HEIGHT_PX}px`,
@@ -243,187 +243,7 @@ const onInputOrScroll = () => {
     </div>
   </div>
 </template>
-
 <style lang="scss" scoped>
-.f-editor {
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #1e293b;
-  overflow: hidden;
-  transition: border-color 0.2s;
-
-  &:focus-within {
-    border-color: #6366f1;
-  }
-
-  &--invalid {
-    border-color: #ef4444;
-  }
-
-  &__toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 10px;
-    background: #1e293b;
-    font-size: 10px;
-  }
-
-  &__status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  &__lines {
-    color: #64748b;
-  }
-
-  &__heavy {
-    color: #fbbf24;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 3px;
-    background: rgba(251, 191, 36, 0.12);
-  }
-
-  &__format {
-    background: none;
-    border: none;
-    color: #818cf8;
-    font-size: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 2px 6px;
-    border-radius: 4px;
-
-    &:hover {
-      background: rgba(99, 102, 241, 0.15);
-    }
-  }
-
-  &__body {
-    position: relative;
-    display: flex;
-    background: #0f172a;
-    overflow: hidden;
-  }
-
-  &__gutter {
-    flex-shrink: 0;
-    width: 44px;
-    padding: 12px 0;
-    overflow-y: hidden;
-    background: #0b1322;
-    border-right: 1px solid #1e293b;
-    text-align: right;
-    user-select: none;
-    height: 100%;
-  }
-
-  &__gutter-line {
-    font-size: 11px;
-    font-weight: 700;
-    height: 17.6px;
-    line-height: 17.6px;
-    color: #475569;
-    padding-right: 8px;
-    box-sizing: border-box;
-
-    &--active {
-      color: #94a3b8;
-    }
-  }
-
-  &__code-wrapper {
-    position: relative;
-    flex: 1;
-    min-width: 0;
-    height: 100%;
-  }
-
-  &__active-line {
-    position: absolute;
-    left: 0;
-    right: 0;
-    background: rgba(99, 102, 241, 0.08);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  &__highlight,
-  &__textarea {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    height: 100%;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 17.6px;
-    letter-spacing: 0;
-    padding: 12px;
-    box-sizing: border-box;
-    white-space: pre-wrap;
-    word-break: break-all;
-    tab-size: 2;
-  }
-
-  &__highlight {
-    color: #f1f5f9;
-    overflow: auto;
-    pointer-events: none;
-    z-index: 1;
-
-    :deep(.f-editor__line) {
-      display: block;
-      height: 17.6px;
-      line-height: 17.6px;
-    }
-
-    :deep(.tok-key) {
-      color: #7dd3fc;
-    }
-
-    :deep(.tok-string) {
-      color: #86efac;
-    }
-
-    :deep(.tok-number) {
-      color: #fbbf24;
-    }
-
-    :deep(.tok-keyword) {
-      color: #c4b5fd;
-    }
-
-    :deep(.tok-punct) {
-      color: #94a3b8;
-    }
-
-    :deep(.tok-error) {
-      background: rgba(239, 68, 68, 0.45);
-      border-radius: 2px;
-      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.8);
-    }
-  }
-
-  &__textarea {
-    background: transparent;
-    color: transparent;
-    caret-color: #f1f5f9;
-    border: none;
-    resize: none;
-    overflow: auto;
-    z-index: 2;
-
-    &:focus {
-      outline: none;
-    }
-
-    &::placeholder {
-      color: #475569;
-      opacity: 0.7;
-    }
-  }
-}
+@use '../../styles/components/f-editor.scss';
 </style>
+
