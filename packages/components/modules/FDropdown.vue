@@ -21,6 +21,16 @@ const dropdownRef = ref<HTMLElement | null>(null);
 const dropdownHeight = ref(0);
 const dropdownWidth = ref(0);
 
+// ── 锚点矩形 ────────────────────────────────────────
+// 包裹层是 display: contents，自身没有盒子（rect 全为 0），
+// 因此取插槽里第一个真实元素作为定位锚点
+const getAnchorRect = (): DOMRect | null => {
+  const root = triggerRef.value;
+  if (!root) return null;
+  const el = (root.firstElementChild as HTMLElement | null) ?? root;
+  return el.getBoundingClientRect();
+};
+
 // ── 定位计算 ────────────────────────────────────────
 const bridgeStyle = computed<CSSProperties>(() => {
   const [side] = props.placement.split('-');
@@ -123,7 +133,7 @@ const handleTriggerClick = (e: MouseEvent) => {
   if (props.trigger !== 'click' || props.disabled) return;
   e.stopPropagation();
   if (!show.value) {
-    anchorRect.value = triggerRef.value!.getBoundingClientRect();
+    anchorRect.value = getAnchorRect();
     show.value = true;
   } else {
     show.value = false;
@@ -134,9 +144,7 @@ const handleMouseEnter = () => {
   if (props.trigger !== 'hover' || props.disabled) return;
   clearLeaveTimer();
   showTimer = setTimeout(() => {
-    if (triggerRef.value) {
-      anchorRect.value = triggerRef.value.getBoundingClientRect();
-    }
+    anchorRect.value = getAnchorRect();
     show.value = true;
   }, 400);
 };
@@ -145,9 +153,9 @@ const handleMouseLeave = () => {
   if (props.trigger !== 'hover') return;
   if (showTimer) { clearTimeout(showTimer); showTimer = null; }
   leaveTimer = setTimeout(() => { show.value = false; }, 400);
-}
+};
 
-const handleWindowClick = (e: MouseEvent) => {
+const handleWindowClick = () => {
   if (props.trigger !== 'click' || !show.value) return;
   show.value = false;
 };
@@ -161,7 +169,7 @@ const handleOptionClick = (option: FDropdownOption) => {
 // ── 生命周期与事件绑定 ────────────────────────────────
 watch(show, async (val) => {
   if (val) {
-    anchorRect.value = triggerRef.value!.getBoundingClientRect();
+    anchorRect.value = getAnchorRect();
     await nextTick();
     dropdownHeight.value = dropdownRef.value?.offsetHeight || 200;
     dropdownWidth.value = dropdownRef.value?.offsetWidth || 160;
@@ -182,11 +190,9 @@ useEventListener(window, 'click', handleWindowClick);
 </script>
 
 <template>
-  <div class="f-dropdown-wrapper">
-    <div ref="triggerRef" class="f-dropdown-trigger-wrapper" @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave" @click="handleTriggerClick">
-      <slot />
-    </div>
+  <div ref="triggerRef" class="f-dropdown-trigger-wrapper" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"
+    @click="handleTriggerClick">
+    <slot />
 
     <Teleport to="body">
       <Transition name="f-dropdown-motion">
@@ -213,15 +219,9 @@ useEventListener(window, 'click', handleWindowClick);
 </template>
 
 <style lang="scss" scoped>
-.f-dropdown-wrapper {
-  display: inline-flex;
-  align-items: center;
-}
-
+// 不产生盒子，对外层布局完全透明
 .f-dropdown-trigger-wrapper {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
+  display: contents;
 }
 
 .f-dropdown-item {
