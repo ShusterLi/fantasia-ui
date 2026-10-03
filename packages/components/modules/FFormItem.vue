@@ -61,7 +61,8 @@ defineExpose({ validate, clearValidate })
 			textAlign: labelPosition === 'top' ? 'left' : labelPosition
 		}">
 			<span v-if="isRequired" class="star">*</span>
-			{{ label }}锛?		</label>
+			{{ label }}
+		</label>
 
 		<div class="f-form-item__content">
 			<slot />
@@ -74,4 +75,3 @@ defineExpose({ validate, clearValidate })
 <style lang="scss" scoped>
 @use '../../styles/components/f-form-item.scss';
 </style>
-
