@@ -16,6 +16,20 @@ const position = ref({ top: 0, left: 0 });
 
 let showTimer: ReturnType<typeof setTimeout> | null = null;
 
+const getAnchorRect = (): DOMRect | null => {
+  const root = triggerRef.value;
+  if (!root) return null;
+
+  const el = root.firstElementChild as HTMLElement | null;
+  if (el) return el.getBoundingClientRect();
+
+  // 插槽只有文本：用 Range 量文本节点的实际矩形
+  const range = document.createRange();
+  range.selectNodeContents(root);
+  const rect = range.getBoundingClientRect();
+  return rect.width || rect.height ? rect : null;
+};
+
 const show = () => {
   if (props.disabled) return;
   showTimer = setTimeout(() => {
@@ -32,10 +46,9 @@ const hide = () => {
 const updatePosition = () => {
   if (!tooltipRef.value) return;
 
-  const triggerEl = (triggerRef.value?.firstElementChild as HTMLElement) ?? triggerRef.value;
-  if (!triggerEl) return;
+  const trigger = getAnchorRect();
+  if (!trigger) { visible.value = false; return; }
 
-  const trigger = triggerEl.getBoundingClientRect();
   const tooltip = tooltipRef.value.getBoundingClientRect();
   const gap = props.offset;
   const [side, align] = props.placement.split('-') as [string, string | undefined];
@@ -92,4 +105,3 @@ onUnmounted(hide);
 <style lang="scss" scoped>
 @use '../../styles/components/f-tooltip.scss';
 </style>
-

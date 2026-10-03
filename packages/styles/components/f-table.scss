@@ -1,46 +1,41 @@
 ﻿.f-table {
   position: relative;
+  display: flex;
+  flex-direction: column;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
   overflow: hidden;
   min-height: 14rem;
 
-  &__loading {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(2px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 0.625rem;
-    z-index: 10;
-  }
-
   &__scroll {
     position: relative;
+    flex: 1;
+    min-height: 0;
     width: 100%;
-    height: 100%;
     overflow: auto;
   }
 
   &__inner {
     width: 100%;
+    min-width: 100%;
     border-collapse: collapse;
     font-size: 0.75rem;
     text-align: left;
     table-layout: auto;
-    min-width: 100%;
 
     th,
     td {
-      padding: 0.625rem;
+      padding: 0 0.625rem;
       border-right: 1px solid #e2e8f0;
 
       &:last-child {
         border-right: none;
       }
+    }
+
+    th {
+      padding-top: 0.625rem;
+      padding-bottom: 0.625rem;
     }
   }
 
@@ -48,7 +43,7 @@
     width: 3rem;
   }
 
-  // thead
+  // ── thead ──
   &__head {
     position: sticky;
     top: 0;
@@ -74,7 +69,7 @@
     }
   }
 
-  // tbody
+  // ── tbody ──
   &__row {
     border-bottom: 1px solid #e2e8f0;
 
@@ -103,6 +98,13 @@
     }
   }
 
+  &__text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &__spacer td {
     padding: 0;
     border: none;
@@ -114,5 +116,28 @@
     color: #94a3b8;
     font-weight: 700;
     background: rgba(248, 250, 252, 0.5);
+  }
+
+  &__tip {
+    position: fixed;
+    z-index: 3000;
+    max-width: 320px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.96);
+    color: #f8fafc;
+    font-size: 12px;
+    line-height: 1.5;
+    word-break: break-all;
+    pointer-events: none;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+
+    &.is-top {
+      transform: translate(-50%, -100%);
+    }
+
+    &.is-bottom {
+      transform: translate(-50%, 0);
+    }
   }
 }
