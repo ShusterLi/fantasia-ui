@@ -1,0 +1,315 @@
+.f-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+
+  // 水平轮播
+  &--horizontal {
+    aspect-ratio: 16 / 9;
+    height: var(--f-carousel-height, 400px);
+  }
+
+  // 垂直轮播
+  &--vertical {
+    height: var(--f-carousel-height, 300px);
+  }
+
+  &__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &__track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+
+    // 水平方向
+    .f-carousel--horizontal & {
+      flex-direction: row;
+    }
+
+    // 垂直方向
+    .f-carousel--vertical & {
+      flex-direction: column;
+    }
+  }
+
+  &__item {
+    flex: 0 0 100%;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__html-content,
+  &__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  &__content {
+    font-size: 18px;
+    color: #333;
+    background: #f5f5f5;
+  }
+
+  &__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  &__description {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  &__empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 16px;
+    background: #f5f5f5;
+  }
+
+  // 控制按钮
+  &__controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  &__control {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    transition: all 0.3s;
+    pointer-events: all;
+
+    &:hover:not(:disabled) {
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    :deep(svg) {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // 指示器
+  &__indicators {
+    position: absolute;
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+
+    // 位置
+    &--top {
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .f-carousel--indicator-top & {
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .f-carousel--indicator-bottom & {
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .f-carousel--indicator-left & {
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
+    }
+
+    .f-carousel--indicator-right & {
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
+    }
+  }
+
+  &__indicator {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 4px;
+    transition: all 0.3s;
+
+    // 点状指示器
+    &--dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+
+      &:hover,
+      &.f-carousel__indicator--active {
+        background: white;
+      }
+    }
+
+    // 线状指示器
+    &--line {
+      width: 24px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.6);
+
+      &:hover,
+      &.f-carousel__indicator--active {
+        background: white;
+      }
+    }
+
+    // 数字指示器
+    &--number {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover,
+      &.f-carousel__indicator--active {
+        background: rgba(0, 0, 0, 0.8);
+      }
+    }
+  }
+
+  // 播放控制
+  &__play-control {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+  }
+
+  &__play-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    :deep(svg) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // 淡入淡出效果
+  &--fade {
+    .f-carousel__track {
+      display: block;
+    }
+
+    .f-carousel__item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+
+      &:nth-child(1) {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .f-carousel {
+    &--horizontal {
+      height: var(--f-carousel-height, 300px);
+    }
+
+    &--vertical {
+      height: var(--f-carousel-height, 250px);
+    }
+
+    &__title {
+      font-size: 20px;
+    }
+
+    &__control {
+      width: 32px;
+      height: 32px;
+      
+      :deep(svg) {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}

@@ -49,6 +49,8 @@ export { default as FInputNumber } from './modules/FInputNumber.vue';
 export { default as FResult } from './modules/FResult.vue';
 export { default as FMask } from './modules/FMask.vue';
 export { default as FMarquee } from './modules/FMarquee.vue';
+export { default as FSliderCaptcha } from './modules/FSliderCaptcha.vue';
+export { default as FCarousel } from './modules/FCarousel.vue';
 export { default as FSteps } from './modules/FSteps.vue';
 export { default as FTimeline } from './modules/FTimeline.vue';
 export { default as FTimelineItem } from './modules/FTimelineItem.vue';
