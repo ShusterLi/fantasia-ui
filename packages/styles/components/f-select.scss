@@ -1,4 +1,10 @@
-﻿.f-select {
+﻿.f-select-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+
+.f-select {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -216,6 +222,62 @@
   }
 }
 
+/* ---------- 下拉面板 ---------- */
+.f-select-dropdown {
+  position: fixed;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  z-index: 2000;
+
+  &__content {
+    padding: 4px 0;
+  }
+}
+
+/* ---------- 选项 ---------- */
+.f-select-option {
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #606266;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+
+  &:hover:not(.is-disabled) {
+    background-color: #f5f7fa;
+  }
+
+  &.is-selected {
+    color: #ec4899;
+    font-weight: 500;
+    background-color: #fdf2f8;
+  }
+
+  &.is-disabled {
+    color: #c0c4cc;
+    cursor: not-allowed;
+  }
+
+  &.is-empty {
+    text-align: center;
+    color: #909399;
+    cursor: default;
+    
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  &__label {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 /* ---------- 新增选项按钮 ---------- */
 .f-select__add-option {
   display: flex;
@@ -235,4 +297,16 @@
   &:active {
     background-color: #fce7f3;
   }
+}
+
+/* ---------- 下拉动画 ---------- */
+.f-select-dropdown-enter-active,
+.f-select-dropdown-leave-active {
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.f-select-dropdown-enter-from,
+.f-select-dropdown-leave-to {
+  opacity: 0;
+  transform: scaleY(0.9);
 }

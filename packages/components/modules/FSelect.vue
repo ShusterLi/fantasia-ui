@@ -1,13 +1,14 @@
 ﻿<script lang="ts" setup>
 import type { FSelectProps } from '@/types';
 import type { FDropdownOption } from '@/types';
+import { useEventListener } from '@vueuse/core';
 import {
   ChevronDownOutline,
   CloseCircleOutline,
 } from '@vicons/ionicons5';
 import FIcon from './FIcon.vue';
-import FDropdown from './FDropdown.vue';
 import FTag from './FTag.vue';
+import FScrollbar from './FScrollbar.vue';
 
 type SelectKey = string | number;
 
@@ -34,8 +35,9 @@ const modelValue = defineModel<SelectKey | SelectKey[] | null>();
 
 const isOpen = ref(false);
 const inputRef = ref<HTMLInputElement | null>(null);
+const selectRef = ref<HTMLElement | null>(null);
+const dropdownRef = ref<HTMLElement | null>(null);
 const keyword = ref('');
-const dropdownValue = ref<SelectKey[]>([]);
 
 /* ---------- 公共 ---------- */
 const multiValue = computed<SelectKey[]>(() =>
@@ -57,14 +59,44 @@ const filteredOptions = computed(() => {
   return props.options.filter(o => String(o.label).toLowerCase().includes(kw));
 });
 
+// 下拉面板定位
+const dropdownStyle = ref<Record<string, string>>({});
+
+const updateDropdownPosition = () => {
+  if (!selectRef.value) return;
+  
+  const rect = selectRef.value.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const spaceBelow = viewportHeight - rect.bottom;
+  const spaceAbove = rect.top;
+  
+  // 默认显示在下方
+  let top = rect.bottom + 4;
+  let maxHeight = '240px';
+  
+  // 如果下方空间不足，显示在上方
+  if (spaceBelow < 240 && spaceAbove > spaceBelow) {
+    top = rect.top - 4;
+    maxHeight = `${Math.min(spaceAbove - 8, 240)}px`;
+  } else {
+    maxHeight = `${Math.min(spaceBelow - 8, 240)}px`;
+  }
+  
+  dropdownStyle.value = {
+    position: 'fixed',
+    top: `${top}px`,
+    left: `${rect.left}px`,
+    width: `${rect.width}px`,
+    maxHeight,
+    zIndex: '2000'
+  };
+};
+
 // 打开时聚焦输入框，关闭时清空关键字
 watch(isOpen, open => {
   if (open) {
     if (props.filterable) nextTick(() => inputRef.value?.focus());
-    // 同步到 dropdown 的 modelValue
-    if (props.multiple) {
-      dropdownValue.value = [...multiValue.value];
-    }
+    updateDropdownPosition();
   } else {
     keyword.value = '';
   }
@@ -76,24 +108,36 @@ const selectedLabel = computed(() => {
   return option?.label ?? props.placeholder;
 });
 
-const handleSelect = (key: SelectKey, option: FDropdownOption) => {
+const handleOptionClick = (option: FDropdownOption) => {
+  if (option.disabled) return;
+  
   if (props.multiple) {
-    // 多选：通过 dropdown 的 v-model 同步
-    const next = [...dropdownValue.value];
-    modelValue.value = next;
-    emit('select', key, option);
-    emit('change', next, props.options.filter(o => next.includes(o.key)));
+    // 多选模式
+    const keys = [...multiValue.value];
+    const index = keys.indexOf(option.key);
+    if (index > -1) {
+      keys.splice(index, 1);
+    } else {
+      keys.push(option.key);
+    }
+    modelValue.value = keys;
+    emit('select', option.key, option);
+    emit('change', keys, props.options.filter(o => keys.includes(o.key)));
   } else {
-    // 单选
+    // 单选模式
     const oldValue = modelValue.value;
-    modelValue.value = key;
-    emit('select', key, option);
-    if (oldValue !== key) emit('change', key, option);
+    modelValue.value = option.key;
+    emit('select', option.key, option);
+    if (oldValue !== option.key) emit('change', option.key, option);
     isOpen.value = false;
   }
 };
 
-// 输入框已在展开状态时，点击它不应触发 dropdown 的开关
+const isSelected = (key: SelectKey) => {
+  return props.multiple && multiValue.value.includes(key);
+};
+
+// 输入框已在展开状态时，点击它不应触发下拉面板的开关
 const stopWhenOpen = (e: MouseEvent) => {
   if (isOpen.value) e.stopPropagation();
 };
@@ -107,7 +151,6 @@ const removeTag = (key: SelectKey) => {
   if (props.disabled) return;
   const next = multiValue.value.filter(k => k !== key);
   modelValue.value = next;
-  dropdownValue.value = next;
   emit('change', next, props.options.filter(o => next.includes(o.key)));
 };
 
@@ -116,7 +159,6 @@ const handleBackspace = () => {
   if (keyword.value || !multiValue.value.length) return;
   const next = multiValue.value.slice(0, -1);
   modelValue.value = next;
-  dropdownValue.value = next;
   emit('change', next, props.options.filter(o => next.includes(o.key)));
 };
 
@@ -128,17 +170,8 @@ const handleInputClick = () => {
 const handleClear = (e: MouseEvent) => {
   e.stopPropagation();
   modelValue.value = props.multiple ? [] : undefined;
-  dropdownValue.value = [];
   keyword.value = '';
   emit('clear');
-};
-
-const handleShow = () => {
-  isOpen.value = true;
-};
-
-const handleHide = () => {
-  isOpen.value = false;
 };
 
 /* ---------- 新增选项 ---------- */
@@ -165,8 +198,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   
   if (props.multiple) {
     // 多选模式：添加到选中列表
-    const next = [...dropdownValue.value, newKey];
-    dropdownValue.value = next;
+    const next = [...multiValue.value, newKey];
     modelValue.value = next;
     emit('select', newKey, newOption);
     emit('change', next, [...props.options, newOption]);
@@ -189,36 +221,41 @@ const handleAddOption = () => {
   // 触发add事件，由父组件处理新增逻辑
   emit('add', keyword.value.trim());
 };
+
+/* ---------- 点击外部关闭 ---------- */
+const handleWindowClick = (e: MouseEvent) => {
+  if (!isOpen.value) return;
+  
+  const target = e.target as HTMLElement;
+  if (
+    selectRef.value?.contains(target) ||
+    dropdownRef.value?.contains(target)
+  ) {
+    return;
+  }
+  
+  isOpen.value = false;
+};
+
+useEventListener(window, 'click', handleWindowClick);
+useEventListener(window, 'resize', updateDropdownPosition);
+useEventListener(window, 'scroll', updateDropdownPosition, true);
 </script>
 
 <template>
-  <f-dropdown 
-    :options="filteredOptions" 
-    :disabled="disabled" 
-    :multiple="multiple"
-    v-model="dropdownValue"
-    trigger="click" 
-    placement="bottom-start" 
-    :offset="4"
-    max-height="240px"
-    @select="handleSelect"
-    @show="handleShow" 
-    @hide="handleHide"
-  >
-    <template #footer>
-      <div v-if="showAddOption" class="f-select__add-option" @click="handleAddOption">
-        {{ addOptionText }}
-      </div>
-    </template>
-    
-    <div class="f-select" :class="{
-      'is-active': hasValue,
-      'is-open': isOpen,
-      'is-disabled': disabled,
-      'is-clearable': showClear,
-      'is-multiple': multiple,
-      [`f-select--${size}`]: size,
-    }">
+  <div ref="selectRef" class="f-select-wrapper">
+    <div 
+      class="f-select" 
+      :class="{
+        'is-active': hasValue,
+        'is-open': isOpen,
+        'is-disabled': disabled,
+        'is-clearable': showClear,
+        'is-multiple': multiple,
+        [`f-select--${size}`]: size,
+      }"
+      @click="!disabled && (isOpen = !isOpen)"
+    >
       <!-- 多选：标签展示 -->
       <div v-if="multiple" class="f-select__tags">
         <f-tag 
@@ -274,7 +311,48 @@ const handleAddOption = () => {
         </f-icon>
       </div>
     </div>
-  </f-dropdown>
+
+    <!-- 下拉面板 -->
+    <Teleport to="body">
+      <Transition name="f-select-dropdown">
+        <div 
+          v-if="isOpen"
+          ref="dropdownRef"
+          class="f-select-dropdown"
+          :style="dropdownStyle"
+          @click.stop
+        >
+          <f-scrollbar :max-height="dropdownStyle.maxHeight">
+            <div class="f-select-dropdown__content">
+              <!-- 选项列表 -->
+              <div
+                v-for="opt in filteredOptions"
+                :key="opt.key"
+                class="f-select-option"
+                :class="{
+                  'is-disabled': opt.disabled,
+                  'is-selected': isSelected(opt.key)
+                }"
+                @click="handleOptionClick(opt)"
+              >
+                <span class="f-select-option__label">{{ opt.label }}</span>
+              </div>
+              
+              <!-- 空状态 -->
+              <div v-if="filteredOptions.length === 0" class="f-select-option is-empty">
+                暂无数据
+              </div>
+            </div>
+            
+            <!-- 新增选项按钮 -->
+            <div v-if="showAddOption" class="f-select__add-option" @click="handleAddOption">
+              {{ addOptionText }}
+            </div>
+          </f-scrollbar>
+        </div>
+      </Transition>
+    </Teleport>
+  </div>
 </template>
 
 <style lang="scss" scoped>

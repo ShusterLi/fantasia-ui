@@ -82,23 +82,14 @@ const iconMap = {
 				<Transition name="dialog">
 					<div v-if="visible" class="f-dialog" :class="`f-dialog--${type}`">
 						<!-- 关闭按钮 -->
-						<button 
-							v-if="showClose" 
-							type="button" 
-							class="f-dialog__close" 
-							@click="handleClose"
-						>
+						<button v-if="showClose" type="button" class="f-dialog__close" @click="handleClose">
 							<f-icon :size="18">
 								<CloseOutline />
 							</f-icon>
 						</button>
 
 						<!-- 头部 -->
-						<div 
-							v-if="$slots.header || title" 
-							class="f-dialog__header"
-							:class="{ 'has-divider': divider }"
-						>
+						<div v-if="$slots.header || title" class="f-dialog__header" :class="{ 'has-divider': divider }">
 							<slot name="header">
 								<div class="f-dialog__icon">
 									<f-icon>
@@ -117,10 +108,7 @@ const iconMap = {
 						</f-scrollbar>
 
 						<!-- 底部 -->
-						<div 
-							class="f-dialog__footer"
-							:class="{ 'has-divider': divider }"
-						>
+						<div class="f-dialog__footer" :class="{ 'has-divider': divider }">
 							<slot name="footer">
 								<f-button v-if="showCancel" @click="handleCancel">
 									{{ cancelText }}
@@ -139,6 +127,3 @@ const iconMap = {
 <style lang="scss" scoped>
 @use '../../styles/components/f-dialog.scss';
 </style>
-
-
-
