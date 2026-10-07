@@ -1,8 +1,16 @@
 ﻿<script setup lang="ts">
 import type { FCollapseProps } from '@/types';
+import FIcon from './FIcon.vue';
+
+const emit = defineEmits<{
+	add: []
+}>();
 
 const props = withDefaults(defineProps<FCollapseProps>(), {
-	accordion: false
+	accordion: false,
+	showAddButton: false,
+	addButtonPosition: 'bottom',
+	addButtonText: '新增选项'
 })
 
 /**
@@ -36,6 +44,10 @@ function handleItemClick(name: string | number) {
 	activeNames.value = current
 }
 
+function handleAddClick() {
+	emit('add')
+}
+
 provide(
 	'fCollapseContext',
 	reactive({
@@ -47,7 +59,19 @@ provide(
 
 <template>
 	<div class="f-collapse">
+		<div v-if="showAddButton && addButtonPosition === 'top'" class="f-collapse__add-button f-collapse__add-button--top">
+			<button class="f-collapse__add-button-inner" @click="handleAddClick">
+				<FIcon name="material-symbols:add" />
+				<span>{{ addButtonText }}</span>
+			</button>
+		</div>
 		<slot />
+		<div v-if="showAddButton && addButtonPosition === 'bottom'" class="f-collapse__add-button f-collapse__add-button--bottom">
+			<button class="f-collapse__add-button-inner" @click="handleAddClick">
+				<FIcon name="material-symbols:add" />
+				<span>{{ addButtonText }}</span>
+			</button>
+		</div>
 	</div>
 </template>
 <style lang="scss" scoped>

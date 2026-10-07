@@ -1,14 +1,64 @@
 ﻿:root {
 	--f-collapse-border-color: #333338;
 	--f-collapse-radius: 8px;
+	--f-collapse-add-button-bg: #2a2a2f;
+	--f-collapse-add-button-color: #a1a1aa;
+	--f-collapse-add-button-hover-bg: #35353a;
 }
 
 :root.light {
 	--f-collapse-border-color: #e4e4e7;
+	--f-collapse-add-button-bg: #f5f5f7;
+	--f-collapse-add-button-color: #52525b;
+	--f-collapse-add-button-hover-bg: #e8e8eb;
 }
 
 .f-collapse {
 	border: 1px solid var(--f-collapse-border-color);
 	border-radius: var(--f-collapse-radius);
 	overflow: hidden;
+	
+	&__add-button {
+		padding: 12px 16px;
+		background: var(--f-collapse-add-button-bg);
+		border-top: 1px solid var(--f-collapse-border-color);
+		
+		&--top {
+			border-top: none;
+			border-bottom: 1px solid var(--f-collapse-border-color);
+		}
+		
+		&--bottom {
+			border-top: 1px solid var(--f-collapse-border-color);
+		}
+		
+		&-inner {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			width: 100%;
+			padding: 8px 12px;
+			background: transparent;
+			border: none;
+			border-radius: 6px;
+			color: var(--f-collapse-add-button-color);
+			font-size: 13px;
+			cursor: pointer;
+			transition: background-color 0.2s;
+			
+			&:hover {
+				background: var(--f-collapse-add-button-hover-bg);
+			}
+			
+			&:focus {
+				outline: 2px solid #3b82f6;
+				outline-offset: 2px;
+			}
+			
+			.f-icon {
+				font-size: 16px;
+			}
+		}
+	}
 }

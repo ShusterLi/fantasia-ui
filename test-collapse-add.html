@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>折叠面板新增选项功能测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        body {
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e4e4e7;
+        }
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #222;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #a1a1aa;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333338;
+        }
+        .mock-collapse {
+            border: 1px solid #333338;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .mock-collapse-item {
+            border-bottom: 1px solid #333338;
+        }
+        .mock-collapse-item:last-child {
+            border-bottom: none;
+        }
+        .mock-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #1a1a1e;
+            color: #e4e4e7;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.25s;
+        }
+        .mock-header:hover {
+            background: #232328;
+        }
+        .mock-content {
+            padding: 12px 16px;
+            background: #18181b;
+            color: #a1a1aa;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .mock-add-button {
+            padding: 12px 16px;
+            background: #2a2a2f;
+            border-top: 1px solid #333338;
+        }
+        .mock-add-button.top {
+            border-top: none;
+            border-bottom: 1px solid #333338;
+        }
+        .mock-add-button-inner {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 8px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: #a1a1aa;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .mock-add-button-inner:hover {
+            background: #35353a;
+        }
+        .icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            color: #9cdcfe;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #333338;
+        }
+        .highlight {
+            color: #d7ba7d;
+        }
+        .comment {
+            color: #6a9955;
+        }
+        .string {
+            color: #ce9178;
+        }
+        .control {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            align-items: center;
+        }
+        .btn {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .btn-secondary {
+            background: #52525b;
+        }
+        .btn-secondary:hover {
+            background: #3f3f46;
+        }
+        .toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+        }
+        .toggle-checkbox {
+            display: none;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #52525b;
+            border-radius: 20px;
+            transition: .4s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+        .toggle-checkbox:checked + .toggle-slider {
+            background-color: #3b82f6;
+        }
+        .toggle-checkbox:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        .log {
+            margin-top: 20px;
+            padding: 12px;
+            background: #111827;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: #9ca3af;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #1f2937;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 class="title">折叠面板新增选项功能演示</h1>
+        
+        <div class="section">
+            <h2 class="section-title">功能演示</h2>
+            
+            <div class="control">
+                <div class="toggle">
+                    <span>显示新增按钮:</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" class="toggle-checkbox" id="showAddButton" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle">
+                    <span>按钮在顶部:</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" class="toggle-checkbox" id="buttonPosition">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <button class="btn" onclick="addItem()">模拟新增</button>
+            </div>
+            
+            <div class="mock-collapse" id="collapseDemo">
+                <!-- 这里会动态生成内容 -->
+            </div>
+            
+            <div class="log" id="eventLog">
+                <div class="log-entry">事件日志:</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">使用示例代码</h2>
+            <div class="code-block">
+&lt;template&gt;<br>
+  &lt;f-collapse v-model="activeNames"<br>
+              <span class="highlight">:showAddButton="true"</span><br>
+              <span class="highlight">addButtonPosition="top"</span><br>
+              <span class="highlight">addButtonText="添加新项目"</span><br>
+              <span class="highlight">@add="handleAdd"</span>&gt;<br>
+    &lt;f-collapse-item name="1" title="项目一"&gt;<br>
+      这是第一个项目的内容<br>
+    &lt;/f-collapse-item&gt;<br>
+    &lt;f-collapse-item name="2" title="项目二"&gt;<br>
+      这是第二个项目的内容<br>
+    &lt;/f-collapse-item&gt;<br>
+  &lt;/f-collapse&gt;<br>
+&lt;/template&gt;<br>
+<br>
+&lt;script setup lang="ts"&gt;<br>
+import { ref } from 'vue'<br>
+<br>
+const activeNames = ref([])<br>
+const items = ref([<br>
+  { name: '1', title: '项目一', content: '这是第一个项目的内容' },<br>
+  { name: '2', title: '项目二', content: '这是第二个项目的内容' }<br>
+])<br>
+<br>
+<span class="highlight">function handleAdd() {</span><br>
+<span class="highlight">  const newName = String(items.value.length + 1)</span><br>
+<span class="highlight">  items.value.push({</span><br>
+<span class="highlight">    name: newName,</span><br>
+<span class="highlight">    title: `项目${newName}`,</span><br>
+<span class="highlight">    content: `这是第${newName}个项目的内容`</span><br>
+<span class="highlight">  })</span><br>
+<span class="highlight">}</span><br>
+&lt;/script&gt;
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">API 文档</h2>
+            <div class="code-block">
+<span class="comment">// 新增的 props</span><br>
+interface FCollapseProps {<br>
+  accordion?: boolean<br>
+  <span class="highlight">showAddButton?: boolean</span>       <span class="comment">// 是否显示新增按钮</span><br>
+  <span class="highlight">addButtonPosition?: 'top' | 'bottom'</span>  <span class="comment">// 按钮位置，默认为 'bottom'</span><br>
+  <span class="highlight">addButtonText?: string</span>         <span class="comment">// 按钮文本，默认为 '新增选项'</span><br>
+}<br>
+<br>
+<span class="comment">// 新增的事件</span><br>
+<span class="highlight">@add</span> - 点击新增按钮时触发<br>
+<span class="highlight">// 示例：@add="handleAdd"</span><br>
+<br>
+<span class="comment">// 默认值</span><br>
+const props = withDefaults(defineProps&lt;FCollapseProps&gt;(), {<br>
+  accordion: false,<br>
+  <span class="highlight">showAddButton: false,</span><br>
+  <span class="highlight">addButtonPosition: 'bottom',</span><br>
+  <span class="highlight">addButtonText: '新增选项'</span><br>
+})
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let itemCount = 2;
+        const items = [
+            { id: '1', title: '项目一', content: '这是第一个项目的内容' },
+            { id: '2', title: '项目二', content: '这是第二个项目的内容' }
+        ];
+        
+        function logEvent(message) {
+            const logDiv = document.getElementById('eventLog');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function updateCollapse() {
+            const collapseDiv = document.getElementById('collapseDemo');
+            const showAddButton = document.getElementById('showAddButton').checked;
+            const buttonPosition = document.getElementById('buttonPosition').checked ? 'top' : 'bottom';
+            
+            collapseDiv.innerHTML = '';
+            
+            if (showAddButton && buttonPosition === 'top') {
+                collapseDiv.innerHTML += `
+                    <div class="mock-add-button top">
+                        <button class="mock-add-button-inner" onclick="logEvent('新增按钮被点击（顶部）')">
+                            <div class="icon">+</div>
+                            <span>新增选项</span>
+                        </button>
+                    </div>
+                `;
+            }
+            
+            items.forEach(item => {
+                collapseDiv.innerHTML += `
+                    <div class="mock-collapse-item">
+                        <div class="mock-header">
+                            <span>${item.title}</span>
+                            <svg width="12" height="12" viewBox="0 0 12 12">
+                                <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="mock-content">
+                            ${item.content}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (showAddButton && buttonPosition === 'bottom') {
+                collapseDiv.innerHTML += `
+                    <div class="mock-add-button">
+                        <button class="mock-add-button-inner" onclick="logEvent('新增按钮被点击（底部）')">
+                            <div class="icon">+</div>
+                            <span>新增选项</span>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        function addItem() {
+            itemCount++;
+            items.push({
+                id: String(itemCount),
+                title: `项目${itemCount}`,
+                content: `这是第${itemCount}个项目的内容`
+            });
+            updateCollapse();
+            logEvent(`添加了新项目：项目${itemCount}`);
+        }
+        
+        document.getElementById('showAddButton').addEventListener('change', updateCollapse);
+        document.getElementById('buttonPosition').addEventListener('change', updateCollapse);
+        
+        // 初始化
+        updateCollapse();
+        logEvent('折叠面板初始化完成');
+    </script>
+</body>
+</html>
