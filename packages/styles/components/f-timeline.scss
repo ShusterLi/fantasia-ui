@@ -1,0 +1,84 @@
+.f-timeline {
+  position: relative;
+  padding: 0;
+  list-style: none;
+
+  // 竖向布局
+  &--vertical {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // 横向布局
+  &--horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding-bottom: 10px;
+
+    .f-timeline-item {
+      flex-shrink: 0;
+      min-width: 150px;
+    }
+  }
+
+  // 左对齐（竖向）
+  &--left.f-timeline--vertical,
+  &--right.f-timeline--vertical {
+    .f-timeline-item__wrapper {
+      padding-left: 32px;
+    }
+  }
+
+  // 交替对齐（竖向）
+  &--alternate.f-timeline--vertical {
+    .f-timeline-item {
+      &:nth-child(odd) .f-timeline-item__wrapper {
+        padding-left: 32px;
+        padding-right: 0;
+      }
+
+      &:nth-child(even) {
+        .f-timeline-item__node {
+          left: auto;
+          right: 0;
+        }
+
+        .f-timeline-item__tail {
+          left: auto;
+          right: 9px;
+        }
+
+        .f-timeline-item__wrapper {
+          padding-left: 0;
+          padding-right: 32px;
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  // 居中对齐（竖向）
+  &--center.f-timeline--vertical {
+    .f-timeline-item {
+      text-align: center;
+
+      .f-timeline-item__node {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .f-timeline-item__tail {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .f-timeline-item__wrapper {
+        padding: 0;
+        margin-top: 10px;
+      }
+    }
+  }
+}

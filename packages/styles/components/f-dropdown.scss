@@ -48,6 +48,19 @@
       cursor: not-allowed;
     }
 
+    &.is-selected {
+      color: var(--primary);
+      
+      .opt-icon {
+        color: var(--primary);
+      }
+    }
+
+    .opt-checkbox {
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
     .opt-icon {
       display: inline-flex;
       align-items: center;

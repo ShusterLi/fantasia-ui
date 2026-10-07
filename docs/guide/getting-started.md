@@ -1,12 +1,52 @@
 # 快速开始
 
-文档已被重置为最小结构，仅保留此入门页。如需恢复自动生成的组件文档或搭建 Storybook，请联系我或运行相应的生成脚本。
-
-示例：如何在项目中本地预览文档（示范使用 Vite）
+## 安装
 
 ```bash
-pnpm install
-pnpm run dev
+npm install fantasia-ui
+# 或
+yarn add fantasia-ui
+# 或
+pnpm add fantasia-ui
 ```
 
-（如果你准备重新搭建文档，我可以帮你初始化 Storybook 或 VitePress 模板。）
+## 使用
+
+### 完整导入
+
+```typescript
+import { createApp } from 'vue'
+import FantasiaUI from 'fantasia-ui'
+import 'fantasia-ui/dist/fantasia-ui.css'
+
+createApp(App).use(FantasiaUI).mount('#app')
+```
+
+### 按需导入
+
+```typescript
+import { FButton, FInput } from 'fantasia-ui'
+
+// 在你的组件中使用
+<template>
+  <FButton type="primary">按钮</FButton>
+  <FInput placeholder="请输入" />
+</template>
+```
+
+## 开发
+
+```bash
+# 克隆项目
+git clone https://github.com/ShusterLi/fantasia-ui.git
+cd fantasia-ui
+
+# 安装依赖
+pnpm install
+
+# 启动开发服务器
+pnpm run dev
+
+# 构建
+pnpm run build
+```

@@ -77,8 +77,15 @@
   &__body {
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
     padding: 20px;
+
+    :deep(.f-scrollbar) {
+      height: 100%;
+    }
+
+    :deep(.f-scrollbar__view) {
+      padding: 0;
+    }
   }
 
   &__footer {

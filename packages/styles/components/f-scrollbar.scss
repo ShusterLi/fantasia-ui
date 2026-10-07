@@ -1,13 +1,13 @@
 ﻿:root {
-	--f-scrollbar-thumb-bg: rgba(255, 255, 255, 0.25);
-	--f-scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.4);
-	--f-scrollbar-size: 8px;
+	--f-scrollbar-thumb-bg: rgba(255, 255, 255, 0.12);
+	--f-scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.2);
+	--f-scrollbar-size: 5px;
 	--f-scrollbar-transition-duration: 0.2s;
 }
 
 :root.light {
-	--f-scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
-	--f-scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
+	--f-scrollbar-thumb-bg: rgba(0, 0, 0, 0.08);
+	--f-scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.15);
 }
 
 .f-scrollbar {

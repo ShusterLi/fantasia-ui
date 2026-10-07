@@ -2,6 +2,7 @@
 import type { FDialogProps, FDialogEmits } from '@/types/components';
 import FButton from './FButton.vue';
 import FIcon from './FIcon.vue';
+import FScrollbar from './FScrollbar.vue';
 import {
 	CheckmarkCircleOutline,
 	AlertCircleOutline,
@@ -109,11 +110,11 @@ const iconMap = {
 						</div>
 
 						<!-- 内容 -->
-						<div class="f-dialog__body">
+						<f-scrollbar class="f-dialog__body">
 							<slot>
 								<p v-if="content">{{ content }}</p>
 							</slot>
-						</div>
+						</f-scrollbar>
 
 						<!-- 底部 -->
 						<div 

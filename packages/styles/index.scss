@@ -1,7 +1,7 @@
-// 基础样式
+// 鍩虹鏍峰紡
 @use './base';
 
-// 组件样式
+// 缁勪欢鏍峰紡
 @use './components/f-affix';
 @use './components/f-alert';
 @use './components/f-avatar';
@@ -17,6 +17,7 @@
 @use './components/f-color-picker';
 @use './components/f-container';
 @use './components/f-crop';
+@use './components/f-date-picker';
 @use './components/f-dialog';
 @use './components/f-divider';
 @use './components/f-drawer';
@@ -53,6 +54,9 @@
 @use './components/f-tabs';
 @use './components/f-tag';
 @use './components/f-text';
+@use './components/f-textarea';
+@use './components/f-timeline';
+@use './components/f-timeline-item';
 @use './components/f-tooltip';
 @use './components/f-transfer';
 @use './components/f-tree-select';

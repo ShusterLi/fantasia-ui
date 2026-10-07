@@ -1,6 +1,7 @@
 ﻿<script setup lang="ts">
 import type { FDrawerProps, FDrawerEmits } from '@/types/components';
 import FIcon from './FIcon.vue';
+import FScrollbar from './FScrollbar.vue';
 import { CloseOutline } from '@vicons/ionicons5';
 
 const props = withDefaults(defineProps<FDrawerProps>(), {
@@ -72,9 +73,9 @@ onBeforeUnmount(() => {
 					</button>
 				</div>
 
-				<div class="f-drawer__body">
+				<f-scrollbar class="f-drawer__body">
 					<slot />
-				</div>
+				</f-scrollbar>
 
 				<div v-if="$slots.footer" class="f-drawer__footer">
 					<slot name="footer" />

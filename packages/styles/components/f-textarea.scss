@@ -1,0 +1,70 @@
+.f-textarea {
+  position: relative;
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e0e0e6;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+
+  &__inner {
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1e293b;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  &__count {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    font-size: 12px;
+    color: #94a3b8;
+    pointer-events: none;
+  }
+
+  &.has-count &__inner {
+    padding-bottom: 28px;
+  }
+
+  &:hover:not(.is-disabled) {
+    border-color: #ec4899;
+  }
+
+  &.is-focus {
+    background: #fff;
+    border-color: #ec4899;
+    box-shadow: 0 0 0 2px #ec48993a;
+  }
+
+  &.is-error {
+    border-color: #f43f5e;
+    background: #fff1f2;
+
+    &.is-focus {
+      box-shadow: 0 0 0 2px #f43f5e2a;
+    }
+  }
+
+  &.is-disabled {
+    cursor: not-allowed;
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    opacity: 0.8;
+  }
+}
