@@ -2,6 +2,8 @@
 import type { CSSProperties } from 'vue';
 import type { FDropdownProps, FDropdownOption } from '@/types';
 import { useEventListener } from '@vueuse/core';
+import FScrollbar from './FScrollbar.vue';
+import FCheckbox from './FCheckbox.vue';
 
 const props = withDefaults(defineProps<FDropdownProps>(), {
   trigger: 'hover',
@@ -10,9 +12,22 @@ const props = withDefaults(defineProps<FDropdownProps>(), {
   zIndex: 2000,
   options: () => [],
   disabled: false,
+  multiple: false,
+  modelValue: () => [],
+  maxHeight: '300px',
 });
 
-const emit = defineEmits(['select', 'show', 'hide']);
+const emit = defineEmits<{
+  select: [key: string | number, option: FDropdownOption];
+  show: [];
+  hide: [];
+  'update:modelValue': [value: (string | number)[]];
+}>();
+
+const selectedKeys = computed({
+  get: () => props.modelValue || [],
+  set: (val) => emit('update:modelValue', val)
+});
 
 const show = ref(false);
 const anchorRect = ref<DOMRect | null>(null);
@@ -161,8 +176,28 @@ const handleWindowClick = () => {
 
 const handleOptionClick = (option: FDropdownOption) => {
   if (option.disabled) return;
+  
+  if (props.multiple) {
+    const keys = [...selectedKeys.value];
+    const index = keys.indexOf(option.key);
+    if (index > -1) {
+      keys.splice(index, 1);
+    } else {
+      keys.push(option.key);
+    }
+    selectedKeys.value = keys;
+  }
+  
   emit('select', option.key, option);
-  if (!option.children) show.value = false;
+  
+  // 多选模式下不关闭，单选且无子菜单时关闭
+  if (!props.multiple && !option.children) {
+    show.value = false;
+  }
+};
+
+const isSelected = (key: string | number) => {
+  return props.multiple && selectedKeys.value.includes(key);
 };
 
 // 监听外部事件与点击
@@ -199,19 +234,29 @@ useEventListener(window, 'click', handleWindowClick);
           @mouseenter="clearLeaveTimer" @mouseleave="handleMouseLeave" @click.stop>
           <div v-if="trigger === 'hover'" class="f-dropdown-bridge" :style="bridgeStyle" />
 
-          <div class="f-dropdown-content">
-            <template v-if="options && options.length > 0">
-              <div v-for="opt in options" :key="opt.key" class="f-dropdown-option"
-                :class="{ 'is-disabled': opt.disabled }" @click="handleOptionClick(opt)">
-                <span v-if="opt.icon" class="opt-icon">
-                  <component :is="opt.icon" />
-                </span>
-                <span class="opt-label">{{ opt.label }}</span>
-              </div>
-            </template>
+          <f-scrollbar :max-height="maxHeight" class="f-dropdown-scrollbar">
+            <div class="f-dropdown-content">
+              <template v-if="options && options.length > 0">
+                <div v-for="opt in options" :key="opt.key" class="f-dropdown-option"
+                  :class="{ 'is-disabled': opt.disabled, 'is-selected': isSelected(opt.key) }" 
+                  @click="handleOptionClick(opt)">
+                  <f-checkbox 
+                    v-if="multiple" 
+                    :model-value="isSelected(opt.key)" 
+                    :disabled="opt.disabled"
+                    class="opt-checkbox"
+                  />
+                  <span v-if="opt.icon && !multiple" class="opt-icon">
+                    <component :is="opt.icon" />
+                  </span>
+                  <span class="opt-label">{{ opt.label }}</span>
+                </div>
+              </template>
 
-            <slot v-else name="content" />
-          </div>
+              <slot v-else name="content" />
+            </div>
+            <slot name="footer" />
+          </f-scrollbar>
         </div>
       </Transition>
     </Teleport>
